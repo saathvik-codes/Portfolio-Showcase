@@ -7,6 +7,7 @@ import About from "@/components/About";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
+import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -14,7 +15,6 @@ export default function Portfolio() {
   const [introComplete, setIntroComplete] = useState(false);
 
   useEffect(() => {
-    // Prevent scroll during intro
     if (!introComplete) {
       document.body.style.overflow = "hidden";
     } else {
@@ -25,13 +25,13 @@ export default function Portfolio() {
 
   return (
     <div className="relative" data-testid="portfolio-root">
-      {/* Noise texture */}
+      {/* Noise texture overlay */}
       <div className="noise-overlay" aria-hidden="true" />
 
       {/* Custom cursor */}
       <CustomCursor />
 
-      {/* SK Intro overlay */}
+      {/* SK Intro overlay — renders above everything, z-index 1000 */}
       {!introComplete && (
         <SKIntro onComplete={() => setIntroComplete(true)} />
       )}
@@ -46,6 +46,7 @@ export default function Portfolio() {
         <Experience />
         <Projects />
         <Skills />
+        <Certifications />
         <Contact />
       </main>
       <Footer />

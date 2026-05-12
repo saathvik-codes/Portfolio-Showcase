@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#0a0a0a"/>
+  <!-- Grid -->
+  <defs>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(167,139,250,0.06)" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(139,92,246,0.15)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <ellipse cx="600" cy="315" rx="500" ry="300" fill="url(#glow)"/>
+
+  <!-- SK Logo large -->
+  <path d="M 80 160 C 80 160 200 120 200 180 C 200 230 80 230 80 290 C 80 350 200 340 200 340" stroke="#a78bfa" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 270 120 L 270 370" stroke="#a78bfa" stroke-width="12" stroke-linecap="round"/>
+  <path d="M 270 250 L 420 120" stroke="#a78bfa" stroke-width="12" stroke-linecap="round"/>
+  <path d="M 270 250 L 420 370" stroke="#a78bfa" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="445" cy="370" r="16" fill="#c084fc"/>
+
+  <!-- Divider line -->
+  <line x1="520" y1="180" x2="520" y2="420" stroke="rgba(167,139,250,0.2)" stroke-width="1"/>
+
+  <!-- Name -->
+  <text x="570" y="260" font-family="sans-serif" font-size="72" font-weight="800" fill="white" letter-spacing="-2">Saathvik Kalepu</text>
+
+  <!-- Title -->
+  <text x="573" y="320" font-family="monospace" font-size="22" fill="rgba(167,139,250,0.8)" letter-spacing="4">SOFTWARE DEVELOPER  ·  FULL STACK  ·  AI</text>
+
+  <!-- Tags row -->
+  <rect x="572" y="360" width="120" height="36" rx="4" fill="rgba(139,92,246,0.12)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="600" y="383" font-family="monospace" font-size="14" fill="rgba(167,139,250,0.9)" letter-spacing="2">REACT</text>
+
+  <rect x="706" y="360" width="140" height="36" rx="4" fill="rgba(139,92,246,0.12)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="733" y="383" font-family="monospace" font-size="14" fill="rgba(167,139,250,0.9)" letter-spacing="2">NODE.JS</text>
+
+  <rect x="860" y="360" width="120" height="36" rx="4" fill="rgba(139,92,246,0.12)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="886" y="383" font-family="monospace" font-size="14" fill="rgba(167,139,250,0.9)" letter-spacing="2">PYTHON</text>
+
+  <rect x="994" y="360" width="120" height="36" rx="4" fill="rgba(139,92,246,0.12)" stroke="rgba(139,92,246,0.3)" stroke-width="1"/>
+  <text x="1018" y="383" font-family="monospace" font-size="14" fill="rgba(167,139,250,0.9)" letter-spacing="2">AI/ML</text>
+
+  <!-- URL bottom -->
+  <text x="600" y="580" font-family="monospace" font-size="18" fill="rgba(255,255,255,0.2)" letter-spacing="3">saathvik.dev</text>
+
+  <!-- Accent line -->
+  <line x1="80" y1="490" x2="1120" y2="490" stroke="rgba(167,139,250,0.08)" stroke-width="1"/>
+</svg>
