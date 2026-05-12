@@ -1,0 +1,293 @@
+\documentclass[10pt, a4paper]{cvhari}
+\geometry{left=1.2cm,right=1.2cm,marginparwidth=6.8cm,marginparsep=1.2cm,top=1.2cm,bottom=1.2cm}
+\usepackage[default]{lato}
+
+\begin{document}
+
+%------------------------------------------------
+% HEADER
+%------------------------------------------------
+\name{Saathvik Kalepu}
+\tagline{
+Software Developer Intern $\bullet$ Full Stack Developer\\
+AI \& Cloud Enthusiast
+}
+
+\personalinfo{%
+    \mailaddress{saathvikk202@gmail.com}
+    \phone{+91-9908179816}
+    \location{Hyderabad, India}
+    \linkedin{linkedin.com/in/saathvik-kalepu-17041228b}
+    \github{github.com/saathvik-codes}
+}
+
+\makecvheader
+\medskip
+
+%------------------------------------------------
+% PROFILE
+%------------------------------------------------
+\cvsection{Profile}
+\begin{itemize}
+    \item Software Engineering student with strong foundations in object-oriented programming, data structures, and algorithms.
+    \item Hands-on experience in designing, coding, testing, and deploying scalable software systems and APIs.
+    \item Quick learner with a strong inclination toward product development, clean code, and engineering best practices.
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% SUMMARY OF EXPERIENCE
+%------------------------------------------------
+\cvsection{Summary of Experience}
+\begin{itemize}
+    \item Experience in full-cycle application development including design, coding, unit testing, and CI/CD workflows.
+    \item Hands-on exposure to backend systems, microservices, REST APIs, and cloud-native development.
+    \item Industry internship experience working on real-world, production-grade software systems.
+    \item Strong collaboration skills with experience in code reviews, agile development, and peer programming.
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% CORE COMPETENCIES
+%------------------------------------------------
+\cvsection{Core Competencies}
+\begin{itemize}
+    \item Object-Oriented Analysis and Design (OOAD), Design Patterns
+    \item Data Structures, Algorithms, and Complexity Analysis
+    \item Backend Engineering and API Development
+    \item Unit Testing (xUnit), Mocking, Debugging
+    \item Concurrent and Distributed Systems (Threads, Async Processing)
+    \item CI/CD Pipelines, Code Reviews, and Style Guidelines
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% EDUCATION
+%------------------------------------------------
+\cvsection{Education}
+
+\education
+    {B.Tech in Computer Science \& Engineering}
+    {Indian Institute of Information Technology, Design and Manufacturing (IITDM), Kurnool}
+    {Andhra Pradesh, India}
+    {Expected 2027 \newline CGPA: 8.2}
+
+\medskip
+
+\education
+    {Intermediate (Class XII)}
+    {Valley Oak Junior College}
+    {Hyderabad, Telangana}
+    {2021 -- 2023 \newline Percentage: 98.8\%}
+
+\medskip
+
+\education
+    {Secondary School Certificate (SSC)}
+    {Dr. KKR Gowtham High School}
+    {Hyderabad, Telangana}
+    {2020 -- 2021 \newline CGPA: 10.0}
+
+\medskip
+
+%------------------------------------------------
+% RELEVANT COURSEWORK
+%------------------------------------------------
+\cvsection{Relevant Coursework}
+\begin{itemize}
+    \item Data Structures and Algorithms
+    \item Object-Oriented Programming
+    \item Operating Systems
+    \item Database Management Systems
+    \item Computer Networks
+    \item Software Engineering
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% INTERNSHIP EXPERIENCE
+%------------------------------------------------
+\cvsection{Internship Experience}
+
+\education
+    {Software Engineering Intern (AI \& Full Stack)}
+    {aimaster.live}
+    {Remote}
+    {6 Months}
+
+\begin{itemize}
+    \item Developed backend services and APIs following object-oriented design and clean code principles.
+    \item Implemented unit tests using xUnit-style frameworks and performed debugging to ensure reliability.
+    \item Worked on CI/CD pipelines and version control using Git to support rapid development cycles.
+    \item Participated in code reviews to ensure adherence to best practices and style guidelines.
+    \item Self-learned new technologies and frameworks to support evolving platform requirements.
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% PROJECT EXPERIENCE
+%------------------------------------------------
+
+\cvsection{Projects}
+
+%--- Project 1: Serenity ---
+\company
+    {Serenity -- AI Mental Wellness Platform}
+    {Full Stack Developer}
+    {Personal Project}
+    {2025}
+\project
+    {AI-powered Mental Health Tracking \& Support System}
+    {Self}
+    {Developer}
+    {TypeScript, React, Flask, Python, NLP, Firebase, REST APIs}
+
+\begin{itemize}
+    \item Built a full-stack mental wellness platform with responsive user engagement interfaces and intuitive interaction flows designed for mental health tracking and emotional support.
+    \item Developed RESTful backend services in Python/Flask with NLP-powered features including mood analysis, journaling, and AI-driven recommendations.
+    \item Implemented concurrent request handling, secure Firebase cloud data storage, and real-time data sync across client and server.
+    \item Integrated TypeScript on the frontend for type-safe component architecture, improving maintainability and developer experience.
+    \item Added automated tests, structured logging, and observability tooling to ensure production-grade reliability.
+\end{itemize}
+
+\smallskip
+\divider
+\smallskip
+
+%--- Project 2: TaskVise ---
+\company
+    {TaskVise -- Company Task Management System}
+    {Full Stack Developer}
+    {Personal Project}
+    {2025}
+\project
+    {Team Task Assignment, Tracking \& Collaboration Tool}
+    {Self}
+    {Developer}
+    {TypeScript, React, Node.js, Express, MongoDB, REST APIs}
+
+\begin{itemize}
+    \item Designed and built a task management platform enabling teams to assign, track, and organize work with efficiency and clarity across departments.
+    \item Architected a clean REST API backend in Node.js/Express with role-based access control (RBAC) for team members and admins.
+    \item Implemented real-time task status updates, deadline tracking, and priority queuing with a fully typed TypeScript codebase on both frontend and backend.
+    \item Applied OOP principles and modular component architecture to ensure scalability and separation of concerns.
+    \item Wrote unit and integration tests to validate business logic and API contract correctness.
+\end{itemize}
+
+\smallskip
+\divider
+\smallskip
+\clearpage
+%--- Project 3: CogniShield ---
+\company
+    {CogniShield -- Explainable Behavioral Security Platform}
+    {AI / Security Engineer}
+    {Personal Project}
+    {2025}
+\project
+    {Explainable AI-based Anomalous User Activity Detection System}
+    {Self}
+    {Developer}
+    {Python, Machine Learning, Behavioral Biometrics, SHAP/XAI, Windows API}
+
+\begin{itemize}
+    \item Built an explainable behavioral security platform that detects anomalous user activity on Windows systems using behavioral biometrics (keystroke dynamics, mouse patterns, activity rhythms).
+    \item Trained and evaluated ML classification models to distinguish legitimate vs.\ anomalous usage with high accuracy on real behavioral feature sets.
+    \item Integrated SHAP-based explainability to produce human-readable, per-event security explanations, making model decisions auditable and actionable for security teams.
+    \item Designed a modular pipeline covering data collection, feature engineering, model inference, and explanation generation -- each as independently testable components.
+    \item Achieved robust detection performance across diverse user profiles, with configurable sensitivity thresholds and alert mechanisms.
+\end{itemize}
+
+\smallskip
+\divider
+\smallskip
+
+%--- Project 4: Unicounsel ---
+\company
+    {Unicounsel -- Student Counselling Platform}
+    {Software Developer}
+    {Internship Project}
+    {2025}
+\project
+    {Structured UI Frontend for University Student Counselling}
+    {aimaster.live}
+    {Developer}
+    {TypeScript, React, Node.js, MongoDB, Firebase}
+
+\begin{itemize}
+    \item Developed a TypeScript-based frontend for Unicounsel with clean component architecture, responsive layout patterns, and structured UI for student guidance workflows.
+    \item Built scalable microservice-style backend components to support session management, user authentication, and counsellor-student interaction flows.
+    \item Collaborated in an agile team environment -- broke features into tasks, delivered incrementally, and participated in peer code reviews to maintain quality and consistency.
+    \item Leveraged Firebase for real-time notifications and MongoDB for flexible document storage of session records and user profiles.
+\end{itemize}
+
+\smallskip
+\divider
+\smallskip
+
+%--- Project 5: Supply Chain Optimization ---
+\company
+    {Supply Chain Optimization Engine}
+    {Optimization Engineer}
+    {Academic Project}
+    {2024}
+\project
+    {Logistics Cost Optimization using Linear Programming}
+    {Self / Academic}
+    {Developer}
+    {Python, PuLP, NumPy}
+
+\begin{itemize}
+    \item Applied algorithmic techniques and linear programming (via PuLP) to optimize multi-node supply chain routing and demand allocation under cost and capacity constraints.
+    \item Built computational models and analyzed time/space complexity to ensure efficiency at scale.
+    \item Improved simulated logistics cost efficiency by up to 18\% over baseline heuristics.
+\end{itemize}
+
+\clearpage
+
+%------------------------------------------------
+% TECHNICAL SKILLS
+%------------------------------------------------
+\cvsection{Technical Skills}
+\begin{itemize}
+    \item \textbf{Languages:} Java, Python, JavaScript, TypeScript, C++, SQL
+    \item \textbf{Backend:} REST APIs, Microservices, Node.js, Express, Flask, Django
+    \item \textbf{Frontend:} React.js, HTML5, CSS3, Tailwind CSS
+    \item \textbf{AI / ML:} NLP, Behavioral Biometrics, Explainable AI (SHAP), scikit-learn
+    \item \textbf{Testing:} Unit Testing (xUnit), Integration Testing, Mocking, Debugging
+    \item \textbf{Cloud \& DevOps:} Docker, Kubernetes, CI/CD, AWS, Firebase
+    \item \textbf{Databases:} MongoDB, MySQL, PostgreSQL, SQLite
+    \item \textbf{Tools:} Git, Linux, Windows API
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% ACHIEVEMENTS & LEADERSHIP
+%------------------------------------------------
+\cvsection{Achievements \& Leadership}
+\begin{itemize}
+    \item Led and contributed to production-oriented software projects during internship at aimaster.live.
+    \item Solved 500+ algorithmic problems on LeetCode, strengthening DSA proficiency.
+    \item Built and published 5+ full-stack and AI/ML projects independently on GitHub.
+    \item Active participant in hackathons, coding contests, and technical workshops.
+\end{itemize}
+
+\medskip
+
+%------------------------------------------------
+% EXTRA-CURRICULAR ACTIVITIES
+%------------------------------------------------
+\cvsection{Extra-Curricular Activities}
+\begin{itemize}
+    \item NSS Volunteer -- Participated in social service and community development initiatives.
+    \item NSO Participant -- Engaged in sports activities promoting teamwork and discipline.
+    \item Technical Club Member -- Participated in peer learning and technical seminars.
+\end{itemize}
+
+\end{document}
