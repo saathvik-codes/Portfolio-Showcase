@@ -52,3 +52,4 @@ Thumbs.db
 .cache/
 .local/
 .agents/
+artifacts/portfolio/email-templates/

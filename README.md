@@ -1,35 +1,55 @@
 # Saathvik Kalepu Portfolio
 
-A cinematic, dark-themed developer portfolio for Saathvik Kalepu with an SK logo intro, GSAP scroll animations, rolling title text, image-backed project showcases, and a canvas-based particle background.
+A cinematic developer portfolio built with React, Vite, Tailwind CSS, GSAP, and EmailJS. The site includes an animated SK intro, rolling title typography, image-backed project showcases, certifications, activities, skills, and a working contact form.
 
-## Run
+## Tech Stack
 
-- `pnpm install --ignore-scripts` - install workspace dependencies on Windows.
-- `PORT=8080 BASE_PATH=/ pnpm --filter @workspace/portfolio run dev` - run the local portfolio app.
-- `PORT=8080 BASE_PATH=/ pnpm --filter @workspace/portfolio run build` - build the portfolio.
-- `pnpm --filter @workspace/portfolio run typecheck` - run TypeScript checks.
-
-## Stack
-
-- pnpm workspace, TypeScript, React, Vite
+- React + Vite
+- TypeScript
 - Tailwind CSS v4
-- GSAP ScrollTrigger
-- EmailJS contact form
-- Canvas 2D particle background
-- Fonts: Syne, Space Grotesk, Space Mono
+- GSAP + ScrollTrigger
+- EmailJS
+- Canvas particle background
+- pnpm workspace
 
-## Structure
+## Project Structure
 
-- `artifacts/portfolio/` - main React and Vite portfolio app
-- `artifacts/portfolio/src/pages/Portfolio.tsx` - root page composition
-- `artifacts/portfolio/src/components/` - section components
-- `artifacts/portfolio/src/components/RollingTitle.tsx` - reusable rolling letter title animation
-- `artifacts/portfolio/src/index.css` - design system and animation styles
-- `artifacts/portfolio/public/` - resume, favicon, Open Graph assets, robots file
+```txt
+artifacts/portfolio/
+  public/                 Static assets, resume, favicon, OG image
+  src/
+    components/           Portfolio sections and UI components
+    pages/Portfolio.tsx   Main page composition
+    index.css             Theme, layout, and animation styles
+```
 
-## Environment
+## Local Setup
 
-Create `artifacts/portfolio/.env.local` for local EmailJS testing:
+```bash
+pnpm install --ignore-scripts
+```
+
+Run the portfolio locally:
+
+```bash
+PORT=8080 BASE_PATH=/ pnpm --filter @workspace/portfolio run dev
+```
+
+Build:
+
+```bash
+PORT=8080 BASE_PATH=/ pnpm --filter @workspace/portfolio run build
+```
+
+Typecheck:
+
+```bash
+pnpm --filter @workspace/portfolio run typecheck
+```
+
+## EmailJS Setup
+
+Create `artifacts/portfolio/.env.local` locally:
 
 ```env
 VITE_EMAILJS_PUBLIC_KEY=your_emailjs_public_key
@@ -38,4 +58,32 @@ VITE_EMAILJS_TEMPLATE_ID=template_qzgttb8
 VITE_EMAILJS_AUTO_REPLY_ID=template_2tzr8pi
 ```
 
-For Vercel, add the same variables in project environment settings and redeploy.
+For Vercel, add the same variables in:
+
+`Project Settings -> Environment Variables`
+
+Then redeploy, because Vite injects `VITE_*` variables at build time.
+
+## Deployment
+
+Recommended Vercel settings:
+
+- Framework Preset: Vite
+- Root Directory: `artifacts/portfolio`
+- Build Command: `pnpm run build`
+- Output Directory: `dist/public`
+
+Add:
+
+```env
+PORT=8080
+BASE_PATH=/
+```
+
+along with the EmailJS variables above.
+
+## Notes
+
+- `.env.local` is intentionally ignored.
+- Email template HTML files are local-only and not tracked in git.
+- The contact form uses `user_name`, `user_email`, `subject`, and `message` placeholders for EmailJS templates.
