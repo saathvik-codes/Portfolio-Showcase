@@ -122,6 +122,8 @@ export default function Contact() {
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         name: form.name,
         email: form.email,
+        user_name: form.name,
+        user_email: form.email,
         from_name: form.name,
         from_email: form.email,
         reply_to: form.email,
@@ -132,8 +134,12 @@ export default function Contact() {
 
       try {
         await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_AUTO_REPLY_ID, {
+          user_name: form.name,
+          user_email: form.email,
           to_name: form.name,
           to_email: form.email,
+          reply_to: "saathvikk202@gmail.com",
+          subject: form.subject || "Portfolio Contact",
           email: form.email,
           message: form.message,
         });
