@@ -372,9 +372,82 @@
   display: block;
   line-height: 1.08;
 }
-.clip-line {
+.clip-line,
+.about-clip-line,
+.exp-clip-line,
+.skills-clip-line,
+.contact-clip-line,
+.proj-clip-line,
+.certs-clip-line {
   display: block;
   will-change: transform;
+}
+
+/* Rolling letter titles */
+.rolling-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+}
+
+.hero-rolling-title {
+  font-size: clamp(3.5rem, 10vw, 9rem);
+}
+
+.rolling-line {
+  display: block;
+  overflow: hidden;
+  line-height: inherit;
+  color: white;
+}
+
+.rolling-line.gradient-text {
+  color: transparent;
+}
+
+.roll-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(115%) rotateX(-72deg);
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+}
+
+.rolling-line.gradient-text .roll-letter {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 50%, #f0abfc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rolling-title.is-visible .roll-letter {
+  animation: roll-letter-up 0.82s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc((var(--letter-index) * 28ms) + (var(--line-index) * 90ms));
+}
+
+@keyframes roll-letter-up {
+  0% {
+    opacity: 0;
+    transform: translateY(115%) rotateX(-72deg);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(-8%) rotateX(8deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll-letter {
+    opacity: 1;
+    transform: none;
+  }
+
+  .rolling-title.is-visible .roll-letter {
+    animation: none;
+  }
 }
 
 /* ── Section horizontal reveal line ──────────────────────────────────── */

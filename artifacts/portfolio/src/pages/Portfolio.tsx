@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CustomCursor from "@/components/CustomCursor";
 import SKIntro from "@/components/SKIntro";
 import Navigation from "@/components/Navigation";
@@ -21,6 +22,7 @@ export default function Portfolio() {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     }
     return () => { document.body.style.overflow = ""; };
   }, [introComplete]);

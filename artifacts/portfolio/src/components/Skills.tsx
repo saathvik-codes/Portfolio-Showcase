@@ -106,10 +106,11 @@ const marqueeItems = [
 
 const achievements = [
   {
-    num: "500+",
+    num: "200+",
     label: "LeetCode Problems",
-    desc: "Top 10% globally — consistent algorithmic practice across DSA, graphs, and dynamic programming.",
+    desc: "Consistent algorithmic practice across arrays, graphs, dynamic programming, and SQL.",
     color: "#a78bfa",
+    href: "https://leetcode.com/u/Sunny550/",
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
@@ -121,6 +122,7 @@ const achievements = [
     label: "Production Projects",
     desc: "Full-stack and AI/ML projects built and shipped independently, live on GitHub.",
     color: "#c084fc",
+    href: null,
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M22 11.08V12C21.99 17.05 18.31 21.5 13.35 22.71C8.39 23.92 3.27 21.64 1.05 17.07C-1.17 12.5 0.22 6.99 4.39 3.99C8.57 0.99 14.26 1.47 17.89 5.01"/>
@@ -133,6 +135,7 @@ const achievements = [
     label: "Industry Experience",
     desc: "Internship at AIMaster.live across software engineering, management, and marketing roles.",
     color: "#818cf8",
+    href: null,
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <rect x="2" y="7" width="20" height="14" rx="2"/>
@@ -167,6 +170,11 @@ export default function Skills() {
         y: 40, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.14,
         scrollTrigger: { trigger: ".achievement-row", start: "top 82%" },
       });
+
+      gsap.from(".expertise-panel", {
+        y: 30, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08,
+        scrollTrigger: { trigger: ".expertise-panels", start: "top 84%" },
+      });
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -175,13 +183,13 @@ export default function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="relative py-32 overflow-hidden"
+      className="relative py-24 md:py-28 overflow-hidden"
       data-testid="skills-section"
     >
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139,92,246,0.04) 0%, transparent 70%)" }} />
 
-      <div className="px-8 md:px-16 max-w-7xl mx-auto mb-14">
+      <div className="px-8 md:px-16 max-w-7xl mx-auto mb-10">
         <div className="section-index mb-6">04 — Skills</div>
         <h2
           className="font-serif text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] text-white"
@@ -194,7 +202,7 @@ export default function Skills() {
       </div>
 
       {/* Marquee */}
-      <div className="marquee py-5 mb-14 border-y border-white/[0.04]">
+      <div className="marquee py-5 mb-10 border-y border-white/[0.04]">
         <div className="marquee-inner">
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="mx-6 font-mono text-sm text-white/15 tracking-widest uppercase">
@@ -207,7 +215,7 @@ export default function Skills() {
 
       {/* Skills grid */}
       <div className="skill-grid px-8 md:px-16 max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {skillGroups.map((group, i) => (
             <div
               key={i}
@@ -233,11 +241,43 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* Achievements row */}
-        <div className="achievement-row mt-14 grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="expertise-panels mt-5 grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5">
+          <div className="expertise-panel rounded-[1.5rem] border border-white/[0.06] bg-white/[0.018] p-6">
+            <div className="font-mono text-xs uppercase tracking-[0.22em] text-violet-400/55 mb-5">Technical expertise map</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                ["Frontend systems", "React, Vite, Tailwind, motion-heavy UI"],
+                ["Backend APIs", "Node, Express, Flask, REST contracts"],
+                ["AI integration", "NLP, XAI, model-backed products"],
+              ].map(([title, detail]) => (
+                <div key={title} className="rounded-2xl border border-white/[0.055] bg-black/20 p-4">
+                  <div className="text-white/78 text-sm font-semibold">{title}</div>
+                  <div className="mt-2 text-white/34 text-xs leading-relaxed">{detail}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <a
+            href="https://leetcode.com/u/Sunny550/"
+            target="_blank"
+            rel="noreferrer"
+            className="expertise-panel group rounded-[1.5rem] border border-yellow-400/15 bg-yellow-400/[0.035] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-yellow-300/35"
+            data-hover="true"
+          >
+            <div className="font-mono text-xs uppercase tracking-[0.22em] text-yellow-300/55">Problem solving</div>
+            <div className="mt-5 text-5xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>200+</div>
+            <div className="mt-2 text-sm text-white/45">LeetCode problems solved on Sunny550</div>
+            <div className="mt-6 font-mono text-xs uppercase tracking-widest text-yellow-200/70 group-hover:text-yellow-100">Open profile ↗</div>
+          </a>
+        </div>
+
+        <div className="achievement-row mt-5 grid grid-cols-1 md:grid-cols-3 gap-5">
           {achievements.map((item, i) => (
-            <div
+            <a
               key={i}
+              href={item.href ?? undefined}
+              target={item.href ? "_blank" : undefined}
+              rel={item.href ? "noreferrer" : undefined}
               className="achievement-card relative overflow-hidden p-7 rounded-lg border transition-all duration-400 group hover:scale-[1.02]"
               style={{
                 borderColor: `${item.color}18`,
@@ -256,7 +296,7 @@ export default function Skills() {
                 <div className="font-semibold text-white text-sm mb-3">{item.label}</div>
                 <div className="text-white/35 text-sm leading-relaxed">{item.desc}</div>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

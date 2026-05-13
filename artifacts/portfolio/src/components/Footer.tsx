@@ -31,6 +31,17 @@ export default function Footer() {
       ),
     },
     {
+      label: "LeetCode",
+      href: "https://leetcode.com/u/Sunny550/",
+      icon: (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 4L6 12l8 8"/>
+          <path d="M8 12h10"/>
+          <path d="M15 6l3 3"/>
+        </svg>
+      ),
+    },
+    {
       label: "Instagram",
       href: "https://www.instagram.com/itz._.sunnyyy18/",
       icon: (

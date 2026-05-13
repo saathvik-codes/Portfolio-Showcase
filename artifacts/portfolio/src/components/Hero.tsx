@@ -2,13 +2,12 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ThreeBackground from "./ThreeBackground";
+import RollingTitle from "./RollingTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const heroRef = useRef<HTMLElement>(null);
-  const line1Ref = useRef<HTMLSpanElement>(null);
-  const line2Ref = useRef<HTMLSpanElement>(null);
   const taglineRef = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const badgesRef = useRef<HTMLDivElement>(null);
@@ -33,14 +32,6 @@ export default function Hero() {
         duration: 0.6,
         ease: "power3.out",
       }, "-=0.3");
-
-      tl.from([line1Ref.current, line2Ref.current], {
-        y: 100,
-        opacity: 0,
-        duration: 1,
-        ease: "power4.out",
-        stagger: 0.08,
-      }, "-=0.2");
 
       tl.from(subRef.current, {
         y: 30,
@@ -118,15 +109,14 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Main headline */}
-        <h1
-          className="font-serif leading-[0.88] tracking-tight overflow-hidden"
-          style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: "clamp(3.5rem,10vw,9rem)" }}
-          data-testid="hero-headline"
-        >
-          <span ref={line1Ref} className="block text-white">Saathvik</span>
-          <span ref={line2Ref} className="block gradient-text">Kalepu.</span>
-        </h1>
+        <RollingTitle
+          lines={[
+            { text: "Saathvik" },
+            { text: "Kalepu.", gradient: true },
+          ]}
+          className="hero-rolling-title font-serif leading-[0.88] tracking-tight"
+          testId="hero-headline"
+        />
 
         {/* Sub */}
         <p

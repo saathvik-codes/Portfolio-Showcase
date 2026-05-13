@@ -5,8 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const items = [
-  { value: "500+", label: "LeetCode Problems Solved", color: "#a78bfa" },
-  { value: "Top 10%", label: "LeetCode Global Rank", color: "#c084fc" },
+  { value: "200+", label: "LeetCode Problems Solved", color: "#a78bfa" },
+  { value: "Sunny550", label: "LeetCode Profile", color: "#c084fc" },
   { value: "8.2", label: "CGPA at IITDM Kurnool", color: "#818cf8" },
   { value: "6 mo", label: "Industry Internship", color: "#e879f9" },
   { value: "5+", label: "Full-Stack Projects", color: "#a78bfa" },

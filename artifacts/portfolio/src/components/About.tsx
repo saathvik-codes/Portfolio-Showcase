@@ -41,7 +41,7 @@ export default function About() {
 
   const stats = [
     { num: "8.2", label: "CGPA at IITDM", suffix: "" },
-    { num: "500", label: "LeetCode Problems", suffix: "+" },
+    { num: "200", label: "LeetCode Problems", suffix: "+" },
     { num: "5", label: "Full-stack Projects", suffix: "+" },
     { num: "7", label: "Months at AIMaster", suffix: "" },
   ];

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RollingTitle from "./RollingTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,8 @@ const projects = [
     accent: "linear-gradient(135deg, rgba(139,92,246,0.18) 0%, rgba(88,28,135,0.06) 100%)",
     border: "rgba(139,92,246,0.25)",
     github: "https://github.com/saathvik-codes/Serenity-Mental-Wellness-Platform",
+    image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&q=80",
+    imageAlt: "Calm modern workspace used as a visual metaphor for mental wellness software",
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
         <circle cx="20" cy="20" r="18" fill="rgba(139,92,246,0.15)" stroke="rgba(139,92,246,0.3)" strokeWidth="1.5"/>
@@ -44,6 +47,8 @@ const projects = [
     accent: "linear-gradient(135deg, rgba(192,132,252,0.15) 0%, rgba(126,34,206,0.05) 100%)",
     border: "rgba(192,132,252,0.22)",
     github: "https://github.com/saathvik-codes/TaskVise-Company-Task-Manging-System",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Team planning workflow around a table",
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
         <rect x="2" y="2" width="36" height="36" rx="8" fill="rgba(192,132,252,0.12)" stroke="rgba(192,132,252,0.25)" strokeWidth="1.5"/>
@@ -70,6 +75,8 @@ const projects = [
     accent: "linear-gradient(135deg, rgba(232,121,249,0.14) 0%, rgba(134,25,143,0.05) 100%)",
     border: "rgba(232,121,249,0.22)",
     github: "https://github.com/saathvik-codes/Explainable-Behavioral-Security-Platform",
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
+    imageAlt: "Close-up of circuit board technology for cybersecurity project",
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
         <path d="M20 3 L34 9 L34 22 C34 29 27 35 20 38 C13 35 6 29 6 22 L6 9 Z" fill="rgba(232,121,249,0.1)" stroke="rgba(232,121,249,0.35)" strokeWidth="1.5"/>
@@ -97,6 +104,8 @@ const projects = [
     accent: "linear-gradient(135deg, rgba(129,140,248,0.14) 0%, rgba(67,56,202,0.05) 100%)",
     border: "rgba(129,140,248,0.22)",
     github: "https://github.com/saathvik-codes/Unicounsel-flasknow",
+    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1000&q=80",
+    imageAlt: "Students collaborating in an education setting",
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
         <circle cx="20" cy="20" r="18" fill="rgba(129,140,248,0.1)" stroke="rgba(129,140,248,0.25)" strokeWidth="1.5"/>
@@ -120,6 +129,8 @@ const projects = [
     accent: "linear-gradient(135deg, rgba(251,191,36,0.12) 0%, rgba(180,83,9,0.05) 100%)",
     border: "rgba(251,191,36,0.2)",
     github: null,
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80",
+    imageAlt: "Online payment and commerce workspace",
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
         <rect x="2" y="2" width="36" height="36" rx="8" fill="rgba(251,191,36,0.1)" stroke="rgba(251,191,36,0.25)" strokeWidth="1.5"/>
@@ -145,6 +156,8 @@ const projects = [
     accent: "linear-gradient(135deg, rgba(52,211,153,0.12) 0%, rgba(4,120,87,0.04) 100%)",
     border: "rgba(52,211,153,0.2)",
     github: null,
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80",
+    imageAlt: "Logistics containers representing supply chain systems",
     icon: (
       <svg viewBox="0 0 40 40" width="36" height="36" fill="none">
         <circle cx="8" cy="20" r="4" fill="rgba(52,211,153,0.3)" stroke="rgba(52,211,153,0.5)" strokeWidth="1.5"/>
@@ -161,26 +174,27 @@ const projects = [
   },
 ];
 
+const projectStats = [
+  { label: "Primary focus", value: "AI + full-stack" },
+  { label: "Code style", value: "typed, modular" },
+  { label: "Proof", value: "GitHub-first" },
+];
+
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Rolling title
-      const projLines = sectionRef.current?.querySelectorAll(".proj-clip-line");
-      if (projLines?.length) {
-        gsap.from(Array.from(projLines), {
-          yPercent: 110,
-          duration: 1.1,
-          ease: "power4.out",
-          stagger: 0.08,
-          scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
-        });
-      }
-
-      gsap.from(".proj-card", {
-        y: 30, opacity: 0, duration: 0.6, ease: "power2.out", stagger: 0.09,
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+      gsap.from(".project-showcase-item", {
+        y: 30,
+        duration: 0.6,
+        ease: "power2.out",
+        stagger: 0.09,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          invalidateOnRefresh: true,
+        },
       });
     }, sectionRef);
     return () => ctx.revert();
@@ -203,13 +217,13 @@ export default function Projects() {
 
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 md:mb-12">
-          <h2
+          <RollingTitle
+            lines={[
+              { text: "Selected" },
+              { text: "Work.", gradient: true },
+            ]}
             className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-white"
-            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
-          >
-            <span className="clip-line-wrap"><span className="proj-clip-line">Selected</span></span>
-            <span className="clip-line-wrap"><span className="proj-clip-line gradient-text">Work.</span></span>
-          </h2>
+          />
           <a
             href="https://github.com/saathvik-codes"
             target="_blank"
@@ -225,12 +239,150 @@ export default function Projects() {
           </a>
         </div>
 
-        {/* Gallery grid — 3 col on desktop, 2 on tablet, 1 on mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="project-showcase-item grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-4 mb-5">
+          <a
+            href={projects[0].github ?? "https://github.com/saathvik-codes"}
+            target="_blank"
+            rel="noreferrer"
+            className="group relative min-h-[420px] overflow-hidden rounded-[2rem] border border-violet-500/20 bg-[#101014] p-6 md:p-8 transition-all duration-500 hover:border-violet-400/45 hover:-translate-y-1"
+            data-hover="true"
+          >
+            <img
+              src={projects[0].image}
+              alt={projects[0].imageAlt}
+              className="absolute inset-0 h-full w-full object-cover opacity-30 grayscale transition duration-700 group-hover:scale-105 group-hover:opacity-42 group-hover:grayscale-0"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/85 via-[#101014]/72 to-violet-950/45" />
+            <div className="absolute inset-0 opacity-80 mix-blend-screen" style={{ background: projects[0].accent }} />
+            <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full border border-violet-400/15" />
+            <div className="absolute right-10 top-14 h-36 w-36 rounded-full border border-violet-400/20" />
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/45 to-transparent" />
+
+            <div className="relative z-10 flex h-full flex-col justify-between gap-12">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="font-mono text-xs tracking-[0.25em] uppercase text-violet-300/60">Featured build</div>
+                  <h3 className="mt-5 max-w-xl text-4xl md:text-6xl leading-[0.95] text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
+                    {projects[0].title}
+                  </h3>
+                  <p className="mt-4 font-mono text-sm text-violet-200/55">{projects[0].subtitle}</p>
+                </div>
+                <div className="hidden sm:flex h-16 w-16 items-center justify-center rounded-2xl border border-violet-300/20 bg-white/[0.03]">
+                  {projects[0].icon}
+                </div>
+              </div>
+
+              <div>
+                <p className="max-w-2xl text-base md:text-lg leading-relaxed text-white/58">
+                  {projects[0].description}
+                </p>
+                <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {projectStats.map((stat) => (
+                    <div key={stat.label} className="rounded-2xl border border-white/[0.07] bg-black/20 p-4">
+                      <div className="font-mono text-[10px] uppercase tracking-widest text-white/25">{stat.label}</div>
+                      <div className="mt-2 text-sm font-semibold text-white/78">{stat.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.07] pt-5">
+                <div className="flex flex-wrap gap-2">
+                  {projects[0].tags.slice(0, 5).map((tag) => (
+                    <span key={tag} className="rounded-full border border-violet-300/15 bg-violet-300/[0.05] px-3 py-1 font-mono text-xs text-violet-100/55">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <span className="font-mono text-xs uppercase tracking-widest text-violet-300/70 group-hover:text-violet-200">
+                  View source ↗
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <div className="grid gap-4">
+            {projects.slice(1, 3).map((p) => (
+              <a
+                key={p.title}
+                href={p.github ?? "https://github.com/saathvik-codes"}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative overflow-hidden rounded-[1.5rem] border p-5 transition-all duration-300 hover:-translate-y-1"
+                style={{ background: "#101010", borderColor: p.border }}
+                data-hover="true"
+              >
+                <img
+                  src={p.image}
+                  alt={p.imageAlt}
+                  className="absolute inset-0 h-full w-full object-cover opacity-18 grayscale transition duration-500 group-hover:scale-105 group-hover:opacity-35 group-hover:grayscale-0"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/88 via-[#101010]/74 to-black/55" />
+                <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: p.accent }} />
+                <div className="relative z-10 flex h-full flex-col justify-between gap-8">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="font-mono text-xs text-white/22">{p.index} / {p.type}</div>
+                      <h3 className="mt-3 text-2xl text-white/90" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>{p.title}</h3>
+                    </div>
+                    <div className="shrink-0">{p.icon}</div>
+                  </div>
+                  <p className="text-sm leading-relaxed text-white/45">{p.description}</p>
+                  <div className="flex items-center justify-between border-t border-white/[0.06] pt-4">
+                    <span className="font-mono text-xs" style={{ color: p.color }}>{p.lang}</span>
+                    <span className="text-white/20 group-hover:text-white/55 transition-colors">↗</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="project-showcase-item mb-6 rounded-[1.75rem] border border-white/[0.06] bg-white/[0.015] p-2">
+          {projects.slice(3).map((p, i) => (
+            <a
+              key={p.title}
+              href={p.github ?? "https://github.com/saathvik-codes"}
+              target="_blank"
+              rel="noreferrer"
+              className="group grid grid-cols-1 gap-4 rounded-[1.35rem] px-4 py-5 transition-all duration-300 hover:bg-white/[0.035] md:grid-cols-[90px_1fr_180px_80px] md:items-center md:px-5"
+              data-hover="true"
+            >
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-xs text-white/18">{String(i + 4).padStart(2, "0")}</span>
+                <span className="h-8 w-px bg-white/[0.06]" />
+                <span className="relative h-14 w-20 overflow-hidden rounded-xl border border-white/[0.06] bg-white/[0.02]">
+                  <img src={p.image} alt={p.imageAlt} className="h-full w-full object-cover opacity-65 grayscale transition duration-300 group-hover:opacity-90 group-hover:grayscale-0" loading="lazy" />
+                </span>
+              </div>
+              <div>
+                <h3 className="text-lg text-white/82 transition-colors group-hover:text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}>
+                  {p.title}
+                </h3>
+                <p className="mt-1 text-sm text-white/38">{p.subtitle}</p>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {p.tags.slice(0, 3).map((tag) => (
+                  <span key={tag} className="rounded-full border border-white/[0.06] px-2 py-1 font-mono text-[10px] text-white/32">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div className="font-mono text-xs uppercase tracking-widest text-white/22 transition-colors group-hover:text-violet-300">
+                Open ↗
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Legacy compact cards retained as data source replacement removed */}
+        <div className="hidden">
           {projects.map((p, i) => (
             <div
               key={i}
-              className="proj-card group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl cursor-pointer flex flex-col"
+              className="proj-card"
               style={{
                 background: "#111111",
                 borderColor: p.border,

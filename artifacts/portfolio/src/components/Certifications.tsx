@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RollingTitle from "./RollingTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -197,21 +198,16 @@ export default function Certifications() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Rolling title
-      const certLines = sectionRef.current?.querySelectorAll(".certs-clip-line");
-      if (certLines?.length) {
-        gsap.from(Array.from(certLines), {
-          yPercent: 110,
-          duration: 1.1,
-          ease: "power4.out",
-          stagger: 0.08,
-          scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
-        });
-      }
-
-      gsap.from(".cert-card", {
-        y: 24, opacity: 0, duration: 0.5, ease: "power2.out", stagger: 0.05,
-        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
+      gsap.from(".cert-showcase-item", {
+        y: 24,
+        duration: 0.5,
+        ease: "power2.out",
+        stagger: 0.05,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          invalidateOnRefresh: true,
+        },
       });
     }, sectionRef);
     return () => ctx.revert();
@@ -219,6 +215,13 @@ export default function Certifications() {
 
   const featured = certifications.filter((c) => c.featured);
   const rest = certifications.filter((c) => !c.featured);
+  const credentialImage = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80";
+  const activityImages = [
+    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=80",
+  ];
 
   return (
     <section
@@ -231,24 +234,51 @@ export default function Certifications() {
         <div className="section-index mb-6">05 — Credentials</div>
 
         <div className="flex flex-col md:flex-row md:items-end gap-6 mb-10 md:mb-12">
-          <h2
+          <RollingTitle
+            lines={[
+              { text: "Certifications" },
+              { text: "& Activities.", gradient: true },
+            ]}
             className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-white"
-            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
-          >
-            <span className="clip-line-wrap"><span className="certs-clip-line">Certifications</span></span>
-            <span className="clip-line-wrap"><span className="certs-clip-line gradient-text">&amp; Activities.</span></span>
-          </h2>
+          />
           <p className="md:ml-auto text-white/40 text-sm font-mono max-w-xs">
             Continuous learning across AI, cloud, data, and development.
           </p>
         </div>
 
         {/* Featured: Microsoft — large prominent cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+        <div className="cert-showcase-item grid grid-cols-1 lg:grid-cols-[0.82fr_1.18fr] gap-4 mb-5">
+          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-violet-400/16 bg-[#101014] p-6">
+            <img
+              src={credentialImage}
+              alt="Online learning workspace with laptop"
+              className="absolute inset-0 h-full w-full object-cover opacity-32 grayscale transition duration-700 hover:scale-105 hover:opacity-45 hover:grayscale-0"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/86 via-black/62 to-violet-950/36" />
+            <div className="relative z-10 flex h-full flex-col justify-between">
+              <div>
+                <div className="font-mono text-xs uppercase tracking-[0.24em] text-violet-300/55">Learning stack</div>
+                <div className="mt-7 text-6xl leading-none text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>10+</div>
+                <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/48">
+                  Certificates arranged as a skills ledger instead of a generic badge wall.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {["AI", "Cloud", "Data", "Dev"].map((track) => (
+                  <div key={track} className="rounded-2xl border border-white/[0.07] bg-black/25 p-4">
+                    <div className="font-mono text-[10px] uppercase tracking-widest text-white/25">Track</div>
+                    <div className="mt-1 text-sm font-semibold text-violet-100/75">{track}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="grid gap-4">
           {featured.map((cert, i) => (
             <div
               key={i}
-              className="cert-card group flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01]"
+              className="group relative overflow-hidden flex items-center gap-4 p-6 rounded-[1.65rem] border transition-all duration-300 hover:-translate-y-1"
               style={{ background: cert.bg, borderColor: cert.border }}
             >
               <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
@@ -267,15 +297,16 @@ export default function Certifications() {
                 style={{ background: "rgba(0,120,212,0.2)", color: cert.color }}>✓</div>
             </div>
           ))}
+          </div>
         </div>
 
         {/* Rest — responsive grid, always visible */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-12">
+        <div className="cert-showcase-item overflow-hidden rounded-[1.75rem] border border-white/[0.06] bg-white/[0.015] mb-12">
           {rest.map((cert, i) => (
             <div
               key={i}
-              className="cert-card group flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:scale-[1.01]"
-              style={{ background: cert.bg, borderColor: cert.border }}
+              className="group grid grid-cols-1 gap-3 border-b border-white/[0.045] px-4 py-4 transition-all duration-300 last:border-b-0 hover:bg-white/[0.03] sm:grid-cols-[52px_1fr_160px_80px] sm:items-center"
+              style={{ borderColor: cert.border }}
             >
               <div className="shrink-0 mt-0.5">{cert.logo}</div>
               <div className="min-w-0">
@@ -296,16 +327,24 @@ export default function Certifications() {
             <span className="font-mono text-xs text-violet-400/60 tracking-widest uppercase">Extra-Curricular Activities</span>
             <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="cert-showcase-item grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {extras.map((item, i) => (
               <div
                 key={i}
-                className="cert-card p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+                className="group relative min-h-[230px] overflow-hidden p-5 rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1"
                 style={{ background: "#111111", borderColor: `${item.color}20` }}
               >
-                <div className="text-2xl mb-3">{item.icon}</div>
-                <div className="text-white/85 text-sm font-semibold mb-2">{item.label}</div>
-                <div className="text-white/40 text-xs leading-relaxed mb-3">{item.detail}</div>
+                <img
+                  src={activityImages[i]}
+                  alt={`${item.label} visual`}
+                  className="absolute inset-0 h-full w-full object-cover opacity-16 grayscale transition duration-500 group-hover:scale-105 group-hover:opacity-28 group-hover:grayscale-0"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/58 via-[#111]/76 to-[#111]" />
+                <div className="inline-flex h-12 min-w-12 items-center justify-center rounded-2xl border px-2 font-mono text-xs font-bold mb-4"
+                  style={{ color: item.color, borderColor: `${item.color}35`, background: `${item.color}10` }}>{item.label.split(" ").map(word => word[0]).join("").slice(0, 3)}</div>
+                <div className="relative text-white/85 text-sm font-semibold mb-2">{item.label}</div>
+                <div className="relative text-white/40 text-xs leading-relaxed mb-3">{item.detail}</div>
                 <div className="inline-block font-mono text-xs px-2.5 py-1 rounded-full"
                   style={{ background: `${item.color}15`, color: item.color, border: `1px solid ${item.color}30` }}>
                   {item.tag}
