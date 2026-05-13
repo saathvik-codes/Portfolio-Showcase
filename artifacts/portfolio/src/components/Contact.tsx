@@ -46,6 +46,41 @@ const socials = [
   },
 ];
 
+const contactInfo = [
+  {
+    label: "Email",
+    value: "saathvikk202@gmail.com",
+    href: "mailto:saathvikk202@gmail.com",
+    icon: (
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="M2 8L12 14L22 8"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Phone",
+    value: "+91 9908179816",
+    href: "tel:+919908179816",
+    icon: (
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.0 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.06 6.06l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Location",
+    value: "Hyderabad, India",
+    href: null,
+    icon: (
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+    ),
+  },
+];
+
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
@@ -62,9 +97,13 @@ export default function Contact() {
         y: 60, opacity: 0, duration: 1.2, ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
       });
+      gsap.from(".contact-info-chip", {
+        y: 20, opacity: 0, duration: 0.5, stagger: 0.08, ease: "power3.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 68%" },
+      });
       gsap.from(".contact-side-item", {
         x: -30, opacity: 0, duration: 0.7, stagger: 0.1, ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 60%" },
       });
       gsap.from(".form-field-anim", {
         y: 24, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power3.out",
@@ -128,90 +167,99 @@ export default function Contact() {
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true"
         style={{ background: "radial-gradient(ellipse 60% 60% at 80% 50%, rgba(139,92,246,0.06) 0%, transparent 70%)" }} />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
-        <span className="text-[clamp(6rem,18vw,16rem)] font-800 text-white/[0.012] leading-none"
+        <span className="text-[clamp(6rem,18vw,16rem)] leading-none text-white/[0.012]"
           style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>Hello.</span>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="section-index mb-6">06 — Contact</div>
 
+        {/* Big heading + info chips */}
         <div ref={headRef} className="mb-12 md:mb-16">
           <h2
-            className="font-serif text-[clamp(2.5rem,7vw,7rem)] font-800 leading-tight text-white"
+            className="font-serif text-[clamp(2.5rem,7vw,7rem)] leading-tight text-white mb-5"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
             data-testid="contact-heading"
           >
             Let's build<br />
             <span className="gradient-text">something.</span>
           </h2>
-          <p className="text-white/35 text-base md:text-lg leading-relaxed mt-5 max-w-md">
+          <p className="text-white/35 text-base md:text-lg leading-relaxed mb-8 max-w-lg">
             Open to internships, full-time roles, and interesting projects.
             Drop me a message — I respond within 24 hours.
           </p>
+
+          {/* Contact info chips — prominently below heading */}
+          <div className="flex flex-wrap gap-3">
+            {contactInfo.map((info, i) => (
+              info.href ? (
+                <a key={i} href={info.href}
+                  className="contact-info-chip group flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] hover:bg-violet-500/[0.08] hover:border-violet-500/30 transition-all duration-300"
+                  data-hover="true">
+                  <span className="text-violet-400/70 group-hover:text-violet-400 transition-colors">{info.icon}</span>
+                  <div>
+                    <div className="font-mono text-xs text-white/20 tracking-widest uppercase leading-none mb-0.5">{info.label}</div>
+                    <div className="text-white/70 text-sm font-medium group-hover:text-white transition-colors">{info.value}</div>
+                  </div>
+                </a>
+              ) : (
+                <div key={i}
+                  className="contact-info-chip flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-white/[0.07] bg-white/[0.03]">
+                  <span className="text-violet-400/50">{info.icon}</span>
+                  <div>
+                    <div className="font-mono text-xs text-white/20 tracking-widest uppercase leading-none mb-0.5">{info.label}</div>
+                    <div className="text-white/50 text-sm">{info.value}</div>
+                  </div>
+                </div>
+              )
+            ))}
+
+            {/* Copy email button */}
+            <button onClick={copyEmail}
+              className="contact-info-chip group flex items-center gap-2.5 px-4 py-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] hover:bg-violet-500/[0.06] hover:border-violet-500/25 transition-all duration-300 cursor-pointer"
+              data-hover="true">
+              <span className="text-white/30 group-hover:text-violet-400 transition-colors">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                  {copied ? <path d="M5 12L10 17L19 8"/> : <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></>}
+                </svg>
+              </span>
+              <span className="font-mono text-xs text-white/30 tracking-widest uppercase group-hover:text-violet-400/80 transition-colors">
+                {copied ? "Copied!" : "Copy Email"}
+              </span>
+            </button>
+          </div>
         </div>
 
-        <div className="grid lg:grid-cols-[320px_1fr] gap-10 md:gap-16 items-start">
-          {/* Left: contact info */}
-          <div className="space-y-3">
-            {/* Email */}
-            <a href="mailto:saathvikk202@gmail.com"
-              className="contact-side-item group flex items-center gap-4 p-4 rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] hover:border-violet-500/25 transition-all duration-300"
-              data-hover="true" data-testid="contact-email-link">
-              <div className="w-10 h-10 rounded-xl border border-violet-500/20 flex items-center justify-center text-violet-400 group-hover:bg-violet-500/10 transition-all">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8L12 14L22 8"/></svg>
-              </div>
-              <div>
-                <div className="font-mono text-xs text-white/25 tracking-widest uppercase">Email</div>
-                <div className="text-white/80 text-sm font-medium group-hover:text-white transition-colors">saathvikk202@gmail.com</div>
-              </div>
-            </a>
-
-            {/* Copy */}
-            <div onClick={copyEmail}
-              className="contact-side-item group flex items-center gap-4 p-4 rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] hover:border-violet-500/20 cursor-pointer transition-all duration-300"
-              data-hover="true" data-testid="contact-copy-email">
-              <div className="w-10 h-10 rounded-xl border border-white/8 flex items-center justify-center text-white/30 group-hover:text-violet-400 group-hover:border-violet-500/25 transition-all">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                  {copied ? <path d="M5 12L10 17L19 8"/> : <><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4C2.9 15 2 14.1 2 13V4C2 2.9 2.9 2 4 2H13C14.1 2 15 2.9 15 4V5"/></>}
-                </svg>
-              </div>
-              <span className="font-mono text-xs text-white/25 tracking-widest uppercase group-hover:text-violet-400/70 transition-colors">
-                {copied ? "Copied to clipboard!" : "Copy email address"}
-              </span>
+        <div className="grid lg:grid-cols-[300px_1fr] gap-10 md:gap-14 items-start">
+          {/* Left: socials */}
+          <div>
+            <div className="font-mono text-xs text-white/20 tracking-widest uppercase mb-4">Find me online</div>
+            <div className="flex flex-col gap-2 mb-8">
+              {socials.map((s, i) => (
+                <a key={i} href={s.href} target="_blank" rel="noreferrer"
+                  className="contact-side-item group flex items-center justify-between py-3.5 px-4 rounded-xl border border-white/[0.04] hover:border-violet-500/25 hover:bg-violet-500/[0.04] transition-all duration-300"
+                  data-hover="true">
+                  <div className="flex items-center gap-3">
+                    <span className="text-white/25 group-hover:text-violet-400 transition-colors">{s.icon}</span>
+                    <div>
+                      <div className="font-mono text-xs text-white/20 tracking-widest uppercase">{s.label}</div>
+                      <div className="text-white/50 text-xs mt-0.5 group-hover:text-white/80 transition-colors">{s.handle}</div>
+                    </div>
+                  </div>
+                  <span className="text-white/15 group-hover:text-violet-400 transition-all group-hover:translate-x-0.5">↗</span>
+                </a>
+              ))}
             </div>
 
-            {/* Phone */}
-            <a href="tel:+919908179816"
-              className="contact-side-item group flex items-center gap-4 p-4 rounded-2xl border border-white/[0.05] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300"
-              data-hover="true" data-testid="contact-phone">
-              <div className="w-10 h-10 rounded-xl border border-white/6 flex items-center justify-center text-white/20 group-hover:text-white/50 group-hover:border-white/15 transition-all">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M22 16.92V19.92C22 20.48 21.73 21 21.27 21.34C20.81 21.68 20.23 21.79 19.69 21.64C16.41 20.71 13.33 19.02 10.77 16.73C8.39 14.62 6.53 12.07 5.44 9.24C5.29 8.7 5.41 8.12 5.75 7.66C6.09 7.2 6.61 6.94 7.17 6.94H10.17C10.99 6.94 11.71 7.51 11.92 8.31L12.87 12.06C13.05 12.76 12.79 13.5 12.24 13.93L10.91 14.94C11.79 16.47 13.45 17.85 15.23 18.62L16.06 17.5C16.5 16.95 17.24 16.71 17.94 16.9L21.69 17.85C22.49 18.06 23.06 18.78 23.06 19.6"/></svg>
+            {/* Availability badge */}
+            <div className="p-4 rounded-xl border border-emerald-500/15 bg-emerald-500/[0.04]">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="font-mono text-xs text-emerald-400/80 tracking-widest uppercase">Available</span>
               </div>
-              <div>
-                <div className="font-mono text-xs text-white/20 tracking-widest uppercase">Phone</div>
-                <div className="text-white/40 text-sm group-hover:text-white/70 transition-colors">+91 9908179816</div>
-              </div>
-            </a>
-
-            {/* Divider */}
-            <div className="pt-4">
-              <div className="font-mono text-xs text-white/20 tracking-widest uppercase mb-3">Find me online</div>
-              <div className="flex flex-col gap-2">
-                {socials.map((s, i) => (
-                  <a key={i} href={s.href} target="_blank" rel="noreferrer"
-                    className="contact-side-item group flex items-center justify-between py-3 px-4 rounded-xl border border-white/[0.04] hover:border-violet-500/20 hover:bg-white/[0.02] transition-all duration-300"
-                    data-hover="true">
-                    <div className="flex items-center gap-3">
-                      <span className="text-white/25 group-hover:text-violet-400 transition-colors">{s.icon}</span>
-                      <div>
-                        <div className="font-mono text-xs text-white/20 tracking-widest uppercase">{s.label}</div>
-                        <div className="text-white/50 text-xs mt-0.5 group-hover:text-white/80 transition-colors">{s.handle}</div>
-                      </div>
-                    </div>
-                    <span className="text-white/15 group-hover:text-violet-400 transition-all -translate-x-1 group-hover:translate-x-0">↗</span>
-                  </a>
-                ))}
-              </div>
+              <p className="text-white/35 text-xs leading-relaxed">
+                Open to internships and full-time opportunities starting 2025.
+              </p>
             </div>
           </div>
 
@@ -222,7 +270,9 @@ export default function Contact() {
             {sent ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <div className="w-16 h-16 rounded-full bg-violet-500/10 border border-violet-500/30 flex items-center justify-center mb-6">
-                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round"><path d="M5 12L10 17L19 8"/></svg>
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round">
+                    <path d="M5 12L10 17L19 8"/>
+                  </svg>
                 </div>
                 <h3 className="font-serif text-2xl text-white mb-2" style={{ fontFamily: "'Syne', sans-serif" }}>Message Sent!</h3>
                 <p className="text-white/35 text-sm">I'll get back to you within 24 hours.</p>
@@ -273,11 +323,6 @@ export default function Contact() {
                       </>
                     ) : "Send Message →"}
                   </button>
-                  {!EMAILJS_PUBLIC_KEY && (
-                    <p className="font-mono text-xs text-white/12 text-center mt-3">
-                      Set <code className="text-violet-400/40">VITE_EMAILJS_PUBLIC_KEY</code> to enable form.
-                    </p>
-                  )}
                 </div>
               </form>
             )}
