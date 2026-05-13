@@ -166,16 +166,21 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Rolling title
+      const projLines = sectionRef.current?.querySelectorAll(".proj-clip-line");
+      if (projLines?.length) {
+        gsap.from(Array.from(projLines), {
+          yPercent: 110,
+          duration: 1.1,
+          ease: "power4.out",
+          stagger: 0.08,
+          scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
+        });
+      }
+
       gsap.from(".proj-card", {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-        },
+        y: 30, opacity: 0, duration: 0.6, ease: "power2.out", stagger: 0.09,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
       });
     }, sectionRef);
     return () => ctx.revert();
@@ -199,10 +204,11 @@ export default function Projects() {
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 md:mb-12">
           <h2
-            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-tight text-white"
+            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-white"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
           >
-            Selected <span className="gradient-text">Work.</span>
+            <span className="clip-line-wrap"><span className="proj-clip-line">Selected</span></span>
+            <span className="clip-line-wrap"><span className="proj-clip-line gradient-text">Work.</span></span>
           </h2>
           <a
             href="https://github.com/saathvik-codes"

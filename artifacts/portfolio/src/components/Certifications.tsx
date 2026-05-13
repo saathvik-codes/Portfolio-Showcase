@@ -197,12 +197,20 @@ export default function Certifications() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Rolling title
+      const certLines = sectionRef.current?.querySelectorAll(".certs-clip-line");
+      if (certLines?.length) {
+        gsap.from(Array.from(certLines), {
+          yPercent: 110,
+          duration: 1.1,
+          ease: "power4.out",
+          stagger: 0.08,
+          scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
+        });
+      }
+
       gsap.from(".cert-card", {
-        y: 24,
-        opacity: 0,
-        duration: 0.5,
-        ease: "power2.out",
-        stagger: 0.05,
+        y: 24, opacity: 0, duration: 0.5, ease: "power2.out", stagger: 0.05,
         scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
       });
     }, sectionRef);
@@ -224,11 +232,11 @@ export default function Certifications() {
 
         <div className="flex flex-col md:flex-row md:items-end gap-6 mb-10 md:mb-12">
           <h2
-            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-tight text-white"
+            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-white"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
           >
-            Certifications<br />
-            <span className="gradient-text">&amp; Activities.</span>
+            <span className="clip-line-wrap"><span className="certs-clip-line">Certifications</span></span>
+            <span className="clip-line-wrap"><span className="certs-clip-line gradient-text">&amp; Activities.</span></span>
           </h2>
           <p className="md:ml-auto text-white/40 text-sm font-mono max-w-xs">
             Continuous learning across AI, cloud, data, and development.

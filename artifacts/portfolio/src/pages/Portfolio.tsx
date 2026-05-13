@@ -5,11 +5,13 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
+import AchievementsStrip from "@/components/AchievementsStrip";
 import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import SectionDivider from "@/components/SectionDivider";
 
 export default function Portfolio() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -25,28 +27,29 @@ export default function Portfolio() {
 
   return (
     <div className="relative" data-testid="portfolio-root">
-      {/* Noise texture overlay */}
       <div className="noise-overlay" aria-hidden="true" />
-
-      {/* Custom cursor */}
       <CustomCursor />
 
-      {/* SK Intro overlay — renders above everything, z-index 1000 */}
       {!introComplete && (
         <SKIntro onComplete={() => setIntroComplete(true)} />
       )}
 
-      {/* Navigation */}
       <Navigation visible={introComplete} />
 
-      {/* Main content */}
       <main>
         <Hero />
+        <SectionDivider index="01" label="About" />
         <About />
+        <SectionDivider index="02" label="Experience" accent />
         <Experience />
+        <AchievementsStrip />
+        <SectionDivider index="03" label="Projects" />
         <Projects />
+        <SectionDivider index="04" label="Skills" accent />
         <Skills />
+        <SectionDivider index="05" label="Credentials" />
         <Certifications />
+        <SectionDivider index="06" label="Contact" accent />
         <Contact />
       </main>
       <Footer />

@@ -12,18 +12,27 @@ export default function About() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Rolling title lines
+      gsap.from(".about-clip-line", {
+        yPercent: 110,
+        duration: 1.1,
+        ease: "power4.out",
+        stagger: 0.08,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
+      });
+
       gsap.from(leftRef.current, {
-        x: -60, opacity: 0, duration: 1.2, ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
+        x: -40, opacity: 0, duration: 1.0, ease: "power3.out", delay: 0.1,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 78%" },
       });
       gsap.from(rightRef.current, {
-        x: 60, opacity: 0, duration: 1.2, ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
+        x: 40, opacity: 0, duration: 1.0, ease: "power3.out", delay: 0.15,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 78%" },
       });
       if (statsRef.current) {
         gsap.from(statsRef.current.children, {
-          y: 40, opacity: 0, duration: 0.8, stagger: 0.12, ease: "power3.out",
-          scrollTrigger: { trigger: statsRef.current, start: "top 85%" },
+          y: 40, opacity: 0, duration: 0.7, stagger: 0.1, ease: "power3.out",
+          scrollTrigger: { trigger: statsRef.current, start: "top 88%" },
         });
       }
     }, sectionRef);
@@ -32,7 +41,7 @@ export default function About() {
 
   const stats = [
     { num: "8.2", label: "CGPA at IITDM", suffix: "" },
-    { num: "200", label: "LeetCode Problems", suffix: "+" },
+    { num: "500", label: "LeetCode Problems", suffix: "+" },
     { num: "5", label: "Full-stack Projects", suffix: "+" },
     { num: "7", label: "Months at AIMaster", suffix: "" },
   ];
@@ -53,18 +62,17 @@ export default function About() {
           {/* Left */}
           <div ref={leftRef}>
             <h2
-              className="font-serif text-[clamp(2.5rem,5vw,4.5rem)] font-800 leading-tight text-white mb-8"
+              className="font-serif text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] text-white mb-8"
               style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
               data-testid="about-heading"
             >
-              Crafting software<br />
-              <span className="gradient-text">that matters.</span>
+              <span className="clip-line-wrap"><span className="about-clip-line">Crafting software</span></span>
+              <span className="clip-line-wrap"><span className="about-clip-line gradient-text">that matters.</span></span>
             </h2>
 
-            {/* Profile avatar placeholder */}
             <div className="flex items-center gap-5 mb-8 p-4 rounded-lg border border-white/5 bg-white/[0.02]">
               <div
-                className="w-16 h-16 rounded-full shrink-0 flex items-center justify-center text-2xl font-800 border border-violet-500/30"
+                className="w-16 h-16 rounded-full shrink-0 flex items-center justify-center text-2xl border border-violet-500/30"
                 style={{
                   background: "linear-gradient(135deg, rgba(139,92,246,0.3), rgba(192,132,252,0.15))",
                   fontFamily: "'Syne', sans-serif",
@@ -100,11 +108,10 @@ export default function About() {
               </p>
             </div>
 
-            {/* Education */}
             <div className="mt-8 space-y-3">
               {[
                 { degree: "B.Tech — Computer Science & Engineering", inst: "IITDM Kurnool · Expected 2027", detail: "CGPA: 8.2" },
-                { degree: "Intermediate (Class XII)", inst: "Valley Oak Junior College, Hyderabad", detail: "Percentage: 98.8%" },
+                { degree: "Intermediate (Class XII)", inst: "Valley Oak Junior College, Hyderabad", detail: "98.8%" },
                 { degree: "SSC (Class X)", inst: "Dr. KKR Gowtham High School, Hyderabad", detail: "CGPA: 10.0" },
               ].map((edu, i) => (
                 <div key={i} className="p-4 border border-white/5 bg-white/[0.02] rounded-lg hover:border-violet-500/15 transition-all duration-300">
@@ -119,36 +126,28 @@ export default function About() {
               ))}
             </div>
 
-            {/* Links */}
             <div className="flex gap-6 mt-8">
               <a href="https://linkedin.com/in/saathvik-kalepu-17041228b" target="_blank" rel="noreferrer"
-                className="font-mono text-xs tracking-widest uppercase text-white/25 hover:text-violet-400 transition-colors duration-300 flex items-center gap-2"
-                data-hover="true" data-testid="about-linkedin">
-                LinkedIn ↗
-              </a>
+                className="font-mono text-xs tracking-widest uppercase text-white/25 hover:text-violet-400 transition-colors duration-300"
+                data-hover="true" data-testid="about-linkedin">LinkedIn ↗</a>
               <a href="https://github.com/saathvik-codes" target="_blank" rel="noreferrer"
-                className="font-mono text-xs tracking-widest uppercase text-white/25 hover:text-violet-400 transition-colors duration-300 flex items-center gap-2"
-                data-hover="true" data-testid="about-github">
-                GitHub ↗
-              </a>
+                className="font-mono text-xs tracking-widest uppercase text-white/25 hover:text-violet-400 transition-colors duration-300"
+                data-hover="true" data-testid="about-github">GitHub ↗</a>
               <a href="/Saathvik_Kalepu_Resume.pdf" download
-                className="font-mono text-xs tracking-widest uppercase text-white/25 hover:text-violet-400 transition-colors duration-300 flex items-center gap-2"
-                data-hover="true" data-testid="about-resume">
-                Resume ↓
-              </a>
+                className="font-mono text-xs tracking-widest uppercase text-white/25 hover:text-violet-400 transition-colors duration-300"
+                data-hover="true" data-testid="about-resume">Resume ↓</a>
             </div>
           </div>
 
           {/* Right */}
           <div ref={rightRef} className="space-y-6">
-            {/* Stats grid */}
             <div ref={statsRef} className="grid grid-cols-2 gap-4" data-testid="stats-grid">
               {stats.map(({ num, label, suffix }) => (
                 <div key={label}
                   className="p-6 border border-white/5 bg-white/[0.02] rounded-lg hover:border-violet-500/20 transition-all duration-300 group"
                   data-testid={`stat-${label.replace(/\s+/g, "-").toLowerCase()}`}
                 >
-                  <div className="font-serif text-4xl font-800 text-white group-hover:text-violet-300 transition-colors duration-300"
+                  <div className="font-serif text-4xl text-white group-hover:text-violet-300 transition-colors duration-300"
                     style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
                     {num}<span className="text-violet-400">{suffix}</span>
                   </div>
@@ -157,7 +156,6 @@ export default function About() {
               ))}
             </div>
 
-            {/* Core competencies */}
             <div className="p-6 border border-white/5 bg-white/[0.015] rounded-lg">
               <div className="font-mono text-xs text-violet-400/50 tracking-widest uppercase mb-5">Core Competencies</div>
               <div className="space-y-3">
@@ -179,7 +177,6 @@ export default function About() {
               </div>
             </div>
 
-            {/* Profile highlight */}
             <div className="p-5 rounded-lg border border-violet-500/15 bg-violet-500/5">
               <div className="font-mono text-xs text-violet-400/50 tracking-widest uppercase mb-3">Quick Profile</div>
               <div className="grid grid-cols-2 gap-y-2 text-sm">

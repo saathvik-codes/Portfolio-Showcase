@@ -16,7 +16,7 @@ const skillGroups = [
   },
   {
     category: "Frontend",
-    skills: ["React.js", "HTML5", "CSS3", "Tailwind CSS"],
+    skills: ["React.js", "Next.js", "HTML5", "CSS3", "Tailwind CSS", "Material UI"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <rect x="2" y="3" width="20" height="14" rx="2"/>
@@ -26,7 +26,7 @@ const skillGroups = [
   },
   {
     category: "Backend",
-    skills: ["Node.js", "Express", "Flask", "Django", "REST APIs", "Microservices"],
+    skills: ["Node.js", "Express", "Flask", "Django", "REST APIs", "WebSockets"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <rect x="2" y="3" width="20" height="4" rx="1"/>
@@ -40,7 +40,7 @@ const skillGroups = [
   },
   {
     category: "AI / ML",
-    skills: ["NLP", "Behavioral Biometrics", "Explainable AI (SHAP)", "scikit-learn"],
+    skills: ["NLP", "Behavioral Biometrics", "SHAP/XAI", "PyTorch", "TensorFlow", "scikit-learn"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <circle cx="12" cy="12" r="3"/>
@@ -52,7 +52,7 @@ const skillGroups = [
   },
   {
     category: "Cloud & DevOps",
-    skills: ["Docker", "Kubernetes", "CI/CD", "AWS", "Firebase"],
+    skills: ["AWS (EC2, S3, Lambda)", "Docker", "Kubernetes", "Firebase", "CI/CD"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M18 10C18.7 8.5 19 7 19 5.5C19 3 17 2 15 2C13.5 2 12 3 11.5 4.5"/>
@@ -66,7 +66,7 @@ const skillGroups = [
   },
   {
     category: "Databases",
-    skills: ["MongoDB", "MySQL", "PostgreSQL", "SQLite"],
+    skills: ["MongoDB", "PostgreSQL", "MySQL", "SQLite", "Redis"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <ellipse cx="12" cy="5" rx="9" ry="3"/>
@@ -77,7 +77,7 @@ const skillGroups = [
   },
   {
     category: "Testing",
-    skills: ["Unit Testing (xUnit)", "Integration Testing", "Mocking", "Debugging"],
+    skills: ["Unit Testing", "Integration Testing", "Mocking", "Debugging"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M9 11L12 14L20 6"/>
@@ -87,7 +87,7 @@ const skillGroups = [
   },
   {
     category: "Tools",
-    skills: ["Git", "Linux", "Windows API", "VS Code"],
+    skills: ["Git", "Linux", "VS Code", "Agile/Scrum", "Windows API"],
     icon: (
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
@@ -106,9 +106,9 @@ const marqueeItems = [
 
 const achievements = [
   {
-    num: "200+",
+    num: "500+",
     label: "LeetCode Problems",
-    desc: "Consistent competitive programming practice strengthening DSA and algorithmic proficiency.",
+    desc: "Top 10% globally — consistent algorithmic practice across DSA, graphs, and dynamic programming.",
     color: "#a78bfa",
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -119,7 +119,7 @@ const achievements = [
   {
     num: "5+",
     label: "Production Projects",
-    desc: "Built and shipped full-stack and AI/ML projects independently on GitHub and in production.",
+    desc: "Full-stack and AI/ML projects built and shipped independently, live on GitHub.",
     color: "#c084fc",
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -131,7 +131,7 @@ const achievements = [
   {
     num: "7mo",
     label: "Industry Experience",
-    desc: "Hands-on internship at AIMaster.live across software engineering, management, and marketing roles.",
+    desc: "Internship at AIMaster.live across software engineering, management, and marketing roles.",
     color: "#818cf8",
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -149,22 +149,23 @@ export default function Skills() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Rolling title
+      gsap.from(".skills-clip-line", {
+        yPercent: 110,
+        duration: 1.1,
+        ease: "power4.out",
+        stagger: 0.08,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
+      });
+
       gsap.from(".skill-group", {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.07,
-        scrollTrigger: { trigger: ".skill-grid", start: "top 80%" },
+        y: 40, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.06,
+        scrollTrigger: { trigger: ".skill-grid", start: "top 82%" },
       });
 
       gsap.from(".achievement-card", {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.15,
-        scrollTrigger: { trigger: ".achievement-row", start: "top 80%" },
+        y: 40, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.14,
+        scrollTrigger: { trigger: ".achievement-row", start: "top 82%" },
       });
     }, sectionRef);
     return () => ctx.revert();
@@ -183,12 +184,12 @@ export default function Skills() {
       <div className="px-8 md:px-16 max-w-7xl mx-auto mb-14">
         <div className="section-index mb-6">04 — Skills</div>
         <h2
-          className="font-serif text-[clamp(2.5rem,5vw,4.5rem)] font-800 leading-tight text-white"
+          className="font-serif text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] text-white"
           style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
           data-testid="skills-heading"
         >
-          Technical<br />
-          <span className="gradient-text">Arsenal.</span>
+          <span className="clip-line-wrap"><span className="skills-clip-line">Technical</span></span>
+          <span className="clip-line-wrap"><span className="skills-clip-line gradient-text">Arsenal.</span></span>
         </h2>
       </div>
 
@@ -244,18 +245,12 @@ export default function Skills() {
               }}
               data-testid={`achievement-${i}`}
             >
-              {/* Glow */}
               <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-10 transition-opacity duration-300 group-hover:opacity-20"
                 style={{ background: `radial-gradient(circle, ${item.color}, transparent)` }} />
-
               <div className="relative z-10">
-                <div className="mb-4" style={{ color: item.color }}>
-                  {item.icon}
-                </div>
-                <div
-                  className="font-serif text-4xl font-800 mb-1 transition-colors duration-300"
-                  style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, color: item.color }}
-                >
+                <div className="mb-4" style={{ color: item.color }}>{item.icon}</div>
+                <div className="font-serif text-4xl mb-1 transition-colors duration-300"
+                  style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, color: item.color }}>
                   {item.num}
                 </div>
                 <div className="font-semibold text-white text-sm mb-3">{item.label}</div>

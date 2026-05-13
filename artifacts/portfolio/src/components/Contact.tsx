@@ -57,9 +57,21 @@ export default function Contact() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Rolling title
+      const contactLines = sectionRef.current?.querySelectorAll(".contact-clip-line");
+      if (contactLines?.length) {
+        gsap.from(Array.from(contactLines), {
+          yPercent: 110,
+          duration: 1.1,
+          ease: "power4.out",
+          stagger: 0.08,
+          scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
+        });
+      }
+
       gsap.from(".contact-left > *", {
         y: 20, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 72%" },
       });
       gsap.from(".form-field-anim", {
         y: 20, opacity: 0, duration: 0.5, stagger: 0.07, ease: "power2.out",
@@ -129,12 +141,12 @@ export default function Contact() {
         {/* Section heading */}
         <div className="mb-12 md:mb-16">
           <h2
-            className="font-serif text-[clamp(2.5rem,7vw,7rem)] leading-tight text-white mb-4"
+            className="font-serif text-[clamp(2.5rem,7vw,7rem)] leading-[1.05] text-white mb-4"
             style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
             data-testid="contact-heading"
           >
-            Let's build<br />
-            <span className="gradient-text">something.</span>
+            <span className="clip-line-wrap"><span className="contact-clip-line">Let's build</span></span>
+            <span className="clip-line-wrap"><span className="contact-clip-line gradient-text">something.</span></span>
           </h2>
           <p className="text-white/40 text-base md:text-lg leading-relaxed max-w-xl">
             Open to internships, full-time roles, and interesting projects.

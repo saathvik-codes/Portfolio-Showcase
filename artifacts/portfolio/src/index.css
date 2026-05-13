@@ -366,6 +366,29 @@
   color: hsl(240 5% 32%);
 }
 
+/* ── Rolling clip-up title animation ───────────────────────────────────── */
+.clip-line-wrap {
+  overflow: hidden;
+  display: block;
+  line-height: 1.08;
+}
+.clip-line {
+  display: block;
+  will-change: transform;
+}
+
+/* ── Section horizontal reveal line ──────────────────────────────────── */
+@keyframes line-extend {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ── Achievements ticker ─────────────────────────────────────────────── */
+.achievements-ticker {
+  display: flex;
+  white-space: nowrap;
+}
+
 /* Mobile nav padding fix */
 @media (max-width: 768px) {
   body {
