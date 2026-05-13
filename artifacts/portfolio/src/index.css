@@ -320,7 +320,7 @@
   text-transform: uppercase;
 }
 
-/* Contact form */
+/* Contact form — legacy underline style */
 .form-input {
   background: transparent;
   border: 0;
@@ -340,6 +340,40 @@
 
 .form-input::placeholder {
   color: hsl(240 5% 35%);
+}
+
+/* Contact form — rounded pill style */
+.form-input-rounded {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 0.9rem 1.25rem;
+  color: hsl(0 0% 90%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input-rounded:focus {
+  border-color: rgba(167, 139, 250, 0.5);
+  background: rgba(139, 92, 246, 0.05);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.08);
+}
+
+.form-input-rounded::placeholder {
+  color: hsl(240 5% 32%);
+}
+
+/* Mobile nav padding fix */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  .cursor, .cursor-follower {
+    display: none;
+  }
 }
 
 /* Glitch effect on SK logo */

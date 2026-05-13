@@ -89,7 +89,7 @@ export default function Hero() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-16 overflow-hidden"
       data-testid="hero-section"
     >
       <ThreeBackground />
@@ -131,7 +131,7 @@ export default function Hero() {
         {/* Sub */}
         <p
           ref={subRef}
-          className="mt-8 max-w-lg text-white/40 text-lg leading-relaxed font-light"
+          className="mt-6 max-w-lg text-white/40 text-base md:text-lg leading-relaxed font-light"
           data-testid="hero-sub"
         >
           Building elegant software at the intersection of full-stack
@@ -149,7 +149,7 @@ export default function Hero() {
         </div>
 
         {/* CTA */}
-        <div ref={ctaRef} className="flex items-center gap-8 mt-12">
+        <div ref={ctaRef} className="flex flex-wrap items-center gap-6 mt-10 md:mt-12">
           <a
             href="#projects"
             onClick={(e) => {
@@ -177,7 +177,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <div
         ref={scrollRef}
-        className="absolute bottom-12 left-8 md:left-16 flex flex-col items-center gap-4"
+        className="absolute bottom-8 md:bottom-12 left-4 sm:left-8 md:left-16 flex flex-col items-center gap-4"
         data-testid="scroll-indicator"
       >
         <div className="scroll-indicator" />
@@ -185,7 +185,7 @@ export default function Hero() {
       </div>
 
       {/* Location */}
-      <div className="absolute bottom-12 right-8 md:right-16 font-mono text-xs text-white/15 tracking-widest">
+      <div className="hidden sm:block absolute bottom-8 md:bottom-12 right-4 sm:right-8 md:right-16 font-mono text-xs text-white/15 tracking-widest">
         Hyderabad, India
       </div>
     </section>
