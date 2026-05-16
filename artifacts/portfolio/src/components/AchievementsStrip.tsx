@@ -28,13 +28,22 @@ export default function AchievementsStrip() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(sectionRef.current, {
-        opacity: 0,
-        y: 30,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 85%" },
-      });
+      gsap.fromTo(
+        sectionRef.current,
+        { opacity: 0, y: 18 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 90%",
+            end: "bottom 10%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
 
       if (trackRef.current) {
         const totalWidth = trackRef.current.scrollWidth / 2;
@@ -63,7 +72,7 @@ export default function AchievementsStrip() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-10 overflow-hidden"
+      className="relative py-7 md:py-10 overflow-hidden"
       aria-label="Achievements"
     >
       {/* Top/bottom edge lines */}
@@ -82,12 +91,12 @@ export default function AchievementsStrip() {
             <span key={i} className="inline-flex items-center">
               <span className="inline-flex items-center gap-3 px-4">
                 <span
-                  className="font-serif text-2xl font-800 leading-none"
+                  className="font-serif text-lg md:text-2xl font-800 leading-none"
                   style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, color: item.color }}
                 >
                   {item.value}
                 </span>
-                <span className="font-mono text-xs text-white/30 tracking-wide leading-none">
+                <span className="font-mono text-[10px] md:text-xs text-white/30 tracking-wide leading-none">
                   {item.label}
                 </span>
               </span>

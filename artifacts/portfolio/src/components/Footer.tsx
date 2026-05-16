@@ -75,9 +75,9 @@ export default function Footer() {
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 100% at 50% 100%, rgba(139,92,246,0.05) 0%, transparent 70%)" }} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-16 py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-16 py-10 md:py-16 relative z-10">
         {/* Top section */}
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-10 md:gap-16 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-8 md:gap-16 mb-10 md:mb-12">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -95,10 +95,10 @@ export default function Footer() {
                 <div className="font-mono text-xs text-white/20 mt-0.5">Software Developer</div>
               </div>
             </div>
-            <p className="text-white/25 text-sm leading-relaxed max-w-xs mb-6">
+            <p className="text-white/25 text-xs sm:text-sm leading-relaxed max-w-xs mb-5 md:mb-6">
               Full stack developer & AI enthusiast. Building elegant software from Hyderabad, India.
             </p>
-            <div className="flex items-center gap-2 mb-6">
+            <div className="flex items-center gap-2 mb-5 md:mb-6">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="font-mono text-xs text-emerald-400/60">Open to new opportunities</span>
             </div>
@@ -165,7 +165,7 @@ export default function Footer() {
           </p>
 
           {/* Social icon row (compact) */}
-          <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-4">
             {socials.map((s) => (
               <a key={s.label} href={s.href}
                 target={s.href.startsWith("http") ? "_blank" : undefined}

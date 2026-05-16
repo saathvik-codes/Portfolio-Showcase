@@ -56,7 +56,7 @@ export default function Navigation({ visible }: NavigationProps) {
     <>
       <nav
         ref={navRef}
-        className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 sm:px-8 md:px-12 py-4 md:py-5 transition-all duration-500"
+        className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-4 sm:px-8 md:px-12 py-3 md:py-5 transition-all duration-500"
         style={{
           background: scrolled || menuOpen ? "rgba(10,10,10,0.92)" : "transparent",
           backdropFilter: scrolled || menuOpen ? "blur(24px) saturate(1.4)" : "none",
@@ -72,7 +72,7 @@ export default function Navigation({ visible }: NavigationProps) {
           data-hover="true"
           data-testid="nav-logo"
         >
-          <svg viewBox="0 0 60 36" width="40" height="24" fill="none">
+          <svg viewBox="0 0 60 36" width="36" height="22" fill="none" className="sm:w-10 sm:h-6">
             <path d="M 4 9 C 4 9 17 5 17 12 C 17 18 4 18 4 24 C 4 30 17 28 17 28" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" fill="none" className="transition-all duration-300 group-hover:stroke-purple-300"/>
             <path d="M 26 5 L 26 28" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" fill="none" className="transition-all duration-300 group-hover:stroke-purple-300"/>
             <path d="M 26 17 L 44 5" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" fill="none" className="transition-all duration-300 group-hover:stroke-purple-300"/>
@@ -109,9 +109,9 @@ export default function Navigation({ visible }: NavigationProps) {
         </div>
 
         {/* Mobile: hire me + hamburger */}
-        <div className="flex md:hidden items-center gap-3">
+        <div className="flex md:hidden items-center gap-2">
           <a href="mailto:saathvikk202@gmail.com"
-            className="font-mono text-xs tracking-widest uppercase px-3 py-1.5 bg-violet-500/10 border border-violet-500/40 text-violet-400 rounded-full transition-all duration-300">
+            className="font-mono text-[10px] tracking-widest uppercase px-2.5 py-1.5 bg-violet-500/10 border border-violet-500/40 text-violet-400 rounded-full transition-all duration-300">
             Hire
           </a>
           <button
@@ -130,19 +130,19 @@ export default function Navigation({ visible }: NavigationProps) {
       {menuOpen && (
         <div
           ref={mobileMenuRef}
-          className="fixed top-[60px] inset-x-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-2xl border-b border-white/[0.05] px-6 pt-4 pb-8 md:hidden"
+          className="fixed top-[54px] sm:top-[60px] inset-x-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-2xl border-b border-white/[0.05] px-4 sm:px-6 pt-3 sm:pt-4 pb-6 sm:pb-8 md:hidden"
           style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
         >
           <nav className="flex flex-col gap-1 mb-6">
             {NAV_LINKS.map(({ label, href }) => (
               <a key={href} href={href} onClick={(e) => handleClick(e, href)}
-                className="py-3 text-white/50 hover:text-violet-400 font-mono text-sm tracking-widest uppercase transition-colors border-b border-white/[0.04]">
+                className="py-3 text-white/50 hover:text-violet-400 font-mono text-xs sm:text-sm tracking-widest uppercase transition-colors border-b border-white/[0.04]">
                 {label}
               </a>
             ))}
           </nav>
           <a href="/Saathvik_Kalepu_Resume.pdf" download
-            className="flex items-center justify-center gap-2 py-3 border border-white/10 text-white/40 hover:text-violet-400 font-mono text-xs tracking-widest uppercase rounded-xl transition-all">
+            className="flex items-center justify-center gap-2 py-3 border border-white/10 text-white/40 hover:text-violet-400 font-mono text-[11px] sm:text-xs tracking-widest uppercase rounded-xl transition-all">
             <svg viewBox="0 0 12 12" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
               <path d="M 6 1 L 6 8 M 3 6 L 6 9 L 9 6"/><path d="M 1 11 L 11 11"/>
             </svg>

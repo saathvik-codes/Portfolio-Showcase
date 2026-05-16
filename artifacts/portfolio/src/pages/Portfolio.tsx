@@ -13,6 +13,7 @@ import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SectionDivider from "@/components/SectionDivider";
+import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Portfolio() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -31,6 +32,7 @@ export default function Portfolio() {
     <div className="relative" data-testid="portfolio-root">
       <div className="noise-overlay" aria-hidden="true" />
       <CustomCursor />
+      {introComplete && <ScrollProgress />}
 
       {!introComplete && (
         <SKIntro onComplete={() => setIntroComplete(true)} />

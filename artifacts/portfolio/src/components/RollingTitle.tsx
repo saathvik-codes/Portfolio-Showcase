@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, type CSSProperties } from "react";
+import { useMemo, type CSSProperties } from "react";
 
 type RollingLine = {
   text: string;
@@ -16,45 +16,12 @@ export default function RollingTitle({
   className = "",
   testId,
 }: RollingTitleProps) {
-  const titleRef = useRef<HTMLHeadingElement>(null);
   const label = useMemo(() => lines.map((line) => line.text).join(" "), [lines]);
-
-  useEffect(() => {
-    const title = titleRef.current;
-    if (!title) return;
-
-    const reveal = () => title.classList.add("is-visible");
-    const fallback = window.setTimeout(reveal, 2500);
-
-    if (!("IntersectionObserver" in window)) {
-      reveal();
-      clearTimeout(fallback);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          reveal();
-          clearTimeout(fallback);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.25, rootMargin: "0px 0px -10% 0px" },
-    );
-
-    observer.observe(title);
-    return () => {
-      clearTimeout(fallback);
-      observer.disconnect();
-    };
-  }, []);
 
   let letterIndex = 0;
 
   return (
     <h2
-      ref={titleRef}
       className={`rolling-title ${className}`}
       aria-label={label}
       data-testid={testId}

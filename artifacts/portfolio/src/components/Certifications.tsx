@@ -198,17 +198,25 @@ export default function Certifications() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".cert-showcase-item", {
-        y: 24,
-        duration: 0.5,
-        ease: "power2.out",
-        stagger: 0.05,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          invalidateOnRefresh: true,
+      gsap.fromTo(
+        ".cert-showcase-item",
+        { y: 28, opacity: 0, scale: 0.985 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.58,
+          ease: "power2.out",
+          stagger: 0.06,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 12%",
+            toggleActions: "play reverse play reverse",
+            invalidateOnRefresh: true,
+          },
         },
-      });
+      );
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -227,7 +235,7 @@ export default function Certifications() {
     <section
       ref={sectionRef}
       id="certifications"
-      className="relative py-24 md:py-28 px-4 sm:px-8 md:px-16"
+      className="relative py-20 md:py-28 px-4 sm:px-8 md:px-16"
       data-testid="certifications-section"
     >
       <div className="max-w-7xl mx-auto">
@@ -239,16 +247,16 @@ export default function Certifications() {
               { text: "Certifications" },
               { text: "& Activities.", gradient: true },
             ]}
-            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-white"
+            className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white"
           />
-          <p className="md:ml-auto text-white/40 text-sm font-mono max-w-xs">
+          <p className="md:ml-auto text-white/40 text-xs sm:text-sm font-mono max-w-xs">
             Continuous learning across AI, cloud, data, and development.
           </p>
         </div>
 
         {/* Featured: Microsoft — large prominent cards */}
         <div className="cert-showcase-item grid grid-cols-1 lg:grid-cols-[0.82fr_1.18fr] gap-4 mb-5">
-          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] border border-violet-400/16 bg-[#101014] p-6">
+          <div className="relative min-h-[260px] md:min-h-[360px] overflow-hidden rounded-xl md:rounded-[2rem] border border-violet-400/16 bg-[#101014] p-3.5 sm:p-6">
             <img
               src={credentialImage}
               alt="Online learning workspace with laptop"
@@ -259,14 +267,14 @@ export default function Certifications() {
             <div className="relative z-10 flex h-full flex-col justify-between">
               <div>
                 <div className="font-mono text-xs uppercase tracking-[0.24em] text-violet-300/55">Learning stack</div>
-                <div className="mt-7 text-6xl leading-none text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>10+</div>
-                <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/48">
+                <div className="mt-5 md:mt-7 text-4xl md:text-6xl leading-none text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>10+</div>
+                <p className="mt-3 md:mt-4 max-w-sm text-xs sm:text-sm leading-relaxed text-white/48">
                   Certificates arranged as a skills ledger instead of a generic badge wall.
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 {["AI", "Cloud", "Data", "Dev"].map((track) => (
-                  <div key={track} className="rounded-2xl border border-white/[0.07] bg-black/25 p-4">
+                  <div key={track} className="rounded-xl sm:rounded-2xl border border-white/[0.07] bg-black/25 p-3 sm:p-4">
                     <div className="font-mono text-[10px] uppercase tracking-widest text-white/25">Track</div>
                     <div className="mt-1 text-sm font-semibold text-violet-100/75">{track}</div>
                   </div>
@@ -278,10 +286,10 @@ export default function Certifications() {
           {featured.map((cert, i) => (
             <div
               key={i}
-              className="group relative overflow-hidden flex items-center gap-4 p-6 rounded-[1.65rem] border transition-all duration-300 hover:-translate-y-1"
+              className="group relative overflow-hidden flex items-center gap-3 sm:gap-4 p-4 sm:p-6 rounded-2xl md:rounded-[1.65rem] border transition-all duration-300 hover:-translate-y-1"
               style={{ background: cert.bg, borderColor: cert.border }}
             >
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0"
                 style={{ background: "rgba(0,120,212,0.15)" }}>
                 {cert.logo}
               </div>
@@ -301,7 +309,7 @@ export default function Certifications() {
         </div>
 
         {/* Rest — responsive grid, always visible */}
-        <div className="cert-showcase-item overflow-hidden rounded-[1.75rem] border border-white/[0.06] bg-white/[0.015] mb-12">
+        <div className="cert-showcase-item overflow-hidden rounded-2xl md:rounded-[1.75rem] border border-white/[0.06] bg-white/[0.015] mb-10 md:mb-12">
           {rest.map((cert, i) => (
             <div
               key={i}
@@ -310,7 +318,7 @@ export default function Certifications() {
             >
               <div className="shrink-0 mt-0.5">{cert.logo}</div>
               <div className="min-w-0">
-                <div className="text-white/85 text-sm font-medium leading-snug mb-1.5">{cert.title}</div>
+                <div className="text-white/85 text-xs sm:text-sm font-medium leading-snug mb-1.5">{cert.title}</div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-mono text-xs" style={{ color: cert.color + "cc" }}>{cert.issuer}</span>
                   <span className="text-white/20 text-xs">·</span>
@@ -331,7 +339,7 @@ export default function Certifications() {
             {extras.map((item, i) => (
               <div
                 key={i}
-                className="group relative min-h-[230px] overflow-hidden p-5 rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1"
+                className="group relative min-h-[210px] sm:min-h-[230px] overflow-hidden p-4 sm:p-5 rounded-2xl md:rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1"
                 style={{ background: "#111111", borderColor: `${item.color}20` }}
               >
                 <img

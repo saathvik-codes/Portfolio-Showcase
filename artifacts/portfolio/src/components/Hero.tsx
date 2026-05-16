@@ -80,7 +80,7 @@ export default function Hero() {
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-16 overflow-hidden"
+      className="relative min-h-[92svh] md:min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-16 pt-20 pb-16 md:py-0 overflow-hidden"
       data-testid="hero-section"
     >
       <ThreeBackground />
@@ -99,11 +99,11 @@ export default function Hero() {
         {/* Top tagline */}
         <div
           ref={lineDecRef}
-          className="flex items-center gap-4 mb-10"
+          className="flex items-center gap-3 mb-6 md:gap-4 md:mb-10"
         >
           <div className="glow-dot" />
           <div ref={taglineRef}>
-            <span className="font-mono text-xs tracking-[0.25em] text-violet-400/70 uppercase">
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.16em] sm:tracking-[0.25em] text-violet-400/70 uppercase">
               Software Developer · Full Stack · AI Enthusiast
             </span>
           </div>
@@ -121,7 +121,7 @@ export default function Hero() {
         {/* Sub */}
         <p
           ref={subRef}
-          className="mt-6 max-w-lg text-white/40 text-base md:text-lg leading-relaxed font-light"
+          className="mt-5 max-w-lg text-white/45 text-sm sm:text-base md:text-lg leading-relaxed font-light"
           data-testid="hero-sub"
         >
           Building elegant software at the intersection of full-stack
@@ -130,7 +130,7 @@ export default function Hero() {
         </p>
 
         {/* Badges */}
-        <div ref={badgesRef} className="flex flex-wrap gap-3 mt-10">
+        <div ref={badgesRef} className="flex flex-wrap gap-2 sm:gap-3 mt-7 md:mt-10">
           {["TypeScript", "React", "Node.js", "Python", "AI/ML", "Cloud"].map((tag) => (
             <span key={tag} className="skill-pill" data-testid={`hero-tag-${tag}`}>
               {tag}
@@ -139,14 +139,14 @@ export default function Hero() {
         </div>
 
         {/* CTA */}
-        <div ref={ctaRef} className="flex flex-wrap items-center gap-6 mt-10 md:mt-12">
+        <div ref={ctaRef} className="flex flex-wrap items-center gap-5 mt-8 md:gap-6 md:mt-12">
           <a
             href="#projects"
             onClick={(e) => {
               e.preventDefault();
               document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="group flex items-center gap-3 font-mono text-sm tracking-wider uppercase text-white hover:text-violet-400 transition-colors duration-300"
+            className="group flex items-center gap-3 font-mono text-xs sm:text-sm tracking-wider uppercase text-white hover:text-violet-400 transition-colors duration-300"
             data-hover="true"
             data-testid="hero-cta-work"
           >
@@ -155,7 +155,7 @@ export default function Hero() {
           </a>
           <a
             href="mailto:saathvikk202@gmail.com"
-            className="font-mono text-sm tracking-wider uppercase text-white/30 hover:text-white/70 transition-colors duration-300"
+            className="font-mono text-xs sm:text-sm tracking-wider uppercase text-white/30 hover:text-white/70 transition-colors duration-300"
             data-hover="true"
             data-testid="hero-cta-contact"
           >
@@ -167,7 +167,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <div
         ref={scrollRef}
-        className="absolute bottom-8 md:bottom-12 left-4 sm:left-8 md:left-16 flex flex-col items-center gap-4"
+        className="hidden sm:flex absolute bottom-8 md:bottom-12 left-4 sm:left-8 md:left-16 flex-col items-center gap-4"
         data-testid="scroll-indicator"
       >
         <div className="scroll-indicator" />

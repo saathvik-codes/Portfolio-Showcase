@@ -185,17 +185,25 @@ export default function Projects() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".project-showcase-item", {
-        y: 30,
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.09,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 80%",
-          invalidateOnRefresh: true,
+      gsap.fromTo(
+        ".project-showcase-item",
+        { y: 30, opacity: 0, scale: 0.985 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.62,
+          ease: "power2.out",
+          stagger: 0.09,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            end: "bottom 12%",
+            toggleActions: "play reverse play reverse",
+            invalidateOnRefresh: true,
+          },
         },
-      });
+      );
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -204,7 +212,7 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative py-24 md:py-32 px-4 sm:px-8 md:px-16"
+      className="relative py-20 md:py-32 px-4 sm:px-8 md:px-16"
       data-testid="projects-section"
     >
       <div
@@ -222,7 +230,7 @@ export default function Projects() {
               { text: "Selected" },
               { text: "Work.", gradient: true },
             ]}
-            className="font-serif text-[clamp(2rem,5vw,4.5rem)] leading-[1.05] text-white"
+            className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white"
           />
           <a
             href="https://github.com/saathvik-codes"
@@ -244,7 +252,7 @@ export default function Projects() {
             href={projects[0].github ?? "https://github.com/saathvik-codes"}
             target="_blank"
             rel="noreferrer"
-            className="group relative min-h-[420px] overflow-hidden rounded-[2rem] border border-violet-500/20 bg-[#101014] p-6 md:p-8 transition-all duration-500 hover:border-violet-400/45 hover:-translate-y-1"
+            className="group relative min-h-[430px] sm:min-h-[420px] overflow-hidden rounded-xl md:rounded-[2rem] border border-violet-500/20 bg-[#101014] p-3.5 sm:p-6 md:p-8 transition-all duration-500 hover:border-violet-400/45 hover:-translate-y-1"
             data-hover="true"
           >
             <img
@@ -255,18 +263,18 @@ export default function Projects() {
             />
             <div className="absolute inset-0 bg-gradient-to-br from-black/85 via-[#101014]/72 to-violet-950/45" />
             <div className="absolute inset-0 opacity-80 mix-blend-screen" style={{ background: projects[0].accent }} />
-            <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full border border-violet-400/15" />
-            <div className="absolute right-10 top-14 h-36 w-36 rounded-full border border-violet-400/20" />
+            <div className="hidden sm:block absolute -right-20 -top-20 h-72 w-72 rounded-full border border-violet-400/15" />
+            <div className="hidden sm:block absolute right-10 top-14 h-36 w-36 rounded-full border border-violet-400/20" />
             <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/45 to-transparent" />
 
             <div className="relative z-10 flex h-full flex-col justify-between gap-12">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="font-mono text-xs tracking-[0.25em] uppercase text-violet-300/60">Featured build</div>
-                  <h3 className="mt-5 max-w-xl text-4xl md:text-6xl leading-[0.95] text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
+                  <h3 className="mt-4 md:mt-5 max-w-xl text-2xl sm:text-4xl md:text-6xl leading-[1.02] md:leading-[0.95] text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
                     {projects[0].title}
                   </h3>
-                  <p className="mt-4 font-mono text-sm text-violet-200/55">{projects[0].subtitle}</p>
+                  <p className="mt-3 md:mt-4 font-mono text-xs sm:text-sm text-violet-200/55">{projects[0].subtitle}</p>
                 </div>
                 <div className="hidden sm:flex h-16 w-16 items-center justify-center rounded-2xl border border-violet-300/20 bg-white/[0.03]">
                   {projects[0].icon}
@@ -274,12 +282,12 @@ export default function Projects() {
               </div>
 
               <div>
-                <p className="max-w-2xl text-base md:text-lg leading-relaxed text-white/58">
+                <p className="max-w-2xl text-sm sm:text-base md:text-lg leading-relaxed text-white/58">
                   {projects[0].description}
                 </p>
-                <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="mt-5 md:mt-8 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
                   {projectStats.map((stat) => (
-                    <div key={stat.label} className="rounded-2xl border border-white/[0.07] bg-black/20 p-4">
+                    <div key={stat.label} className="rounded-xl sm:rounded-2xl border border-white/[0.07] bg-black/20 p-3 sm:p-4">
                       <div className="font-mono text-[10px] uppercase tracking-widest text-white/25">{stat.label}</div>
                       <div className="mt-2 text-sm font-semibold text-white/78">{stat.value}</div>
                     </div>
@@ -288,14 +296,14 @@ export default function Projects() {
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.07] pt-5">
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {projects[0].tags.slice(0, 5).map((tag) => (
-                    <span key={tag} className="rounded-full border border-violet-300/15 bg-violet-300/[0.05] px-3 py-1 font-mono text-xs text-violet-100/55">
+                    <span key={tag} className="rounded-full border border-violet-300/15 bg-violet-300/[0.05] px-2.5 sm:px-3 py-1 font-mono text-[10px] sm:text-xs text-violet-100/55">
                       {tag}
                     </span>
                   ))}
                 </div>
-                <span className="font-mono text-xs uppercase tracking-widest text-violet-300/70 group-hover:text-violet-200">
+                <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-violet-300/70 group-hover:text-violet-200">
                   View source ↗
                 </span>
               </div>
@@ -309,7 +317,7 @@ export default function Projects() {
                 href={p.github ?? "https://github.com/saathvik-codes"}
                 target="_blank"
                 rel="noreferrer"
-                className="group relative overflow-hidden rounded-[1.5rem] border p-5 transition-all duration-300 hover:-translate-y-1"
+                className="group relative min-h-[260px] overflow-hidden rounded-2xl md:rounded-[1.5rem] border p-4 sm:p-5 transition-all duration-300 hover:-translate-y-1"
                 style={{ background: "#101010", borderColor: p.border }}
                 data-hover="true"
               >
@@ -325,11 +333,11 @@ export default function Projects() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <div className="font-mono text-xs text-white/22">{p.index} / {p.type}</div>
-                      <h3 className="mt-3 text-2xl text-white/90" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>{p.title}</h3>
+                      <h3 className="mt-3 text-xl sm:text-2xl text-white/90" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>{p.title}</h3>
                     </div>
                     <div className="shrink-0">{p.icon}</div>
                   </div>
-                  <p className="text-sm leading-relaxed text-white/45">{p.description}</p>
+                  <p className="text-xs sm:text-sm leading-relaxed text-white/45">{p.description}</p>
                   <div className="flex items-center justify-between border-t border-white/[0.06] pt-4">
                     <span className="font-mono text-xs" style={{ color: p.color }}>{p.lang}</span>
                     <span className="text-white/20 group-hover:text-white/55 transition-colors">↗</span>
@@ -340,14 +348,14 @@ export default function Projects() {
           </div>
         </div>
 
-        <div className="project-showcase-item mb-6 rounded-[1.75rem] border border-white/[0.06] bg-white/[0.015] p-2">
+        <div className="project-showcase-item mb-6 rounded-2xl md:rounded-[1.75rem] border border-white/[0.06] bg-white/[0.015] p-2">
           {projects.slice(3).map((p, i) => (
             <a
               key={p.title}
               href={p.github ?? "https://github.com/saathvik-codes"}
               target="_blank"
               rel="noreferrer"
-              className="group grid grid-cols-1 gap-4 rounded-[1.35rem] px-4 py-5 transition-all duration-300 hover:bg-white/[0.035] md:grid-cols-[90px_1fr_180px_80px] md:items-center md:px-5"
+              className="group grid grid-cols-1 gap-3 sm:gap-4 rounded-xl md:rounded-[1.35rem] px-3 sm:px-4 py-4 sm:py-5 transition-all duration-300 hover:bg-white/[0.035] md:grid-cols-[90px_1fr_180px_80px] md:items-center md:px-5"
               data-hover="true"
             >
               <div className="flex items-center gap-3">
@@ -358,10 +366,10 @@ export default function Projects() {
                 </span>
               </div>
               <div>
-                <h3 className="text-lg text-white/82 transition-colors group-hover:text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}>
+                <h3 className="text-base sm:text-lg text-white/82 transition-colors group-hover:text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700 }}>
                   {p.title}
                 </h3>
-                <p className="mt-1 text-sm text-white/38">{p.subtitle}</p>
+                <p className="mt-1 text-xs sm:text-sm text-white/38">{p.subtitle}</p>
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {p.tags.slice(0, 3).map((tag) => (

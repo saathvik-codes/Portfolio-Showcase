@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import emailjs from "@emailjs/browser";
+import RollingTitle from "./RollingTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -69,26 +70,41 @@ export default function Contact() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Rolling title
-      const contactLines = sectionRef.current?.querySelectorAll(".contact-clip-line");
-      if (contactLines?.length) {
-        gsap.from(Array.from(contactLines), {
-          yPercent: 110,
-          duration: 1.1,
-          ease: "power4.out",
-          stagger: 0.08,
-          scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
-        });
-      }
-
-      gsap.from(".contact-left > *", {
-        y: 20, opacity: 0, duration: 0.6, stagger: 0.08, ease: "power2.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 72%" },
-      });
-      gsap.from(".form-field-anim", {
-        y: 20, opacity: 0, duration: 0.5, stagger: 0.07, ease: "power2.out",
-        scrollTrigger: { trigger: formRef.current, start: "top 85%" },
-      });
+      gsap.fromTo(
+        ".contact-left > *",
+        { y: 24, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.55,
+          stagger: 0.07,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 74%",
+            end: "bottom 18%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
+      gsap.fromTo(
+        ".form-field-anim",
+        { y: 18, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          stagger: 0.06,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: formRef.current,
+            start: "top 86%",
+            end: "bottom 12%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -162,7 +178,7 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative py-24 md:py-36 px-4 sm:px-8 md:px-16 overflow-hidden"
+      className="relative py-20 md:py-36 px-4 sm:px-8 md:px-16 overflow-hidden"
       data-testid="contact-section"
     >
       {/* Ambient bg */}
@@ -173,29 +189,29 @@ export default function Contact() {
         <div className="section-index mb-6">06 — Contact</div>
 
         {/* Section heading */}
-        <div className="mb-12 md:mb-16">
-          <h2
-            className="font-serif text-[clamp(2.5rem,7vw,7rem)] leading-[1.05] text-white mb-4"
-            style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
-            data-testid="contact-heading"
-          >
-            <span className="clip-line-wrap"><span className="contact-clip-line">Let's build</span></span>
-            <span className="clip-line-wrap"><span className="contact-clip-line gradient-text">something.</span></span>
-          </h2>
-          <p className="text-white/40 text-base md:text-lg leading-relaxed max-w-xl">
+        <div className="mb-10 md:mb-16">
+          <RollingTitle
+            lines={[
+              { text: "Let's build" },
+              { text: "something.", gradient: true },
+            ]}
+            className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.5rem,7vw,7rem)] leading-[1.06] md:leading-[1.05] text-white mb-4"
+            testId="contact-heading"
+          />
+          <p className="text-white/40 text-sm sm:text-base md:text-lg leading-relaxed max-w-xl">
             Open to internships, full-time roles, and interesting projects.
             Drop a message — I respond within 24 hours.
           </p>
         </div>
 
         {/* Main 2-col layout */}
-        <div className="grid lg:grid-cols-[340px_1fr] gap-10 md:gap-14 items-start">
+        <div className="grid lg:grid-cols-[340px_1fr] gap-8 md:gap-14 items-start">
 
           {/* LEFT COLUMN: contact info + socials */}
           <div className="contact-left space-y-6">
 
             {/* Contact details block */}
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 space-y-5">
+            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4 sm:p-6 space-y-5">
               <div className="font-mono text-xs text-white/30 tracking-widest uppercase mb-2">Get in touch</div>
 
               {/* Email */}
@@ -212,7 +228,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="font-mono text-xs text-white/25 tracking-widest uppercase">Email</div>
-                  <div className="text-white/80 text-sm font-medium group-hover:text-white transition-colors">saathvikk202@gmail.com</div>
+                  <div className="text-white/80 text-xs sm:text-sm font-medium group-hover:text-white transition-colors break-all">saathvikk202@gmail.com</div>
                 </div>
               </a>
 
@@ -230,7 +246,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <div className="font-mono text-xs text-white/25 tracking-widest uppercase">Phone</div>
-                  <div className="text-white/70 text-sm group-hover:text-white/90 transition-colors">+91 9908179816</div>
+                  <div className="text-white/70 text-xs sm:text-sm group-hover:text-white/90 transition-colors">+91 9908179816</div>
                 </div>
               </a>
 
@@ -277,7 +293,7 @@ export default function Contact() {
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-white/25 group-hover:text-violet-400 transition-colors">{s.icon}</span>
-                      <span className="text-white/45 text-xs group-hover:text-white/75 transition-colors truncate max-w-[180px]">{s.handle}</span>
+                      <span className="text-white/45 text-xs group-hover:text-white/75 transition-colors truncate max-w-[220px] sm:max-w-[180px]">{s.handle}</span>
                     </div>
                     <span className="text-white/15 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all">↗</span>
                   </a>
@@ -288,7 +304,7 @@ export default function Contact() {
             {/* Availability */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-emerald-500/15 bg-emerald-500/[0.04]">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-              <span className="font-mono text-xs text-emerald-400/70">Open to opportunities from 2025</span>
+              <span className="font-mono text-[11px] sm:text-xs text-emerald-400/70">Open to opportunities from 2025</span>
             </div>
           </div>
 
@@ -342,7 +358,7 @@ export default function Contact() {
 
                 <div className="form-field-anim pt-1">
                   <button type="submit" disabled={sending}
-                    className="w-full py-4 rounded-2xl font-mono text-sm tracking-widest uppercase border border-violet-500/40 text-violet-400 hover:bg-violet-500/10 hover:border-violet-400/70 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-mono text-xs sm:text-sm tracking-widest uppercase border border-violet-500/40 text-violet-400 hover:bg-violet-500/10 hover:border-violet-400/70 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                     data-hover="true" data-testid="contact-submit">
                     {sending ? (
                       <>

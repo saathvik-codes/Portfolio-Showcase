@@ -16,12 +16,17 @@ export default function SectionDivider({ label, index, accent = false }: Props) 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: ref.current, start: "top 92%" },
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top 92%",
+          end: "bottom 8%",
+          toggleActions: "play reverse play reverse",
+        },
       });
-      tl.from(".sdiv-line-l", { scaleX: 0, transformOrigin: "right center", duration: 1.1, ease: "power3.out" }, 0)
-        .from(".sdiv-line-r", { scaleX: 0, transformOrigin: "left center", duration: 1.1, ease: "power3.out" }, 0)
-        .from(".sdiv-dot", { scale: 0, opacity: 0, duration: 0.5, ease: "back.out(3)" }, 0.3)
-        .from(".sdiv-label", { opacity: 0, y: 8, duration: 0.6, ease: "power3.out" }, 0.25);
+      tl.fromTo(".sdiv-line-l", { scaleX: 0 }, { scaleX: 1, transformOrigin: "right center", duration: 1.1, ease: "power3.out" }, 0)
+        .fromTo(".sdiv-line-r", { scaleX: 0 }, { scaleX: 1, transformOrigin: "left center", duration: 1.1, ease: "power3.out" }, 0)
+        .fromTo(".sdiv-dot", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(3)" }, 0.3)
+        .fromTo(".sdiv-label", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.25);
     }, ref);
     return () => ctx.revert();
   }, []);

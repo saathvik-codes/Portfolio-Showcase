@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RollingTitle from "./RollingTitle";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,18 +107,6 @@ const marqueeItems = [
 
 const achievements = [
   {
-    num: "200+",
-    label: "LeetCode Problems",
-    desc: "Consistent algorithmic practice across arrays, graphs, dynamic programming, and SQL.",
-    color: "#a78bfa",
-    href: "https://leetcode.com/u/Sunny550/",
-    icon: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-      </svg>
-    ),
-  },
-  {
     num: "5+",
     label: "Production Projects",
     desc: "Full-stack and AI/ML projects built and shipped independently, live on GitHub.",
@@ -152,29 +141,62 @@ export default function Skills() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Rolling title
-      gsap.from(".skills-clip-line", {
-        yPercent: 110,
-        duration: 1.1,
-        ease: "power4.out",
-        stagger: 0.08,
-        scrollTrigger: { trigger: sectionRef.current, start: "top 82%" },
-      });
+      gsap.fromTo(
+        ".skill-group",
+        { y: 28, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.55,
+          ease: "power3.out",
+          stagger: 0.05,
+          scrollTrigger: {
+            trigger: ".skill-grid",
+            start: "top 82%",
+            end: "bottom 16%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
 
-      gsap.from(".skill-group", {
-        y: 40, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.06,
-        scrollTrigger: { trigger: ".skill-grid", start: "top 82%" },
-      });
+      gsap.fromTo(
+        ".achievement-card",
+        { y: 28, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.62,
+          ease: "power3.out",
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: ".achievement-row",
+            start: "top 84%",
+            end: "bottom 12%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
 
-      gsap.from(".achievement-card", {
-        y: 40, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.14,
-        scrollTrigger: { trigger: ".achievement-row", start: "top 82%" },
-      });
-
-      gsap.from(".expertise-panel", {
-        y: 30, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.08,
-        scrollTrigger: { trigger: ".expertise-panels", start: "top 84%" },
-      });
+      gsap.fromTo(
+        ".expertise-panel",
+        { y: 24, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.58,
+          ease: "power3.out",
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: ".expertise-panels",
+            start: "top 84%",
+            end: "bottom 15%",
+            toggleActions: "play reverse play reverse",
+          },
+        },
+      );
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -183,29 +205,29 @@ export default function Skills() {
     <section
       ref={sectionRef}
       id="skills"
-      className="relative py-24 md:py-28 overflow-hidden"
+      className="relative py-20 md:py-28 overflow-hidden"
       data-testid="skills-section"
     >
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(139,92,246,0.04) 0%, transparent 70%)" }} />
 
-      <div className="px-8 md:px-16 max-w-7xl mx-auto mb-10">
+      <div className="px-4 sm:px-8 md:px-16 max-w-7xl mx-auto mb-8 md:mb-10">
         <div className="section-index mb-6">04 — Skills</div>
-        <h2
-          className="font-serif text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] text-white"
-          style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}
-          data-testid="skills-heading"
-        >
-          <span className="clip-line-wrap"><span className="skills-clip-line">Technical</span></span>
-          <span className="clip-line-wrap"><span className="skills-clip-line gradient-text">Arsenal.</span></span>
-        </h2>
+        <RollingTitle
+          lines={[
+            { text: "Technical" },
+            { text: "Arsenal.", gradient: true },
+          ]}
+          className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white"
+          testId="skills-heading"
+        />
       </div>
 
       {/* Marquee */}
-      <div className="marquee py-5 mb-10 border-y border-white/[0.04]">
+      <div className="marquee py-4 md:py-5 mb-8 md:mb-10 border-y border-white/[0.04]">
         <div className="marquee-inner">
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span key={i} className="mx-6 font-mono text-sm text-white/15 tracking-widest uppercase">
+            <span key={i} className="mx-4 md:mx-6 font-mono text-xs md:text-sm text-white/15 tracking-widest uppercase">
               {item}
               <span className="ml-6 text-violet-500/30">·</span>
             </span>
@@ -214,12 +236,12 @@ export default function Skills() {
       </div>
 
       {/* Skills grid */}
-      <div className="skill-grid px-8 md:px-16 max-w-7xl mx-auto">
+      <div className="skill-grid px-4 sm:px-8 md:px-16 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {skillGroups.map((group, i) => (
             <div
               key={i}
-              className="skill-group project-card p-5 rounded-lg bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-300 group"
+              className="skill-group project-card p-4 md:p-5 rounded-lg bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-300 group"
               data-testid={`skill-group-${group.category.toLowerCase().replace(/\s+/g, "-")}`}
             >
               <div className="flex items-center gap-2.5 mb-4">
@@ -242,7 +264,7 @@ export default function Skills() {
         </div>
 
         <div className="expertise-panels mt-5 grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5">
-          <div className="expertise-panel rounded-[1.5rem] border border-white/[0.06] bg-white/[0.018] p-6">
+          <div className="expertise-panel rounded-2xl md:rounded-[1.5rem] border border-white/[0.06] bg-white/[0.018] p-4 sm:p-6">
             <div className="font-mono text-xs uppercase tracking-[0.22em] text-violet-400/55 mb-5">Technical expertise map</div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
@@ -250,7 +272,7 @@ export default function Skills() {
                 ["Backend APIs", "Node, Express, Flask, REST contracts"],
                 ["AI integration", "NLP, XAI, model-backed products"],
               ].map(([title, detail]) => (
-                <div key={title} className="rounded-2xl border border-white/[0.055] bg-black/20 p-4">
+                <div key={title} className="rounded-xl sm:rounded-2xl border border-white/[0.055] bg-black/20 p-3 sm:p-4">
                   <div className="text-white/78 text-sm font-semibold">{title}</div>
                   <div className="mt-2 text-white/34 text-xs leading-relaxed">{detail}</div>
                 </div>
@@ -261,11 +283,11 @@ export default function Skills() {
             href="https://leetcode.com/u/Sunny550/"
             target="_blank"
             rel="noreferrer"
-            className="expertise-panel group rounded-[1.5rem] border border-yellow-400/15 bg-yellow-400/[0.035] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-yellow-300/35"
+            className="expertise-panel group rounded-2xl md:rounded-[1.5rem] border border-yellow-400/15 bg-yellow-400/[0.035] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-yellow-300/35"
             data-hover="true"
           >
             <div className="font-mono text-xs uppercase tracking-[0.22em] text-yellow-300/55">Problem solving</div>
-            <div className="mt-5 text-5xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>200+</div>
+            <div className="mt-4 md:mt-5 text-4xl sm:text-5xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>200+</div>
             <div className="mt-2 text-sm text-white/45">LeetCode problems solved on Sunny550</div>
             <div className="mt-6 font-mono text-xs uppercase tracking-widest text-yellow-200/70 group-hover:text-yellow-100">Open profile ↗</div>
           </a>
@@ -278,7 +300,7 @@ export default function Skills() {
               href={item.href ?? undefined}
               target={item.href ? "_blank" : undefined}
               rel={item.href ? "noreferrer" : undefined}
-              className="achievement-card relative overflow-hidden p-7 rounded-lg border transition-all duration-400 group hover:scale-[1.02]"
+              className="achievement-card relative overflow-hidden p-5 md:p-7 rounded-lg border transition-all duration-400 group hover:scale-[1.02]"
               style={{
                 borderColor: `${item.color}18`,
                 background: `linear-gradient(135deg, ${item.color}08 0%, transparent 60%)`,
@@ -289,12 +311,12 @@ export default function Skills() {
                 style={{ background: `radial-gradient(circle, ${item.color}, transparent)` }} />
               <div className="relative z-10">
                 <div className="mb-4" style={{ color: item.color }}>{item.icon}</div>
-                <div className="font-serif text-4xl mb-1 transition-colors duration-300"
+                <div className="font-serif text-3xl md:text-4xl mb-1 transition-colors duration-300"
                   style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, color: item.color }}>
                   {item.num}
                 </div>
                 <div className="font-semibold text-white text-sm mb-3">{item.label}</div>
-                <div className="text-white/35 text-sm leading-relaxed">{item.desc}</div>
+                <div className="text-white/35 text-xs sm:text-sm leading-relaxed">{item.desc}</div>
               </div>
             </a>
           ))}
