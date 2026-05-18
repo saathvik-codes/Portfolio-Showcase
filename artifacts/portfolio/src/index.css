@@ -395,10 +395,11 @@
 
 .rolling-line {
   display: block;
-  overflow: hidden;
+  overflow: visible;
   line-height: inherit;
   color: white;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .rolling-line.gradient-text {

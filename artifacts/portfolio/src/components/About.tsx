@@ -73,18 +73,18 @@ export default function About() {
       <div className="max-w-7xl mx-auto">
         <div className="section-index mb-6">01 — About</div>
 
+        <RollingTitle
+          lines={[
+            { text: "Crafting software" },
+            { text: "that matters.", gradient: true },
+          ]}
+          className="max-w-5xl font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white mb-8 md:mb-14"
+          testId="about-heading"
+        />
+
         <div className="grid md:grid-cols-2 gap-10 md:gap-20 items-start">
           {/* Left */}
           <div ref={leftRef}>
-            <RollingTitle
-              lines={[
-                { text: "Crafting software" },
-                { text: "that matters.", gradient: true },
-              ]}
-              className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white mb-6 md:mb-8"
-              testId="about-heading"
-            />
-
             <div className="flex items-center gap-3 sm:gap-5 mb-6 md:mb-8 p-3 sm:p-4 rounded-lg border border-white/5 bg-white/[0.02]">
               <div
                 className="w-12 h-12 sm:w-16 sm:h-16 rounded-full shrink-0 flex items-center justify-center text-lg sm:text-2xl border border-violet-500/30"

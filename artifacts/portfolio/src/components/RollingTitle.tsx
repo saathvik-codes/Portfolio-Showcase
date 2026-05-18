@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties } from "react";
+import { useMemo } from "react";
 
 type RollingLine = {
   text: string;
@@ -18,8 +18,6 @@ export default function RollingTitle({
 }: RollingTitleProps) {
   const label = useMemo(() => lines.map((line) => line.text).join(" "), [lines]);
 
-  let letterIndex = 0;
-
   return (
     <h2
       className={`rolling-title ${className}`}
@@ -30,21 +28,8 @@ export default function RollingTitle({
         <span
           key={`${line.text}-${lineIndex}`}
           className={`rolling-line ${line.gradient ? "gradient-text" : ""}`}
-          aria-hidden="true"
-          style={{ "--line-index": lineIndex } as CSSProperties}
         >
-          {Array.from(line.text).map((letter, i) => {
-            const currentIndex = letterIndex++;
-            return (
-              <span
-                key={`${line.text}-${lineIndex}-${i}`}
-                className="roll-letter"
-                style={{ "--letter-index": currentIndex } as CSSProperties}
-              >
-                {letter === " " ? "\u00A0" : letter}
-              </span>
-            );
-          })}
+          {line.text}
         </span>
       ))}
     </h2>

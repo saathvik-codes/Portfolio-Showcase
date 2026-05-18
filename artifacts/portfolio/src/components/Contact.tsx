@@ -281,21 +281,19 @@ export default function Contact() {
             {/* Social links */}
             <div>
               <div className="font-mono text-xs text-white/25 tracking-widest uppercase mb-3">Find me online</div>
-              <div className="space-y-2">
+              <div className="flex flex-wrap gap-3">
                 {socials.map((s, i) => (
                   <a
                     key={i}
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex items-center justify-between py-3 px-4 rounded-xl border border-white/[0.04] hover:border-violet-500/20 hover:bg-violet-500/[0.03] transition-all duration-300"
+                    className="group flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.06] text-white/32 hover:border-violet-500/30 hover:bg-violet-500/[0.06] hover:text-violet-300 transition-all duration-300"
                     data-hover="true"
+                    aria-label={s.label}
+                    title={s.label}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-white/25 group-hover:text-violet-400 transition-colors">{s.icon}</span>
-                      <span className="text-white/45 text-xs group-hover:text-white/75 transition-colors truncate max-w-[220px] sm:max-w-[180px]">{s.handle}</span>
-                    </div>
-                    <span className="text-white/15 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all">↗</span>
+                    {s.icon}
                   </a>
                 ))}
               </div>
