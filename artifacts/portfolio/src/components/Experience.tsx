@@ -7,49 +7,49 @@ gsap.registerPlugin(ScrollTrigger);
 
 const experiences = [
   {
-    role: "Digital Marketing Intern",
-    company: "AIMaster.live",
-    period: "Oct 2025 – Jan 2026 · 4 months",
-    location: "Hyderabad, India · Hybrid",
+    role: "DevOps Engineer & UI/UX Designer",
+    company: "Caterworld Technologies",
+    period: "Mar 2026 – May 2026",
+    location: "Hybrid",
     type: "Internship",
     color: "#e879f9",
     points: [
-      "Worked on data-driven marketing strategies and content optimization for the AI platform.",
-      "Hands-on experience in digital imaging, affiliate marketing, and campaign analytics.",
-      "Utilized analytics tools to track performance metrics and iterate on campaign results.",
-      "Collaborated cross-functionally with engineering and design teams for product launches.",
+      "Streamlined deployment workflows and enhanced responsive UI/UX for core web application modules.",
+      "Improved system reliability and modernized the frontend interface for enterprise clients.",
+      "Reduced deployment times by optimizing CI/CD pipelines, accelerating product iterations.",
+      "Designed intuitive user journeys to bridge the gap between complex backend systems and end-users."
     ],
-    tags: ["Data Analytics", "Digital Marketing", "Content Strategy", "Campaign Analysis"],
+    tags: ["DevOps", "UI/UX Design", "CI/CD", "Web Development", "System Reliability"],
   },
   {
-    role: "Software Engineering Manager",
+    role: "Software Engineering Intern",
     company: "AIMaster.live",
-    period: "Aug 2025 – Oct 2025 · 3 months",
-    location: "Hyderabad, India · On-site",
+    period: "Aug 2024 – Feb 2025",
+    location: "Remote",
     type: "Internship",
     color: "#a78bfa",
     points: [
-      "Contributed to software development by building and improving web-based applications.",
-      "Focused on backend logic, system efficiency, clean code principles, and debugging.",
+      "Developed full-stack features and automated API integrations utilizing React, Python/Flask, and Node.js.",
+      "Designed and implemented scalable cloud delivery pipelines and REST APIs to support robust user workflows.",
+      "Optimized data pipelines and enhanced backend performance, significantly improving data throughput.",
       "Gained practical experience writing maintainable code following engineering best practices.",
-      "Reviewed code submissions and provided technical guidance to junior team members.",
     ],
-    tags: ["Bootstrap", "Python", "Backend Engineering", "System Design", "Code Review"],
+    tags: ["React", "Python", "Node.js", "Backend Engineering", "REST APIs"],
   },
   {
-    role: "Web Developer",
+    role: "Data Analyst Intern",
     company: "AIMaster.live",
-    period: "Jul 2025 – Aug 2025 · 2 months",
+    period: "Aug 2024 – Feb 2025",
     location: "Remote",
     type: "Internship",
     color: "#818cf8",
     points: [
-      "Developed dynamic, reusable components using React.js to enhance user experience.",
-      "Designed RESTful APIs with Node.js and Express.js for efficient server-side logic.",
-      "Optimized database schemas and managed data pipelines for real-time platform needs.",
-      "Implemented responsive UI patterns and integrated third-party APIs and services.",
+      "Analyzed large-scale datasets to uncover trends and actionable insights for business growth.",
+      "Built interactive dashboards and data visualizations to track KPIs and performance metrics.",
+      "Utilized SQL and Python to extract, clean, and manipulate complex data pipelines.",
+      "Collaborated with product teams to optimize data-driven decision making and strategy."
     ],
-    tags: ["React.js", "Node.js", "Express.js", "AWS", "Web Design", "REST APIs"],
+    tags: ["Data Analytics", "SQL", "Python", "Data Visualization", "Business Intelligence"],
   },
 ];
 
@@ -120,7 +120,7 @@ export default function Experience() {
             testId="experience-heading"
           />
           <div className="md:ml-auto font-mono text-[11px] sm:text-xs text-white/25 tracking-widest">
-            AIMaster.live · 7 months total
+            AIMaster.live & Caterworld · Real-world Impact
           </div>
         </div>
 
