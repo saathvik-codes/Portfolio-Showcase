@@ -98,9 +98,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       html: autoReplyHtml,
     });
 
-    res.status(200).json({ success: true, message: 'Message sent successfully!' });
+    return res.status(200).json({ success: true, message: 'Message sent successfully!' });
   } catch (error) {
     console.error('SMTP Error:', error);
-    res.status(500).json({ success: false, message: 'Failed to send message. Please try again later.' });
+    return res.status(500).json({ success: false, message: 'Failed to send message. Please try again later.' });
   }
 }
