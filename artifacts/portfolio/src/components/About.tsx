@@ -99,7 +99,7 @@ export default function About() {
               </div>
               <div>
                 <div className="font-semibold text-white text-sm">Saathvik Kalepu</div>
-                <div className="font-mono text-xs text-violet-400/60 mt-0.5">Software Developer · Hyderabad, India</div>
+                <div className="font-mono text-xs text-violet-400/60 mt-0.5">Full Stack & AI Specialist · Hyderabad, India</div>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="font-mono text-xs text-emerald-400/70">Open to opportunities</span>
@@ -123,19 +123,19 @@ export default function About() {
               </p>
             </div>
 
-            <div className="mt-6 md:mt-8 space-y-2.5 md:space-y-3">
+            <div className="mt-6 md:mt-8 space-y-4">
+              <div className="font-mono text-[10px] sm:text-xs text-violet-400/50 tracking-widest uppercase mb-3">Education</div>
               {[
                 { degree: "B.Tech — Computer Science & Engineering", inst: "IITDM Kurnool · Expected 2027", detail: "CGPA: 8.2" },
                 { degree: "Intermediate (Class XII)", inst: "Valley Oak Junior College, Hyderabad", detail: "98.8%" },
-                { degree: "SSC (Class X)", inst: "Dr. KKR Gowtham High School, Hyderabad", detail: "CGPA: 10.0" },
               ].map((edu, i) => (
-                <div key={i} className="p-3 md:p-4 border border-white/5 bg-white/[0.02] rounded-lg hover:border-violet-500/15 transition-all duration-300">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+                <div key={i} className="group">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
                     <div className="min-w-0">
-                      <div className="font-semibold text-white/80 text-xs sm:text-sm leading-snug">{edu.degree}</div>
-                      <div className="text-white/35 text-[10px] sm:text-xs mt-1 font-mono leading-relaxed">{edu.inst}</div>
+                      <div className="font-medium text-white/80 text-sm leading-snug group-hover:text-violet-300 transition-colors">{edu.degree}</div>
+                      <div className="text-white/40 text-xs mt-0.5 font-mono leading-relaxed">{edu.inst}</div>
                     </div>
-                    <div className="font-mono text-[10px] sm:text-xs shrink-0" style={{ color: "#a78bfa", opacity: 0.7 }}>{edu.detail}</div>
+                    <div className="font-mono text-xs shrink-0 text-violet-400/70">{edu.detail}</div>
                   </div>
                 </div>
               ))}
@@ -154,26 +154,25 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right */}
-          <div ref={rightRef} className="space-y-3 md:space-y-6">
-            <div ref={statsRef} className="grid grid-cols-2 gap-2 md:gap-4" data-testid="stats-grid">
+          <div ref={rightRef} className="space-y-10 md:space-y-16">
+            <div ref={statsRef} className="grid grid-cols-2 gap-6 md:gap-10" data-testid="stats-grid">
               {stats.map(({ num, label, suffix }) => (
                 <div key={label}
-                  className="min-w-0 p-2.5 sm:p-3 md:p-6 border border-white/5 bg-white/[0.02] rounded-md md:rounded-lg hover:border-violet-500/20 transition-all duration-300 group"
+                  className="min-w-0 group"
                   data-testid={`stat-${label.replace(/\s+/g, "-").toLowerCase()}`}
                 >
-                  <div className="font-serif text-lg min-[380px]:text-xl sm:text-3xl md:text-4xl leading-none text-white group-hover:text-violet-300 transition-colors duration-300"
+                  <div className="font-serif text-3xl md:text-5xl leading-none text-white group-hover:text-violet-400 transition-colors duration-300"
                     style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
-                    {num}<span className="text-violet-400">{suffix}</span>
+                    {num}<span className="text-violet-500/60">{suffix}</span>
                   </div>
-                  <div className="font-mono text-[9px] min-[380px]:text-[10px] sm:text-xs text-white/25 mt-1.5 md:mt-2 tracking-wide leading-snug truncate">{label}</div>
+                  <div className="font-mono text-xs text-white/40 mt-2 tracking-wide leading-snug">{label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="p-3.5 md:p-6 border border-white/5 bg-white/[0.015] rounded-lg">
+            <div className="pt-2">
               <div className="font-mono text-[10px] sm:text-xs text-violet-400/50 tracking-widest uppercase mb-4 md:mb-5">Core Competencies</div>
-              <div className="space-y-2.5 md:space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
                   "Object-Oriented Design & Patterns",
                   "Backend Engineering & REST APIs",
@@ -182,28 +181,11 @@ export default function About() {
                   "CI/CD & Cloud-Native Development",
                   "Unit Testing & Debugging",
                 ].map((item) => (
-                  <div key={item} className="flex items-start gap-2.5 sm:gap-3 text-white/35 text-[11px] sm:text-sm leading-relaxed hover:text-white/65 transition-colors duration-300 group">
+                  <div key={item} className="flex items-start gap-3 text-white/50 text-sm leading-relaxed hover:text-white/80 transition-colors duration-300 group">
                     <svg viewBox="0 0 8 8" width="8" height="8" fill="none" className="mt-1.5 shrink-0">
                       <circle cx="4" cy="4" r="3" stroke="#a78bfa" strokeWidth="1" strokeOpacity="0.5" className="group-hover:stroke-violet-400 transition-colors"/>
                     </svg>
                     {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="p-3.5 md:p-5 rounded-lg border border-violet-500/15 bg-violet-500/5">
-              <div className="font-mono text-[10px] sm:text-xs text-violet-400/50 tracking-widest uppercase mb-3">Quick Profile</div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1.5 md:gap-y-2 text-sm">
-                {[
-                  ["Role", "Full Stack Dev"],
-                  ["Status", "Student (2027)"],
-                  ["Location", "Hyderabad, IN"],
-                  ["Focus", "AI + Cloud"],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex gap-2">
-                    <span className="text-white/25 font-mono text-[10px] sm:text-xs">{k}:</span>
-                    <span className="text-white/60 text-[10px] sm:text-xs">{v}</span>
                   </div>
                 ))}
               </div>

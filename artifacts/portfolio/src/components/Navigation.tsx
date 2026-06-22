@@ -91,7 +91,6 @@ export default function Navigation({ visible }: NavigationProps) {
           ))}
         </div>
 
-        {/* Desktop right actions */}
         <div className="hidden md:flex items-center gap-3">
           <a href="/Saathvik_Kalepu_Resume.pdf" download
             className="flex items-center gap-2 font-mono text-xs tracking-widest uppercase px-4 py-2 border border-white/10 text-white/35 hover:text-violet-400 hover:border-violet-500/40 transition-all duration-300 rounded-full"
@@ -101,19 +100,10 @@ export default function Navigation({ visible }: NavigationProps) {
             </svg>
             Resume
           </a>
-          <a href="mailto:saathvikk202@gmail.com"
-            className="font-mono text-xs tracking-widest uppercase px-4 py-2 bg-violet-500/10 border border-violet-500/40 text-violet-400 hover:bg-violet-500/20 hover:border-violet-400 transition-all duration-300 rounded-full"
-            data-hover="true" data-testid="nav-hire">
-            Hire Me
-          </a>
         </div>
 
-        {/* Mobile: hire me + hamburger */}
+        {/* Mobile: hamburger */}
         <div className="flex md:hidden items-center gap-2">
-          <a href="mailto:saathvikk202@gmail.com"
-            className="font-mono text-[10px] tracking-widest uppercase px-2.5 py-1.5 bg-violet-500/10 border border-violet-500/40 text-violet-400 rounded-full transition-all duration-300">
-            Hire
-          </a>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="w-9 h-9 flex flex-col items-center justify-center gap-1.5 text-white/50 hover:text-white transition-colors"

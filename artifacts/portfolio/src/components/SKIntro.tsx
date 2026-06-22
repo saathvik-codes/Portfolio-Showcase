@@ -270,9 +270,9 @@ export default function SKIntro({ onComplete }: SKIntroProps) {
           </p>
           <p
             ref={tagRef}
-            className="font-mono text-xs tracking-[0.3em] text-violet-400/40 uppercase"
+            className="font-mono text-xs tracking-[0.3em] text-violet-400/40 uppercase text-center"
           >
-            Software Developer
+            Full Stack Developer & AI Specialist
           </p>
         </div>
       </div>

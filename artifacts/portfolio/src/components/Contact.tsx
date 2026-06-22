@@ -1,15 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import emailjs from "@emailjs/browser";
 import RollingTitle from "./RollingTitle";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_rqkh5ys";
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_qzgttb8";
-const EMAILJS_AUTO_REPLY_ID = import.meta.env.VITE_EMAILJS_AUTO_REPLY_ID || "template_2tzr8pi";
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined;
 
 const socials = [
   {
@@ -126,49 +120,29 @@ export default function Contact() {
       setError("Please fill in all required fields.");
       return;
     }
-    if (!EMAILJS_PUBLIC_KEY) {
-      setError("EmailJS is missing VITE_EMAILJS_PUBLIC_KEY. Add it to artifacts/portfolio/.env.local, then restart the dev server.");
-      return;
-    }
     setSending(true);
     setError("");
     try {
-      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        name: form.name,
-        email: form.email,
-        user_name: form.name,
-        user_email: form.email,
-        from_name: form.name,
-        from_email: form.email,
-        reply_to: form.email,
-        subject: form.subject || "Portfolio Contact",
-        message: form.message,
-        to_name: "Saathvik",
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
       });
 
-      try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_AUTO_REPLY_ID, {
-          user_name: form.name,
-          user_email: form.email,
-          to_name: form.name,
-          to_email: form.email,
-          reply_to: "saathvikk202@gmail.com",
-          subject: form.subject || "Portfolio Contact",
-          email: form.email,
-          message: form.message,
-        });
-      } catch (autoReplyError) {
-        console.warn("EmailJS auto-reply failed, but the main message was sent.", autoReplyError);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong.");
       }
 
       setSent(true);
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (sendError) {
-      console.error("EmailJS send failed", sendError);
-      const message = sendError instanceof Error ? sendError.message : "Unknown EmailJS error";
-      setError(`EmailJS failed: ${message}. Please email me directly at saathvikk202@gmail.com`);
+      console.error("API send failed", sendError);
+      const message = sendError instanceof Error ? sendError.message : "Unknown error";
+      setError(`Failed: ${message}. Please email me directly at saathvikk202@gmail.com`);
     } finally {
       setSending(false);
     }

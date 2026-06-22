@@ -15,16 +15,11 @@ const certifications = [
     border: "rgba(0,120,212,0.3)",
     featured: true,
     logo: (
-      <svg viewBox="0 0 21 21" width="30" height="30">
-        <rect x="1" y="1" width="9" height="9" fill="#f35325"/>
-        <rect x="11" y="1" width="9" height="9" fill="#81bc06"/>
-        <rect x="1" y="11" width="9" height="9" fill="#05a6f0"/>
-        <rect x="11" y="11" width="9" height="9" fill="#ffba08"/>
-      </svg>
+      <img src="https://cdn.simpleicons.org/microsoft/0078D4" alt="Microsoft" width="28" height="28" />
     ),
   },
   {
-    title: "Career Essentials in Generative AI by Microsoft and LinkedIn",
+    title: "Career Essentials in Generative AI",
     issuer: "Microsoft & LinkedIn",
     date: "2024",
     color: "#0078d4",
@@ -32,48 +27,7 @@ const certifications = [
     border: "rgba(0,120,212,0.3)",
     featured: true,
     logo: (
-      <svg viewBox="0 0 21 21" width="30" height="30">
-        <rect x="1" y="1" width="9" height="9" fill="#f35325"/>
-        <rect x="11" y="1" width="9" height="9" fill="#81bc06"/>
-        <rect x="1" y="11" width="9" height="9" fill="#05a6f0"/>
-        <rect x="11" y="11" width="9" height="9" fill="#ffba08"/>
-      </svg>
-    ),
-  },
-  {
-    title: "Java",
-    issuer: "HackerRank",
-    date: "Jun 2024",
-    color: "#00ea64",
-    bg: "#0a1e12",
-    border: "rgba(0,234,100,0.2)",
-    featured: false,
-    logo: (
-      <div style={{ background: "#1ba94c", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 13, fontFamily: "sans-serif" }}>H</div>
-    ),
-  },
-  {
-    title: "Python",
-    issuer: "HackerRank",
-    date: "Jun 2024",
-    color: "#00ea64",
-    bg: "#0a1e12",
-    border: "rgba(0,234,100,0.2)",
-    featured: false,
-    logo: (
-      <div style={{ background: "#1ba94c", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 13, fontFamily: "sans-serif" }}>H</div>
-    ),
-  },
-  {
-    title: "AI Workshop",
-    issuer: "HackerRank",
-    date: "Jun 2024",
-    color: "#00ea64",
-    bg: "#0a1e12",
-    border: "rgba(0,234,100,0.2)",
-    featured: false,
-    logo: (
-      <div style={{ background: "#1ba94c", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 13, fontFamily: "sans-serif" }}>H</div>
+      <img src="https://cdn.simpleicons.org/linkedin/0A66C2" alt="LinkedIn" width="28" height="28" />
     ),
   },
   {
@@ -85,11 +39,11 @@ const certifications = [
     border: "rgba(3,239,98,0.2)",
     featured: false,
     logo: (
-      <div style={{ background: "#05192d", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "#03ef62", fontSize: 9, fontFamily: "monospace" }}>DC</div>
+      <img src="https://cdn.simpleicons.org/datacamp/03EF62" alt="DataCamp" width="28" height="28" />
     ),
   },
   {
-    title: "Full Stack Development",
+    title: "Full Stack Web Development",
     issuer: "Udemy",
     date: "2023",
     color: "#a435f0",
@@ -97,31 +51,7 @@ const certifications = [
     border: "rgba(164,53,240,0.2)",
     featured: false,
     logo: (
-      <div style={{ background: "#a435f0", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 15, fontFamily: "sans-serif" }}>U</div>
-    ),
-  },
-  {
-    title: "Introduction to Career Skills in Data Analytics",
-    issuer: "LinkedIn Learning",
-    date: "Dec 2024",
-    color: "#0a66c2",
-    bg: "#091830",
-    border: "rgba(10,102,194,0.25)",
-    featured: false,
-    logo: (
-      <div style={{ background: "#0a66c2", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 12, fontFamily: "sans-serif" }}>in</div>
-    ),
-  },
-  {
-    title: "Practical GitHub Actions",
-    issuer: "LinkedIn Learning",
-    date: "Dec 2024",
-    color: "#0a66c2",
-    bg: "#091830",
-    border: "rgba(10,102,194,0.25)",
-    featured: false,
-    logo: (
-      <div style={{ background: "#0a66c2", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 12, fontFamily: "sans-serif" }}>in</div>
+      <img src="https://cdn.simpleicons.org/udemy/A435F0" alt="Udemy" width="28" height="28" />
     ),
   },
   {
@@ -133,33 +63,21 @@ const certifications = [
     border: "rgba(27,160,215,0.2)",
     featured: false,
     logo: (
-      <div style={{ background: "#049fd9", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 8, fontFamily: "sans-serif" }}>CISCO</div>
+      <img src="https://cdn.simpleicons.org/cisco/1BA0D7" alt="Cisco" width="28" height="28" />
     ),
   },
   {
-    title: "Generative AI Imaging: What Creative Pros Need to Know",
-    issuer: "LinkedIn Learning",
-    date: "Dec 2024",
-    color: "#0a66c2",
-    bg: "#091830",
-    border: "rgba(10,102,194,0.25)",
+    title: "Python (Basic) Certificate",
+    issuer: "HackerRank",
+    date: "Jun 2024",
+    color: "#00ea64",
+    bg: "#0a1e12",
+    border: "rgba(0,234,100,0.2)",
     featured: false,
     logo: (
-      <div style={{ background: "#0a66c2", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 12, fontFamily: "sans-serif" }}>in</div>
+      <img src="https://cdn.simpleicons.org/hackerrank/00EA64" alt="HackerRank" width="28" height="28" />
     ),
-  },
-  {
-    title: "Essential Skills in Generative AI for Creatives (Adobe)",
-    issuer: "LinkedIn Learning",
-    date: "Dec 2024",
-    color: "#0a66c2",
-    bg: "#091830",
-    border: "rgba(10,102,194,0.25)",
-    featured: false,
-    logo: (
-      <div style={{ background: "#0a66c2", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, color: "white", fontSize: 12, fontFamily: "sans-serif" }}>in</div>
-    ),
-  },
+  }
 ];
 
 const extras = [
