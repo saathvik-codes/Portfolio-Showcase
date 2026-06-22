@@ -1,7 +1,6 @@
 import nodemailer from 'nodemailer';
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
@@ -23,7 +22,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   });
 
   const fromEmail = '"Saathvik Kalepu" <no-reply@saathvik.in>';
-
   const logoUrl = 'https://saathvik-kalepu.vercel.app/og-thumbnail.svg';
 
   // Email to you (Notification)
