@@ -70,7 +70,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative border-t border-white/[0.04] overflow-hidden" data-testid="footer">
+    <footer className="relative border-t border-white/[0.064] overflow-hidden" data-testid="footer">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 60% 100% at 50% 100%, rgba(139,92,246,0.05) 0%, transparent 70%)" }} />
@@ -96,11 +96,11 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-white/25 text-xs sm:text-sm leading-relaxed max-w-xs mb-5 md:mb-6">
-              Full stack developer & AI enthusiast. Building elegant software from Hyderabad, India.
+              Software engineer and CS student working on backend systems, data, and AI from Hyderabad, India.
             </p>
             <div className="flex items-center gap-2 mb-5 md:mb-6">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="font-mono text-xs text-emerald-400/60">Open to new opportunities</span>
+              <span className="font-mono text-xs text-emerald-400/60">Usually replies within a day</span>
             </div>
             <a
               href="/Saathvik_Kalepu_Resume.pdf"
@@ -170,7 +170,7 @@ export default function Footer() {
               <a key={s.label} href={s.href}
                 target={s.href.startsWith("http") ? "_blank" : undefined}
                 rel="noreferrer"
-                className="text-white/12 hover:text-violet-400 transition-colors duration-300 p-1"
+                className="flex h-11 w-11 items-center justify-center text-white/12 hover:text-violet-400 transition-colors duration-300"
                 data-hover="true" title={s.label}>
                 {s.icon}
               </a>

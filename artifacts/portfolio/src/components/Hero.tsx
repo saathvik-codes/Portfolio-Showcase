@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ThreeBackground from "./ThreeBackground";
 import RollingTitle from "./RollingTitle";
+import { magneticMove, magneticLeave } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,12 +86,19 @@ export default function Hero() {
     >
       <ThreeBackground />
 
+      {/* Ambient glow blobs */}
+      <div className="ambient-blobs">
+        <div className="ambient-blob" style={{ width: 520, height: 520, top: "-8%", left: "8%", background: "#8b5cf6" }} />
+        <div className="ambient-blob" style={{ width: 460, height: 460, top: "20%", right: "-6%", background: "#c084fc", animationDelay: "-6s" }} />
+        <div className="ambient-blob" style={{ width: 380, height: 380, bottom: "-10%", left: "38%", background: "#f0abfc", animationDelay: "-12s", opacity: 0.1 }} />
+      </div>
+
       {/* Gradient overlay */}
       <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(139,92,246,0.06) 0%, transparent 70%)",
+            "radial-gradient(ellipse 80% 60% at 50% 30%, rgba(139,92,246,0.12) 0%, transparent 70%)",
         }}
       />
 
@@ -104,7 +112,7 @@ export default function Hero() {
           <div className="glow-dot" />
           <div ref={taglineRef}>
             <span className="font-mono text-[10px] sm:text-xs tracking-[0.16em] sm:tracking-[0.25em] text-violet-400/70 uppercase">
-              Software Developer · Full Stack · AI Enthusiast
+              Software Engineer · Backend & Data · AI/ML
             </span>
           </div>
         </div>
@@ -121,12 +129,12 @@ export default function Hero() {
         {/* Sub */}
         <p
           ref={subRef}
-          className="mt-5 max-w-lg text-white/45 text-sm sm:text-base md:text-lg leading-relaxed font-light"
+          className="mt-5 max-w-lg text-white/68 text-sm sm:text-base md:text-lg leading-relaxed font-light"
           data-testid="hero-sub"
         >
-          Building elegant software at the intersection of full-stack
-          engineering, AI, and cloud — currently at{" "}
-          <span className="text-violet-400/70">IITDM Kurnool</span>.
+          Software engineer focused on backend systems, data, and AI.
+          Currently studying at{" "}
+          <span className="text-violet-300">IITDM Kurnool</span>.
         </p>
 
         {/* Badges */}
@@ -146,7 +154,10 @@ export default function Hero() {
               e.preventDefault();
               document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="group flex items-center gap-3 font-mono text-xs sm:text-sm tracking-wider uppercase text-white hover:text-violet-400 transition-colors duration-300"
+            className="group flex items-center gap-3 font-mono text-xs sm:text-sm tracking-wider uppercase text-white hover:text-violet-400 transition-colors duration-300 will-change-transform"
+            style={{ transition: "transform 0.2s ease, color 0.3s ease" }}
+            onMouseMove={(e) => magneticMove(e, 0.3)}
+            onMouseLeave={magneticLeave}
             data-hover="true"
             data-testid="hero-cta-work"
           >
@@ -155,7 +166,7 @@ export default function Hero() {
           </a>
           <a
             href="mailto:saathvikk202@gmail.com"
-            className="font-mono text-xs sm:text-sm tracking-wider uppercase text-white/30 hover:text-white/70 transition-colors duration-300"
+            className="font-mono text-xs sm:text-sm tracking-wider uppercase text-white/45 hover:text-white/80 transition-colors duration-300"
             data-hover="true"
             data-testid="hero-cta-contact"
           >
@@ -171,12 +182,16 @@ export default function Hero() {
         data-testid="scroll-indicator"
       >
         <div className="scroll-indicator" />
-        <span className="font-mono text-xs tracking-[0.2em] text-white/20 uppercase">Scroll</span>
+        <span className="font-mono text-xs tracking-[0.2em] text-white/35 uppercase">Scroll</span>
       </div>
 
       {/* Location */}
-      <div className="hidden sm:block absolute bottom-8 md:bottom-12 right-4 sm:right-8 md:right-16 font-mono text-xs text-white/15 tracking-widest">
-        Hyderabad, India
+      <div className="hidden sm:flex absolute bottom-8 md:bottom-12 right-4 sm:right-8 md:right-16 flex-col items-end gap-2 font-mono text-xs text-white/30 tracking-widest">
+        <span className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
+          Open to work
+        </span>
+        <span>Hyderabad, India</span>
       </div>
     </section>
   );

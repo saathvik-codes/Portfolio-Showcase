@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import RollingTitle from "./RollingTitle";
+import { magneticMove, magneticLeave } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -185,7 +186,7 @@ export default function Contact() {
           <div className="contact-left space-y-6">
 
             {/* Contact details block */}
-            <div className="rounded-2xl border border-white/[0.07] bg-white/[0.02] p-4 sm:p-6 space-y-5">
+            <div className="glass-card rounded-2xl p-4 sm:p-6 space-y-5">
               <div className="font-mono text-xs text-white/30 tracking-widest uppercase mb-2">Get in touch</div>
 
               {/* Email */}
@@ -242,7 +243,7 @@ export default function Contact() {
               {/* Copy email button */}
               <button
                 onClick={copyEmail}
-                className="group w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/[0.06] text-white/30 hover:text-violet-400 hover:border-violet-500/25 hover:bg-violet-500/[0.04] transition-all duration-300 font-mono text-xs tracking-widest uppercase"
+                className="group w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/[0.096] text-white/30 hover:text-violet-400 hover:border-violet-500/25 hover:bg-violet-500/[0.04] transition-all duration-300 font-mono text-xs tracking-widest uppercase"
                 data-hover="true"
               >
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -262,7 +263,7 @@ export default function Contact() {
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.06] text-white/32 hover:border-violet-500/30 hover:bg-violet-500/[0.06] hover:text-violet-300 transition-all duration-300"
+                    className="group flex h-11 w-11 items-center justify-center rounded-xl border border-white/[0.096] text-white/32 hover:border-violet-500/30 hover:bg-violet-500/[0.06] hover:text-violet-300 transition-all duration-300"
                     data-hover="true"
                     aria-label={s.label}
                     title={s.label}
@@ -276,7 +277,7 @@ export default function Contact() {
             {/* Availability */}
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl border border-emerald-500/15 bg-emerald-500/[0.04]">
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-              <span className="font-mono text-[11px] sm:text-xs text-emerald-400/70">Open to opportunities from 2025</span>
+              <span className="font-mono text-[11px] sm:text-xs text-emerald-400/70">Usually replies within 24 hours</span>
             </div>
           </div>
 
@@ -285,7 +286,7 @@ export default function Contact() {
             <div className="font-mono text-xs text-violet-400/50 tracking-widest uppercase mb-6">Send a Message</div>
 
             {sent ? (
-              <div className="flex flex-col items-center justify-center py-24 text-center border border-white/[0.05] rounded-2xl bg-white/[0.01]">
+              <div className="glass-card flex flex-col items-center justify-center py-24 text-center rounded-2xl">
                 <div className="w-16 h-16 rounded-full border border-violet-500/30 bg-violet-500/10 flex items-center justify-center mb-6">
                   <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round">
                     <path d="M5 12L10 17L19 8"/>
@@ -330,7 +331,10 @@ export default function Contact() {
 
                 <div className="form-field-anim pt-1">
                   <button type="submit" disabled={sending}
-                    className="w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-mono text-xs sm:text-sm tracking-widest uppercase border border-violet-500/40 text-violet-400 hover:bg-violet-500/10 hover:border-violet-400/70 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="shimmer-btn w-full py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-mono text-xs sm:text-sm tracking-widest uppercase border border-violet-500/40 text-violet-400 hover:bg-violet-500/10 hover:border-violet-400/70 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3 will-change-transform"
+                    style={{ transition: "transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease" }}
+                    onMouseMove={(e) => !sending && magneticMove(e, 0.15)}
+                    onMouseLeave={magneticLeave}
                     data-hover="true" data-testid="contact-submit">
                     {sending ? (
                       <>

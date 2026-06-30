@@ -19,10 +19,16 @@ export default function SKIntro({ onComplete }: SKIntroProps) {
   const glowRef = useRef<HTMLDivElement>(null);
   const ring1Ref = useRef<SVGCircleElement>(null);
   const ring2Ref = useRef<SVGCircleElement>(null);
+  const skipRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onComplete();
+      return;
+    }
 
     const paths = [sPathRef.current, kLineRef.current, kTop.current, kBot.current].filter(Boolean) as SVGPathElement[];
 
@@ -41,32 +47,45 @@ export default function SKIntro({ onComplete }: SKIntroProps) {
     gsap.set(ring2Ref.current, { scale: 0.6, opacity: 0, transformOrigin: "86px 86px" });
 
     const obj = { val: 0 };
+    let skipped = false;
+
+    const exitNow = () => {
+      if (skipped) return;
+      skipped = true;
+      tl.kill();
+      const exitTl = gsap.timeline({ onComplete: () => onComplete() });
+      exitTl
+        .to(glowRef.current, { scale: 8, opacity: 0, duration: 0.45, ease: "power2.in" })
+        .to(overlay, {
+          clipPath: "inset(0 0 100% 0)",
+          duration: 0.55,
+          ease: "power4.inOut",
+        }, "-=0.25")
+        .set(overlay, { display: "none" });
+    };
+
+    skipRef.current = exitNow;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") exitNow();
+    };
+    window.addEventListener("keydown", onKeyDown);
+
     const tl = gsap.timeline({
-      onComplete: () => {
-        // Dramatic exit: scale up glow, then sweep overlay
-        const exitTl = gsap.timeline({ onComplete: () => onComplete() });
-        exitTl
-          .to(glowRef.current, { scale: 8, opacity: 0, duration: 0.7, ease: "power2.in" })
-          .to(overlay, {
-            clipPath: "inset(0 0 100% 0)",
-            duration: 0.9,
-            ease: "power4.inOut",
-          }, "-=0.4")
-          .set(overlay, { display: "none" });
-      },
+      onComplete: exitNow,
     });
 
     // Progress bar
     tl.to(progressBarRef.current, {
       scaleX: 1,
-      duration: 2.8,
+      duration: 1.6,
       ease: "power1.inOut",
     }, 0);
 
     // Counter
     tl.to(obj, {
       val: 100,
-      duration: 2.8,
+      duration: 1.6,
       ease: "power1.inOut",
       onUpdate: () => {
         if (counterRef.current) counterRef.current.textContent = Math.round(obj.val).toString().padStart(3, "0");
@@ -77,55 +96,58 @@ export default function SKIntro({ onComplete }: SKIntroProps) {
     tl.to([ring1Ref.current, ring2Ref.current], {
       scale: 1,
       opacity: 1,
-      duration: 1,
+      duration: 0.7,
       ease: "power2.out",
-      stagger: 0.15,
-    }, 0.1);
+      stagger: 0.1,
+    }, 0.05);
 
     // Draw paths staggered
     paths.forEach((p, i) => {
-      tl.to(p, { strokeDashoffset: 0, duration: 1.2, ease: "power3.inOut" }, 0.15 + i * 0.15);
+      tl.to(p, { strokeDashoffset: 0, duration: 0.7, ease: "power3.inOut" }, 0.1 + i * 0.09);
     });
 
     // Glow pulse
     tl.to(glowRef.current, {
       scale: 1.3,
       opacity: 1,
-      duration: 0.5,
+      duration: 0.35,
       ease: "power2.out",
-    }, 1.2);
+    }, 0.65);
 
     // Dot pop
     tl.to(dotRef.current, {
-      scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.5)",
-    }, 1.4);
+      scale: 1, opacity: 1, duration: 0.35, ease: "back.out(2.5)",
+    }, 0.78);
 
     // Color shift
     tl.to(paths, {
       attr: { stroke: "#c4b5fd" },
-      duration: 0.6,
+      duration: 0.35,
       ease: "power2.out",
-    }, 1.6);
+    }, 0.85);
 
     // Name
     tl.to(nameRef.current, {
-      opacity: 1, y: 0, duration: 0.7, ease: "power3.out",
-    }, 1.7);
+      opacity: 1, y: 0, duration: 0.45, ease: "power3.out",
+    }, 0.95);
 
     // Tag
     tl.to(tagRef.current, {
-      opacity: 1, y: 0, duration: 0.6, ease: "power3.out",
-    }, 1.9);
+      opacity: 1, y: 0, duration: 0.4, ease: "power3.out",
+    }, 1.08);
 
     // Hold
-    tl.to({}, { duration: 0.8 });
+    tl.to({}, { duration: 0.35 });
 
     // Fade all content before exit
     tl.to([...paths, dotRef.current, nameRef.current, tagRef.current, ring1Ref.current, ring2Ref.current, progressBarRef.current], {
-      opacity: 0, duration: 0.4, ease: "power2.in",
+      opacity: 0, duration: 0.3, ease: "power2.in",
     });
 
-    return () => { tl.kill(); };
+    return () => {
+      tl.kill();
+      window.removeEventListener("keydown", onKeyDown);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -272,7 +294,7 @@ export default function SKIntro({ onComplete }: SKIntroProps) {
             ref={tagRef}
             className="font-mono text-xs tracking-[0.3em] text-violet-400/40 uppercase text-center"
           >
-            Turning Vision Into Reality Through Code
+            Software Engineer · Hyderabad, India
           </p>
         </div>
       </div>
@@ -295,6 +317,16 @@ export default function SKIntro({ onComplete }: SKIntroProps) {
         <div className="w-1 h-1 rounded-full bg-violet-400/30 animate-pulse" />
         Initializing
       </div>
+
+      {/* Skip affordance */}
+      <button
+        type="button"
+        onClick={() => skipRef.current()}
+        className="absolute bottom-6 right-10 z-20 font-mono text-xs tracking-[0.2em] text-white/35 uppercase transition-colors duration-300 hover:text-violet-300"
+        data-testid="intro-skip"
+      >
+        Skip ↦
+      </button>
 
       {/* Corner label */}
       <div className="absolute top-10 left-10 font-mono text-xs tracking-[0.2em] text-white/8 uppercase">

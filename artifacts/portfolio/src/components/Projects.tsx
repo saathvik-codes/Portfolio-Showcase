@@ -2,8 +2,24 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import RollingTitle from "./RollingTitle";
+import { hexToRgba } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function handleTiltMove(e: React.MouseEvent<HTMLElement>) {
+  if (reduceMotion()) return;
+  const el = e.currentTarget;
+  const rect = el.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width - 0.5;
+  const py = (e.clientY - rect.top) / rect.height - 0.5;
+  el.style.transform = `perspective(900px) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 7).toFixed(2)}deg) translateY(-4px)`;
+}
+
+function handleTiltLeave(e: React.MouseEvent<HTMLElement>) {
+  e.currentTarget.style.transform = "";
+}
 
 const softwareProjects = [
   {
@@ -137,11 +153,14 @@ export default function Projects() {
             href={softwareProjects[0].href}
             target="_blank"
             rel="noreferrer"
-            className="work-card group relative min-h-[390px] overflow-hidden rounded-xl border border-violet-400/20 bg-[#101014] p-4 sm:p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-violet-300/45"
+            className="work-card group relative min-h-[390px] overflow-hidden rounded-xl border border-violet-400/25 bg-[#101014] p-4 sm:p-6 md:p-8 shadow-[0_20px_60px_-20px_rgba(139,92,246,0.18)] transition-[border-color,box-shadow] duration-300 will-change-transform hover:border-violet-300/55 hover:shadow-[0_28px_80px_-16px_rgba(139,92,246,0.32)]"
+            style={{ transition: "transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease" }}
+            onMouseMove={handleTiltMove}
+            onMouseLeave={handleTiltLeave}
             data-hover="true"
           >
-            <img src={softwareProjects[0].image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-30 grayscale transition duration-700 group-hover:scale-105 group-hover:opacity-45 group-hover:grayscale-0" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-br from-black/86 via-[#101014]/70 to-violet-950/40" />
+            <img src={softwareProjects[0].image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50 transition duration-700 group-hover:scale-105 group-hover:opacity-68" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/78 via-[#101014]/55 to-violet-950/35" />
             <div className="relative z-10 flex h-full flex-col justify-between gap-12">
               <div>
                 <div className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-violet-200/65">{softwareProjects[0].eyebrow}</div>
@@ -170,11 +189,15 @@ export default function Projects() {
                 href={project.href}
                 target="_blank"
                 rel="noreferrer"
-                className="work-card group relative min-h-[235px] overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.015] p-4 sm:p-5 transition-all duration-300 hover:-translate-y-1"
+                className="work-card group relative min-h-[235px] overflow-hidden rounded-xl border border-white/[0.112] bg-white/[0.032] p-4 sm:p-5 will-change-transform"
                 data-hover="true"
+                style={{ boxShadow: "0 16px 50px -22px rgba(0,0,0,0.6)", transition: "transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease" }}
+                onMouseMove={(e) => { handleTiltMove(e); }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 20px 60px -16px ${hexToRgba(project.color, 0.28)}`; e.currentTarget.style.borderColor = hexToRgba(project.color, 0.4); }}
+                onMouseLeave={(e) => { handleTiltLeave(e); e.currentTarget.style.boxShadow = "0 16px 50px -22px rgba(0,0,0,0.6)"; e.currentTarget.style.borderColor = ""; }}
               >
-                <img src={project.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-18 grayscale transition duration-500 group-hover:scale-105 group-hover:opacity-34 group-hover:grayscale-0" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-br from-black/88 via-[#101010]/76 to-black/55" />
+                <img src={project.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-38 transition duration-500 group-hover:scale-105 group-hover:opacity-55" loading="lazy" />
+                <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.8), rgba(16,16,16,0.55), ${hexToRgba(project.color, 0.18)})` }} />
                 <div className="relative z-10 flex h-full flex-col justify-between gap-6">
                   <div>
                     <div className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: project.color }}>{project.eyebrow}</div>
@@ -193,7 +216,7 @@ export default function Projects() {
             href="https://github.com/saathvik-codes"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.018] px-3.5 py-2 font-mono text-[10px] uppercase tracking-widest text-white/38 transition-all duration-300 hover:border-violet-500/35 hover:bg-violet-500/[0.06] hover:text-violet-200"
+            className="inline-flex items-center gap-2 rounded-full border border-white/[0.128] bg-white/[0.038] px-3.5 py-2 font-mono text-[10px] uppercase tracking-widest text-white/38 transition-all duration-300 hover:border-violet-500/35 hover:bg-violet-500/[0.06] hover:text-violet-200"
             data-hover="true"
           >
             <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
@@ -221,12 +244,16 @@ export default function Projects() {
             {designProjects.map((project) => (
               <article
                 key={project.title}
-                className="work-card group overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.018] transition-all duration-300 hover:-translate-y-1"
+                className="work-card group overflow-hidden rounded-xl border border-white/[0.112] bg-white/[0.038] will-change-transform"
+                style={{ boxShadow: "0 16px 50px -24px rgba(0,0,0,0.7)", transition: "transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease" }}
+                onMouseMove={(e) => { handleTiltMove(e); }}
+                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 24px 70px -18px ${hexToRgba(project.color, 0.35)}`; e.currentTarget.style.borderColor = hexToRgba(project.color, 0.45); }}
+                onMouseLeave={(e) => { handleTiltLeave(e); e.currentTarget.style.boxShadow = "0 16px 50px -24px rgba(0,0,0,0.7)"; e.currentTarget.style.borderColor = ""; }}
               >
                 <a href={project.live} target="_blank" rel="noreferrer" className="block" data-hover="true">
                   <div className="relative aspect-[1.12] overflow-hidden">
-                    <img src={project.image} alt={`${project.title} visual direction`} className="h-full w-full object-cover opacity-72 grayscale transition duration-700 group-hover:scale-105 group-hover:opacity-95 group-hover:grayscale-0" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/34 to-transparent" />
+                    <img src={project.image} alt={`${project.title} visual direction`} className="h-full w-full object-cover opacity-95 transition duration-700 group-hover:scale-105 group-hover:opacity-100" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
                       <div className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: project.color }}>Live UI/UX build</div>
                       <h4 className="mt-2 text-xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>{project.title}</h4>
@@ -238,12 +265,12 @@ export default function Projects() {
                   <p className="mt-3 text-xs sm:text-sm leading-relaxed text-white/45">{project.description}</p>
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="rounded-full border border-white/[0.06] px-2 py-1 font-mono text-[10px] text-white/34">
+                      <span key={tag} className="rounded-full border border-white/[0.096] px-2 py-1 font-mono text-[10px] text-white/34">
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <div className="mt-5 flex items-center justify-between border-t border-white/[0.06] pt-4">
+                  <div className="mt-5 flex items-center justify-between border-t border-white/[0.096] pt-4">
                     <a href={project.live} target="_blank" rel="noreferrer" className="font-mono text-[10px] uppercase tracking-widest text-violet-200/70 hover:text-violet-200" data-hover="true">
                       View live
                     </a>

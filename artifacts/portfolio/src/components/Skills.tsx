@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import RollingTitle from "./RollingTitle";
+import CountUp from "./CountUp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -224,7 +225,7 @@ export default function Skills() {
       </div>
 
       {/* Marquee */}
-      <div className="marquee py-4 md:py-5 mb-8 md:mb-10 border-y border-white/[0.04]">
+      <div className="marquee py-4 md:py-5 mb-8 md:mb-10 border-y border-white/[0.064]">
         <div className="marquee-inner">
           {[...marqueeItems, ...marqueeItems].map((item, i) => (
             <span key={i} className="mx-4 md:mx-6 font-mono text-xs md:text-sm text-white/15 tracking-widest uppercase">
@@ -241,7 +242,7 @@ export default function Skills() {
           {skillGroups.map((group, i) => (
             <div
               key={i}
-              className="skill-group project-card p-4 md:p-5 rounded-lg bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-300 group"
+              className="skill-group project-card p-4 md:p-5 rounded-lg bg-white/[0.053] hover:bg-white/[0.07] transition-all duration-300 group"
               data-testid={`skill-group-${group.category.toLowerCase().replace(/\s+/g, "-")}`}
             >
               <div className="flex items-center gap-2.5 mb-4">
@@ -264,7 +265,7 @@ export default function Skills() {
         </div>
 
         <div className="expertise-panels mt-5 grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-5">
-          <div className="expertise-panel rounded-2xl md:rounded-[1.5rem] border border-white/[0.06] bg-white/[0.018] p-4 sm:p-6">
+          <div className="glass-card expertise-panel rounded-2xl md:rounded-[1.5rem] p-4 sm:p-6">
             <div className="font-mono text-xs uppercase tracking-[0.22em] text-violet-400/55 mb-5">Technical expertise map</div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
@@ -272,7 +273,7 @@ export default function Skills() {
                 ["Backend APIs", "Node, Express, Flask, REST contracts"],
                 ["AI integration", "NLP, XAI, model-backed products"],
               ].map(([title, detail]) => (
-                <div key={title} className="rounded-xl sm:rounded-2xl border border-white/[0.055] bg-black/20 p-3 sm:p-4">
+                <div key={title} className="rounded-xl sm:rounded-2xl border border-white/[0.088] bg-black/20 p-3 sm:p-4">
                   <div className="text-white/78 text-sm font-semibold">{title}</div>
                   <div className="mt-2 text-white/34 text-xs leading-relaxed">{detail}</div>
                 </div>
@@ -283,11 +284,11 @@ export default function Skills() {
             href="https://leetcode.com/u/Sunny550/"
             target="_blank"
             rel="noreferrer"
-            className="expertise-panel group rounded-2xl md:rounded-[1.5rem] border border-yellow-400/15 bg-yellow-400/[0.035] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-yellow-300/35"
+            className="glass-card-light expertise-panel group rounded-2xl md:rounded-[1.5rem] border border-yellow-400/15 bg-yellow-400/[0.035] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-yellow-300/35"
             data-hover="true"
           >
             <div className="font-mono text-xs uppercase tracking-[0.22em] text-yellow-300/55">Problem solving</div>
-            <div className="mt-4 md:mt-5 text-4xl sm:text-5xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>200+</div>
+            <div className="mt-4 md:mt-5 text-4xl sm:text-5xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}><CountUp to={200} />+</div>
             <div className="mt-2 text-sm text-white/45">LeetCode problems solved on Sunny550</div>
             <div className="mt-6 font-mono text-xs uppercase tracking-widest text-yellow-200/70 group-hover:text-yellow-100">Open profile ↗</div>
           </a>

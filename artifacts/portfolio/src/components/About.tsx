@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import RollingTitle from "./RollingTitle";
+import CountUp from "./CountUp";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -55,10 +56,10 @@ export default function About() {
   }, []);
 
   const stats = [
-    { num: "8.2", label: "CGPA at IITDM", suffix: "" },
-    { num: "200", label: "LeetCode Problems", suffix: "+" },
-    { num: "5", label: "Full-stack Projects", suffix: "+" },
-    { num: "7", label: "Months at AIMaster", suffix: "" },
+    { num: 8.2, decimals: 1, label: "CGPA at IITDM", suffix: "" },
+    { num: 200, decimals: 0, label: "LeetCode Problems", suffix: "+" },
+    { num: 5, decimals: 0, label: "Full-stack Projects", suffix: "+" },
+    { num: 7, decimals: 0, label: "Months at AIMaster", suffix: "" },
   ];
 
   return (
@@ -85,7 +86,7 @@ export default function About() {
         <div className="grid md:grid-cols-2 gap-10 md:gap-20 items-start">
           {/* Left */}
           <div ref={leftRef}>
-            <div className="flex items-center gap-3 sm:gap-5 mb-6 md:mb-8 p-3 sm:p-4 rounded-lg border border-white/5 bg-white/[0.02]">
+            <div className="glass-card flex items-center gap-3 sm:gap-5 mb-6 md:mb-8 p-3 sm:p-4 rounded-lg">
               <div
                 className="w-12 h-12 sm:w-16 sm:h-16 rounded-full shrink-0 flex items-center justify-center text-lg sm:text-2xl border border-violet-500/30"
                 style={{
@@ -99,7 +100,7 @@ export default function About() {
               </div>
               <div>
                 <div className="font-semibold text-white text-sm">Saathvik Kalepu</div>
-                <div className="font-mono text-xs text-violet-400/60 mt-0.5">Full Stack & AI Specialist · Hyderabad, India</div>
+                <div className="font-mono text-xs text-violet-400/60 mt-0.5">Software Engineer · Backend, Data & AI · Hyderabad, India</div>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="font-mono text-xs text-emerald-400/70">Open to opportunities</span>
@@ -109,17 +110,19 @@ export default function About() {
 
             <div className="space-y-4 md:space-y-5 text-white/45 text-sm sm:text-base leading-relaxed">
               <p>
-                I'm a Computer Science student at{" "}
-                <span className="text-violet-400/80 font-medium">IITDM Kurnool</span>{" "}
-                with a strong foundation in software engineering, data structures, and scalable system design.
+                I'm a Computer Science undergrad at{" "}
+                <span className="text-violet-400/80 font-medium">IITDM Kurnool</span>,
+                mostly heads-down on data structures, system design, and shipping things that actually
+                run in production — not just demos.
               </p>
               <p>
-                My work spans full-cycle application development — from backend API design and microservices
-                to type-safe frontend architectures — with a growing focus on AI/ML integrations and cloud-native deployment.
+                Most of my work is backend — APIs, microservices, data pipelines — with a growing focus
+                on AI/ML and cloud. I pick up frontend (React, TypeScript) when a project needs it, but
+                backend and data are where I spend most of my time.
               </p>
               <p>
-                I believe the best software is invisible: it just works, it's fast, and it gets out of the user's way.
-                That philosophy drives everything I build.
+                My rule for myself: if someone has to think about how a feature works, it's not done yet.
+                I'll take the extra evening on the rough edges over shipping something that just barely works.
               </p>
             </div>
 
@@ -156,14 +159,14 @@ export default function About() {
 
           <div ref={rightRef} className="space-y-10 md:space-y-16">
             <div ref={statsRef} className="grid grid-cols-2 gap-6 md:gap-10" data-testid="stats-grid">
-              {stats.map(({ num, label, suffix }) => (
+              {stats.map(({ num, decimals, label, suffix }) => (
                 <div key={label}
                   className="min-w-0 group"
                   data-testid={`stat-${label.replace(/\s+/g, "-").toLowerCase()}`}
                 >
                   <div className="font-serif text-3xl md:text-5xl leading-none text-white group-hover:text-violet-400 transition-colors duration-300"
                     style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
-                    {num}<span className="text-violet-500/60">{suffix}</span>
+                    <CountUp to={num} decimals={decimals} /><span className="text-violet-500/60">{suffix}</span>
                   </div>
                   <div className="font-mono text-xs text-white/40 mt-2 tracking-wide leading-snug">{label}</div>
                 </div>

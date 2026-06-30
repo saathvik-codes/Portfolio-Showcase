@@ -22,34 +22,19 @@ const experiences = [
     tags: ["DevOps", "UI/UX Design", "CI/CD", "Web Development", "System Reliability"],
   },
   {
-    role: "Software Engineering Intern",
+    role: "Software Engineering & Data Intern",
     company: "AIMaster.live",
     period: "Aug 2024 – Feb 2025",
     location: "Remote",
     type: "Internship",
     color: "#a78bfa",
     points: [
-      "Developed full-stack features and automated API integrations utilizing React, Python/Flask, and Node.js.",
-      "Designed and implemented scalable cloud delivery pipelines and REST APIs to support robust user workflows.",
-      "Optimized data pipelines and enhanced backend performance, significantly improving data throughput.",
-      "Gained practical experience writing maintainable code following engineering best practices.",
+      "Built full-stack features and REST APIs with React, Flask, and Node.js, and shipped cloud delivery pipelines for production workflows.",
+      "Analyzed datasets to surface trends and built dashboards that tracked key metrics for the product team.",
+      "Used SQL and Python to clean and process data, and optimized backend pipelines for better throughput.",
+      "Worked directly with the product team to turn data into decisions, end to end.",
     ],
-    tags: ["React", "Python", "Node.js", "Backend Engineering", "REST APIs"],
-  },
-  {
-    role: "Data Analyst Intern",
-    company: "AIMaster.live",
-    period: "Aug 2024 – Feb 2025",
-    location: "Remote",
-    type: "Internship",
-    color: "#818cf8",
-    points: [
-      "Analyzed large-scale datasets to uncover trends and actionable insights for business growth.",
-      "Built interactive dashboards and data visualizations to track KPIs and performance metrics.",
-      "Utilized SQL and Python to extract, clean, and manipulate complex data pipelines.",
-      "Collaborated with product teams to optimize data-driven decision making and strategy."
-    ],
-    tags: ["Data Analytics", "SQL", "Python", "Data Visualization", "Business Intelligence"],
+    tags: ["React", "Python", "Node.js", "REST APIs", "SQL", "Data Visualization"],
   },
 ];
 
@@ -142,7 +127,7 @@ export default function Experience() {
                   style={{ background: `linear-gradient(to right, ${exp.color}40, transparent)` }} />
 
                 <div
-                  className="project-card p-4 sm:p-5 md:p-7 rounded-lg bg-white/[0.025] hover:bg-white/[0.04] transition-all duration-400 group-hover:translate-x-1"
+                  className="project-card p-4 sm:p-5 md:p-7 rounded-lg bg-white/[0.053] hover:bg-white/[0.07] transition-all duration-400 group-hover:translate-x-1"
                   style={{ borderColor: `${exp.color}18` }}
                 >
                   <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4 mb-4 md:mb-5">
