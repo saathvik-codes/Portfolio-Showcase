@@ -11,13 +11,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
 
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.error('SMTP_USER/SMTP_PASS env vars are not configured');
+    return res.status(500).json({ message: 'Email is not configured on the server.' });
+  }
+
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
-      user: process.env.SMTP_USER || 'saathvikk202@gmail.com',
-      pass: process.env.SMTP_PASS || 'sjyj todq exhx jxgk',
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
   });
 
