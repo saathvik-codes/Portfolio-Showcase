@@ -9,8 +9,8 @@ const experiences = [
   {
     role: "DevOps Engineer & UI/UX Designer",
     company: "Caterworld Technologies",
-    period: "Mar 2026 – May 2026",
-    location: "Hybrid",
+    period: "Apr 2026 – Jun 2026",
+    location: "Hybrid, Chennai",
     type: "Internship",
     color: "#e879f9",
     points: [
@@ -22,9 +22,9 @@ const experiences = [
     tags: ["DevOps", "UI/UX Design", "CI/CD", "Web Development", "System Reliability"],
   },
   {
-    role: "Software Engineering & Data Intern",
+    role: "Software Engineering Intern",
     company: "AIMaster.live",
-    period: "Aug 2024 – Feb 2025",
+    period: "Jul 2024 – Jan 2025",
     location: "Remote",
     type: "Internship",
     color: "#a78bfa",
