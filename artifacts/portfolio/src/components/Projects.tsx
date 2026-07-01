@@ -1,305 +1,351 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import RollingTitle from "./RollingTitle";
-import { hexToRgba } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-function handleTiltMove(e: React.MouseEvent<HTMLElement>) {
-  if (reduceMotion()) return;
-  const el = e.currentTarget;
-  const rect = el.getBoundingClientRect();
-  const px = (e.clientX - rect.left) / rect.width - 0.5;
-  const py = (e.clientY - rect.top) / rect.height - 0.5;
-  el.style.transform = `perspective(900px) rotateX(${(-py * 5).toFixed(2)}deg) rotateY(${(px * 7).toFixed(2)}deg) translateY(-4px)`;
-}
-
-function handleTiltLeave(e: React.MouseEvent<HTMLElement>) {
-  e.currentTarget.style.transform = "";
-}
-
-const softwareProjects = [
+const projects = [
   {
-    title: "Serenity",
-    eyebrow: "Featured full-stack build",
-    subtitle: "AI Mental Wellness Platform",
-    description:
-      "A mental wellness platform with engagement flows, journal-style interactions, AI-assisted support, and a calm product surface.",
-    tags: ["TypeScript", "React", "Flask", "NLP", "Firebase"],
-    href: "https://github.com/saathvik-codes/Serenity-Mental-Wellness-Platform",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
-    color: "#a78bfa",
+    index: "01",
+    title: "QueryMind",
+    category: "AI · Data Systems",
+    tagline: "Natural-language interface over 1M+ real retail transactions — NL to SQL, self-correcting, 12/12 query types validated.",
+    tags: ["Python", "LangChain", "DuckDB", "FastAPI", "React"],
+    href: "https://github.com/saathvik-codes",
+    accent: "#8b5cf6",
   },
   {
-    title: "TaskVise",
-    eyebrow: "Team workflow system",
-    subtitle: "Company Task Management",
-    description:
-      "A typed task management experience for assigning, tracking, and organizing team work across departments.",
-    tags: ["React", "Node.js", "Express", "MongoDB"],
-    href: "https://github.com/saathvik-codes/Taskvise-flask",
-    image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=80",
-    color: "#c084fc",
+    index: "02",
+    title: "Switchboard",
+    category: "ML Engineering",
+    tagline: "Intent classifier trained on 13K+ real queries, 93% accuracy. LangChain agent raises tool-selection pass rate 67 → 83%.",
+    tags: ["HuggingFace", "LangChain", "Ollama", "scikit-learn", "FastAPI"],
+    href: "https://github.com/saathvik-codes",
+    accent: "#c084fc",
   },
   {
-    title: "CogniShield",
-    eyebrow: "AI security prototype",
-    subtitle: "Explainable Behavioral Security",
-    description:
-      "Detects anomalous user activity with behavioral biometrics and explains decisions with human-readable model outputs.",
-    tags: ["Python", "ML", "SHAP/XAI", "Security"],
-    href: "https://github.com/saathvik-codes/Explainable-Behavioral-Security-Platform",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
-    color: "#e879f9",
+    index: "03",
+    title: "AutoVista AI",
+    category: "ML · Prediction",
+    tagline: "Gradient Boosting model cuts pricing error 46% vs naive baseline. Zero-downtime retraining pipeline — hot-swaps on new data.",
+    tags: ["Python", "scikit-learn", "FastAPI", "MongoDB"],
+    href: "https://github.com/saathvik-codes",
+    accent: "#818cf8",
+  },
+  {
+    index: "04",
+    title: "Pulse",
+    category: "Analytics · BI",
+    tagline: "GBP 17.7M revenue across 36,969 orders — RFM segmentation, cohort retention, churn-risk scoring. Live on Vercel.",
+    tags: ["Python", "pandas", "DuckDB", "Next.js", "Recharts"],
+    href: "https://github.com/saathvik-codes",
+    accent: "#e879f9",
+  },
+  {
+    index: "05",
+    title: "Road Hazard CV",
+    category: "Computer Vision · Systems",
+    tagline: "Fine-tuned YOLOv8 instance-segmentation served as REST API. Live React dashboard with detections under 30 seconds.",
+    tags: ["YOLOv8", "Node.js", "React", "SQLite", "Python"],
+    href: "https://github.com/saathvik-codes",
+    accent: "#a78bfa",
+  },
+  {
+    index: "06",
+    title: "RAG Assistant",
+    category: "LLM · Backend",
+    tagline: "Hybrid semantic + keyword retrieval with hallucination-rejection. 16 unit tests + 11-case eval harness, 100% pass.",
+    tags: ["Python", "LangChain", "FAISS", "FastAPI", "Docker"],
+    href: "https://github.com/saathvik-codes",
+    accent: "#7c3aed",
   },
 ];
 
-const designProjects = [
+const visualProjects = [
   {
     title: "Aryav",
     subtitle: "Cinematic luxury real estate",
-    description:
-      "Immersive 3D architecture, cinematic storytelling, GSAP motion, responsive pages, and premium ARYAV branding.",
-    tags: ["Real Estate", "3D", "GSAP", "Brand Site"],
-    repo: "https://github.com/saathvikvisuals/aryav-cinematic-real-estate",
     live: "https://aryav-cinematic-real-estate-api-ser.vercel.app",
-    image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1300&q=80",
-    color: "#c084fc",
+    repo: "https://github.com/saathvikvisuals/aryav-cinematic-real-estate",
+    accent: "#c084fc",
   },
   {
     title: "AARNA Salon",
-    subtitle: "Luxury salon and beauty ritual",
-    description:
-      "A polished beauty website with services, packages, artist profiles, gallery editorials, and a booking-oriented flow.",
-    tags: ["Beauty", "Luxury UI", "Booking", "Editorial"],
-    repo: "https://github.com/saathvikvisuals/aarna-salon",
+    subtitle: "Luxury beauty editorial",
     live: "https://aarna-salon.vercel.app",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1300&q=80",
-    color: "#f0abfc",
+    repo: "https://github.com/saathvikvisuals/aarna-salon",
+    accent: "#f0abfc",
   },
   {
     title: "Jaabili Tourism",
-    subtitle: "Premium travel experiences",
-    description:
-      "A travel experience site built with React, Vite, Tailwind, Framer Motion, GSAP, and atmospheric visual composition.",
-    tags: ["Travel", "Motion", "Three.js", "Experience"],
-    repo: "https://github.com/saathvikvisuals/jaabili-tourism",
+    subtitle: "Premium travel experience",
     live: "https://jaabili-tourism.vercel.app",
-    image: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1300&q=80",
-    color: "#818cf8",
+    repo: "https://github.com/saathvikvisuals/jaabili-tourism",
+    accent: "#818cf8",
   },
 ];
 
 export default function Projects() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const outerRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const outer = outerRef.current;
+    const track = trackRef.current;
+    if (!outer || !track) return;
+
+    const panels = track.querySelectorAll<HTMLElement>(".proj-panel");
+    const totalWidth = track.scrollWidth - window.innerWidth;
+
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".work-card",
-        { y: 24, opacity: 0, scale: 0.985 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.55,
-          ease: "power2.out",
-          stagger: 0.06,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 82%",
-            end: "bottom 12%",
-            toggleActions: "play reverse play reverse",
-          },
+      // Horizontal scroll pin
+      const hTween = gsap.to(track, {
+        x: () => -totalWidth,
+        ease: "none",
+        scrollTrigger: {
+          trigger: outer,
+          pin: true,
+          scrub: 0.9,
+          end: () => `+=${totalWidth}`,
+          invalidateOnRefresh: true,
         },
-      );
-    }, sectionRef);
+      });
+
+      // Per-panel content reveal
+      panels.forEach((panel) => {
+        const num = panel.querySelector(".proj-num");
+        const cat = panel.querySelector(".proj-cat");
+        const title = panel.querySelector(".proj-title");
+        const line = panel.querySelector(".proj-line");
+        const tagline = panel.querySelector(".proj-tagline");
+        const tags = panel.querySelectorAll(".proj-tag");
+        const cta = panel.querySelector(".proj-cta");
+
+        gsap.set([num, cat, title, line, tagline, tags, cta], { opacity: 0, y: 24 });
+
+        ScrollTrigger.create({
+          trigger: panel,
+          containerAnimation: hTween,
+          start: "left 80%",
+          end: "left 20%",
+          toggleActions: "play none none reverse",
+          onEnter: () => {
+            gsap.timeline()
+              .to(num, { opacity: 0.15, y: 0, duration: 0.4, ease: "power2.out" })
+              .to(cat, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.25")
+              .to(title, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "-=0.3")
+              .to(line, { opacity: 1, y: 0, scaleX: 1, duration: 0.5, transformOrigin: "left", ease: "power3.out" }, "-=0.4")
+              .to(tagline, { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, "-=0.35")
+              .to(tags, { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" }, "-=0.3")
+              .to(cta, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.2");
+          },
+          onLeaveBack: () => {
+            gsap.to([num, cat, title, line, tagline, tags, cta], { opacity: 0, y: 24, duration: 0.3 });
+          },
+        });
+      });
+
+      // Progress label counter
+      ScrollTrigger.create({
+        trigger: outer,
+        scrub: true,
+        end: () => `+=${totalWidth}`,
+        onUpdate: (self) => {
+          const idx = Math.min(projects.length - 1, Math.floor(self.progress * projects.length));
+          if (labelRef.current) labelRef.current.textContent = `${idx + 1} / ${projects.length}`;
+        },
+      });
+    }, outer);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      id="projects"
-      className="relative py-20 md:py-32 px-4 sm:px-8 md:px-16 overflow-hidden"
-      data-testid="projects-section"
-    >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 70% 38% at 50% 18%, rgba(139,92,246,0.05) 0%, transparent 72%)" }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="section-index mb-6">03 - Selected Work</div>
-
-        <div className="mb-10 md:mb-14 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <RollingTitle
-            lines={[
-              { text: "Selected" },
-              { text: "Work.", gradient: true },
-            ]}
-            className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.2rem,5vw,4.75rem)] leading-[1.06] md:leading-[1.02] text-white"
-          />
-          <p className="max-w-sm text-xs sm:text-sm leading-relaxed text-white/38">
-            A curated mix of engineering builds and visual UI/UX projects, shaped as case-study cards instead of a dense repository list.
-          </p>
+    <>
+      {/* ---- Horizontal scroll ---- */}
+      <section
+        ref={outerRef}
+        id="projects"
+        className="relative overflow-hidden"
+        style={{ height: "100vh" }}
+        data-testid="projects-section"
+      >
+        {/* Progress counter */}
+        <div className="absolute top-8 right-8 z-20 font-mono text-xs text-white/25 tracking-widest pointer-events-none">
+          <div ref={labelRef}>1 / {projects.length}</div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
-          <a
-            href={softwareProjects[0].href}
-            target="_blank"
-            rel="noreferrer"
-            className="work-card group relative min-h-[390px] overflow-hidden rounded-xl border border-violet-400/25 bg-[#101014] p-4 sm:p-6 md:p-8 shadow-[0_20px_60px_-20px_rgba(139,92,246,0.18)] transition-[border-color,box-shadow] duration-300 will-change-transform hover:border-violet-300/55 hover:shadow-[0_28px_80px_-16px_rgba(139,92,246,0.32)]"
-            style={{ transition: "transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease" }}
-            onMouseMove={handleTiltMove}
-            onMouseLeave={handleTiltLeave}
-            data-hover="true"
-          >
-            <img src={softwareProjects[0].image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50 transition duration-700 group-hover:scale-105 group-hover:opacity-68" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-br from-black/78 via-[#101014]/55 to-violet-950/35" />
-            <div className="relative z-10 flex h-full flex-col justify-between gap-12">
-              <div>
-                <div className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-violet-200/65">{softwareProjects[0].eyebrow}</div>
-                <h3 className="mt-4 text-3xl sm:text-5xl md:text-6xl leading-none text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
-                  {softwareProjects[0].title}
-                </h3>
-                <p className="mt-3 font-mono text-xs sm:text-sm text-violet-100/58">{softwareProjects[0].subtitle}</p>
-              </div>
-              <div>
-                <p className="max-w-2xl text-sm sm:text-base leading-relaxed text-white/58">{softwareProjects[0].description}</p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {softwareProjects[0].tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-violet-300/15 bg-violet-300/[0.06] px-2.5 py-1 font-mono text-[10px] sm:text-xs text-violet-100/60">
+        {/* Section label */}
+        <div className="absolute top-8 left-8 z-20 flex items-center gap-3 pointer-events-none">
+          <span className="section-index opacity-60">03 — Selected Work</span>
+        </div>
+
+        {/* Drag hint */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-white/20 pointer-events-none">
+          <svg width="18" height="8" viewBox="0 0 18 8" fill="none" className="opacity-50">
+            <path d="M1 4H17M13 1L17 4L13 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+          </svg>
+          Scroll to explore
+        </div>
+
+        {/* Track */}
+        <div
+          ref={trackRef}
+          className="flex items-center h-full will-change-transform"
+          style={{ width: `${projects.length * 100}vw` }}
+        >
+          {projects.map((p, i) => (
+            <div
+              key={p.index}
+              className="proj-panel relative flex flex-col justify-center px-10 sm:px-16 md:px-24 shrink-0"
+              style={{ width: "100vw", height: "100vh" }}
+            >
+              {/* Ambient glow */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `radial-gradient(ellipse 55% 60% at ${i % 2 === 0 ? "30%" : "70%"} 50%, ${p.accent}10 0%, transparent 65%)`,
+                }}
+              />
+
+              <div className="relative z-10 max-w-3xl">
+                <div className="proj-num font-mono text-[clamp(5rem,18vw,14rem)] font-black leading-none text-white select-none pointer-events-none absolute -top-4 -left-2 opacity-0"
+                  style={{ fontFamily: "'Syne', sans-serif", WebkitTextStroke: `1px ${p.accent}25`, color: "transparent" }}>
+                  {p.index}
+                </div>
+
+                <div className="proj-cat font-mono text-[10px] sm:text-xs uppercase tracking-[0.28em] mb-5 opacity-0" style={{ color: p.accent }}>
+                  {p.category}
+                </div>
+
+                <h2
+                  className="proj-title text-[clamp(3rem,8vw,7rem)] leading-[0.92] font-black text-white mb-6 opacity-0"
+                  style={{ fontFamily: "'Syne', sans-serif" }}
+                >
+                  {p.title}
+                </h2>
+
+                <div className="proj-line h-px w-16 mb-6 opacity-0" style={{ background: p.accent }} />
+
+                <p className="proj-tagline text-white/55 text-base sm:text-lg leading-relaxed max-w-xl mb-8 opacity-0">
+                  {p.tagline}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-10">
+                  {p.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="proj-tag font-mono text-[10px] sm:text-xs px-3 py-1.5 rounded-full border opacity-0"
+                      style={{ borderColor: `${p.accent}35`, color: `${p.accent}cc`, background: `${p.accent}0d` }}
+                    >
                       {tag}
                     </span>
                   ))}
                 </div>
+
+                <a
+                  href={p.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="proj-cta group inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.22em] text-white/60 hover:text-white transition-colors duration-300 opacity-0"
+                  data-hover="true"
+                >
+                  View on GitHub
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                    <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+                  </svg>
+                </a>
               </div>
             </div>
-          </a>
-
-          <div className="grid gap-4">
-            {softwareProjects.slice(1).map((project) => (
-              <a
-                key={project.title}
-                href={project.href}
-                target="_blank"
-                rel="noreferrer"
-                className="work-card group relative min-h-[235px] overflow-hidden rounded-xl border border-white/[0.112] bg-white/[0.032] p-4 sm:p-5 will-change-transform"
-                data-hover="true"
-                style={{ boxShadow: "0 16px 50px -22px rgba(0,0,0,0.6)", transition: "transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease" }}
-                onMouseMove={(e) => { handleTiltMove(e); }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 20px 60px -16px ${hexToRgba(project.color, 0.28)}`; e.currentTarget.style.borderColor = hexToRgba(project.color, 0.4); }}
-                onMouseLeave={(e) => { handleTiltLeave(e); e.currentTarget.style.boxShadow = "0 16px 50px -22px rgba(0,0,0,0.6)"; e.currentTarget.style.borderColor = ""; }}
-              >
-                <img src={project.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-38 transition duration-500 group-hover:scale-105 group-hover:opacity-55" loading="lazy" />
-                <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.8), rgba(16,16,16,0.55), ${hexToRgba(project.color, 0.18)})` }} />
-                <div className="relative z-10 flex h-full flex-col justify-between gap-6">
-                  <div>
-                    <div className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: project.color }}>{project.eyebrow}</div>
-                    <h3 className="mt-3 text-xl sm:text-2xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>{project.title}</h3>
-                    <p className="mt-1 font-mono text-xs text-white/32">{project.subtitle}</p>
-                  </div>
-                  <p className="text-xs sm:text-sm leading-relaxed text-white/45">{project.description}</p>
-                </div>
-              </a>
-            ))}
-          </div>
+          ))}
         </div>
+      </section>
 
-        <div className="work-card mt-4 flex justify-center">
-          <a
-            href="https://github.com/saathvik-codes"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full border border-white/[0.128] bg-white/[0.038] px-3.5 py-2 font-mono text-[10px] uppercase tracking-widest text-white/38 transition-all duration-300 hover:border-violet-500/35 hover:bg-violet-500/[0.06] hover:text-violet-200"
-            data-hover="true"
-          >
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-            View more on GitHub
-            <span aria-hidden="true">-&gt;</span>
-          </a>
-        </div>
+      {/* ---- Visual / UI builds ---- */}
+      <section className="relative py-20 md:py-28 px-8 md:px-16 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse 55% 40% at 50% 0%, rgba(139,92,246,0.05) 0%, transparent 65%)" }}
+        />
 
-        <div className="mt-10 md:mt-14">
-          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="font-mono text-[10px] sm:text-xs uppercase tracking-[0.22em] text-violet-400/55">UI/UX Studio</div>
-              <h3 className="mt-2 text-2xl sm:text-3xl md:text-4xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
-                Saathvik Visuals
-              </h3>
-            </div>
-            <a href="https://github.com/saathvikvisuals" target="_blank" rel="noreferrer" className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-white/28 transition-colors hover:text-violet-300">
-              github.com/saathvikvisuals
-            </a>
-          </div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="section-index mb-6 opacity-60">Saathvik Visuals — UI/UX Studio</div>
 
-          <div className="grid gap-4 md:grid-cols-3">
-            {designProjects.map((project) => (
-              <article
-                key={project.title}
-                className="work-card group overflow-hidden rounded-xl border border-white/[0.112] bg-white/[0.038] will-change-transform"
-                style={{ boxShadow: "0 16px 50px -24px rgba(0,0,0,0.7)", transition: "transform 0.25s ease, border-color 0.3s ease, box-shadow 0.3s ease" }}
-                onMouseMove={(e) => { handleTiltMove(e); }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 24px 70px -18px ${hexToRgba(project.color, 0.35)}`; e.currentTarget.style.borderColor = hexToRgba(project.color, 0.45); }}
-                onMouseLeave={(e) => { handleTiltLeave(e); e.currentTarget.style.boxShadow = "0 16px 50px -24px rgba(0,0,0,0.7)"; e.currentTarget.style.borderColor = ""; }}
-              >
-                <a href={project.live} target="_blank" rel="noreferrer" className="block" data-hover="true">
-                  <div className="relative aspect-[1.12] overflow-hidden">
-                    <img src={project.image} alt={`${project.title} visual direction`} className="h-full w-full object-cover opacity-95 transition duration-700 group-hover:scale-105 group-hover:opacity-100" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <div className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: project.color }}>Live UI/UX build</div>
-                      <h4 className="mt-2 text-xl text-white" style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>{project.title}</h4>
-                    </div>
-                  </div>
-                </a>
-                <div className="p-4">
-                  <p className="font-mono text-xs text-white/35">{project.subtitle}</p>
-                  <p className="mt-3 text-xs sm:text-sm leading-relaxed text-white/45">{project.description}</p>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="rounded-full border border-white/[0.096] px-2 py-1 font-mono text-[10px] text-white/34">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-5 flex items-center justify-between border-t border-white/[0.096] pt-4">
-                    <a href={project.live} target="_blank" rel="noreferrer" className="font-mono text-[10px] uppercase tracking-widest text-violet-200/70 hover:text-violet-200" data-hover="true">
-                      View live
-                    </a>
-                    <a href={project.repo} target="_blank" rel="noreferrer" className="font-mono text-[10px] uppercase tracking-widest text-white/28 hover:text-white/70" data-hover="true">
-                      Repo
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="work-card mt-4 flex justify-center">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <h2
+              className="text-[clamp(2rem,6vw,4.5rem)] leading-[1.0] font-black text-white"
+              style={{ fontFamily: "'Syne', sans-serif" }}
+            >
+              Design<br />
+              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+                Builds.
+              </span>
+            </h2>
             <a
               href="https://github.com/saathvikvisuals"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-violet-400/15 bg-violet-400/[0.035] px-3.5 py-2 font-mono text-[10px] uppercase tracking-widest text-white/40 transition-all duration-300 hover:border-violet-400/40 hover:bg-violet-400/[0.07] hover:text-violet-100"
+              className="font-mono text-xs uppercase tracking-widest text-white/28 hover:text-violet-300 transition-colors"
               data-hover="true"
             >
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true">
-                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
-              </svg>
-              View more on GitHub
-              <span aria-hidden="true">-&gt;</span>
+              github.com/saathvikvisuals ↗
             </a>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {visualProjects.map((vp, i) => (
+              <a
+                key={i}
+                href={vp.live}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative border rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
+                style={{
+                  borderColor: `${vp.accent}20`,
+                  background: `linear-gradient(160deg, ${vp.accent}08 0%, transparent 50%)`,
+                  minHeight: 200,
+                }}
+                data-hover="true"
+              >
+                <div className="p-6 sm:p-8 flex flex-col justify-between h-full min-h-[200px]">
+                  <div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4 opacity-60" style={{ color: vp.accent }}>
+                      Live UI/UX Build
+                    </div>
+                    <h3
+                      className="text-2xl sm:text-3xl font-black text-white mb-2 group-hover:text-opacity-90"
+                      style={{ fontFamily: "'Syne', sans-serif" }}
+                    >
+                      {vp.title}
+                    </h3>
+                    <p className="font-mono text-xs text-white/30">{vp.subtitle}</p>
+                  </div>
+                  <div className="mt-8 flex items-center justify-between">
+                    <span className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-300" style={{ color: vp.accent }}>
+                      View Live ↗
+                    </span>
+                    <a
+                      href={vp.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="font-mono text-[10px] uppercase tracking-widest text-white/20 hover:text-white/60 transition-colors"
+                      data-hover="true"
+                    >
+                      Repo
+                    </a>
+                  </div>
+                </div>
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: `radial-gradient(circle at 30% 40%, ${vp.accent}14, transparent 65%)` }}
+                />
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

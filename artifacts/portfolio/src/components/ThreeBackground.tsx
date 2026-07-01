@@ -1,102 +1,148 @@
-import { useEffect, useRef } from "react";
+import { useRef, useMemo, useEffect } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Float, Sparkles } from "@react-three/drei";
+import * as THREE from "three";
+
+// Module-level mouse state — shared across all Three.js components, no per-render listener
+const mouse = { x: 0, y: 0 };
+let mouseListenerAttached = false;
+
+function attachMouseListener() {
+  if (mouseListenerAttached || typeof window === "undefined") return;
+  mouseListenerAttached = true;
+  window.addEventListener("mousemove", (e) => {
+    mouse.x = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouse.y = -(e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+}
+
+function WireOrb({ position, scale, speed, rotAxis }: {
+  position: [number, number, number];
+  scale: number;
+  speed: number;
+  rotAxis: [number, number, number];
+}) {
+  const ref = useRef<THREE.Mesh>(null);
+  const basePos = useMemo(() => [...position] as [number, number, number], [position]);
+
+  useFrame(() => {
+    if (!ref.current) return;
+    ref.current.rotation.x += rotAxis[0] * speed * 0.01;
+    ref.current.rotation.y += rotAxis[1] * speed * 0.01;
+    ref.current.rotation.z += rotAxis[2] * speed * 0.005;
+    ref.current.position.x += (basePos[0] + mouse.x * 0.12 - ref.current.position.x) * 0.04;
+    ref.current.position.y += (basePos[1] + mouse.y * 0.08 - ref.current.position.y) * 0.04;
+  });
+
+  return (
+    <Float speed={speed * 0.6} rotationIntensity={0.15} floatIntensity={0.35}>
+      <mesh ref={ref} position={position} scale={scale}>
+        <icosahedronGeometry args={[1, 1]} />
+        <meshStandardMaterial
+          color="#8b5cf6"
+          emissive="#7c3aed"
+          emissiveIntensity={0.65}
+          wireframe
+          transparent
+          opacity={0.5}
+        />
+      </mesh>
+    </Float>
+  );
+}
+
+function RingAccent({ position, rotation, speed = 0.002 }: {
+  position: [number, number, number];
+  rotation: [number, number, number];
+  speed?: number;
+}) {
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame(() => {
+    if (ref.current) ref.current.rotation.z += speed;
+  });
+
+  return (
+    <mesh ref={ref} position={position} rotation={rotation}>
+      <torusGeometry args={[1.4, 0.007, 8, 80]} />
+      <meshStandardMaterial
+        color="#c084fc"
+        emissive="#c084fc"
+        emissiveIntensity={1}
+        transparent
+        opacity={0.2}
+      />
+    </mesh>
+  );
+}
+
+function SceneInner() {
+  const { size } = useThree();
+  const isMobile = size.width < 768;
+
+  const orbConfigs = useMemo(() => {
+    if (isMobile) {
+      return [
+        { position: [1.5, 0.2, -3.5] as [number, number, number], scale: 0.55, speed: 0.7, rotAxis: [1, 1, 0] as [number, number, number] },
+        { position: [-1.8, -0.5, -5] as [number, number, number], scale: 0.75, speed: 0.5, rotAxis: [0, 1, 0.5] as [number, number, number] },
+      ];
+    }
+    return [
+      { position: [3.2, 0.5, -4] as [number, number, number],   scale: 0.6,  speed: 0.65, rotAxis: [1, 1, 0] as [number, number, number] },
+      { position: [-3.5, -0.8, -6] as [number, number, number], scale: 0.85, speed: 0.45, rotAxis: [0, 1, 0.5] as [number, number, number] },
+      { position: [1.8, 2.2, -7] as [number, number, number],   scale: 0.5,  speed: 0.9,  rotAxis: [0.5, 1, 0] as [number, number, number] },
+      { position: [-1.2, -2.5, -8] as [number, number, number], scale: 0.7,  speed: 0.55, rotAxis: [1, 0, 0.5] as [number, number, number] },
+    ];
+  }, [isMobile]);
+
+  return (
+    <>
+      <ambientLight intensity={0.1} />
+      <pointLight position={[0, 4, 2]}   color="#8b5cf6" intensity={3}   distance={14} />
+      <pointLight position={[-5, -3, -2]} color="#f0abfc" intensity={1.5} distance={10} />
+      <pointLight position={[6, 2, -1]}   color="#818cf8" intensity={1.2} distance={10} />
+
+      {orbConfigs.map((cfg, i) => (
+        <WireOrb key={i} {...cfg} />
+      ))}
+
+      <RingAccent position={[2.5, 0, -5]} rotation={[Math.PI / 3, 0.3, 0]} />
+      {!isMobile && (
+        <RingAccent position={[-3, 1, -7]} rotation={[0.5, Math.PI / 4, 0.2]} speed={0.0015} />
+      )}
+
+      <Sparkles
+        count={isMobile ? 28 : 55}
+        scale={isMobile ? 8 : 14}
+        size={isMobile ? 0.8 : 1.1}
+        speed={0.22}
+        color="#a78bfa"
+        opacity={0.45}
+      />
+    </>
+  );
+}
 
 export default function ThreeBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    let animId: number;
-    let W = canvas.width = window.innerWidth;
-    let H = canvas.height = window.innerHeight;
-
-    const onResize = () => {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", onResize);
-
-    // Cinematic floating light dust — soft depth-of-field motes drifting upward,
-    // no connecting lines (avoids the generic "AI neural network" look).
-    interface Mote {
-      x: number; y: number; vx: number; vy: number;
-      r: number; alpha: number; blur: number; color: string;
-      twinklePhase: number; twinkleSpeed: number;
-    }
-
-    const colors = ["167,139,250", "196,132,252", "240,171,252", "139,92,246"];
-    const motes: Mote[] = Array.from({ length: 55 }, () => {
-      const depth = Math.random();
-      return {
-        x: Math.random() * W,
-        y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.08,
-        vy: -0.06 - depth * 0.14,
-        r: 0.6 + depth * 2.2,
-        alpha: 0.15 + depth * 0.45,
-        blur: depth > 0.6 ? (depth - 0.6) * 12 : 0,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        twinklePhase: Math.random() * Math.PI * 2,
-        twinkleSpeed: 0.004 + Math.random() * 0.006,
-      };
-    });
-
-    let t = 0;
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-
-      for (const m of motes) {
-        m.x += m.vx;
-        m.y += m.vy;
-        if (m.y < -10) { m.y = H + 10; m.x = Math.random() * W; }
-        if (m.x < -10) m.x = W + 10;
-        if (m.x > W + 10) m.x = -10;
-
-        const twinkle = 0.7 + 0.3 * Math.sin(t * m.twinkleSpeed + m.twinklePhase);
-        const a = m.alpha * twinkle;
-
-        if (m.blur > 0) {
-          ctx.save();
-          ctx.filter = `blur(${m.blur}px)`;
-        }
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${m.color},${a})`;
-        ctx.fill();
-        if (m.blur > 0) ctx.restore();
-      }
-
-      t += 1;
-      if (!reduceMotion) animId = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", onResize);
-    };
+    attachMouseListener();
   }, []);
+
+  const reduceMotion = typeof window !== "undefined"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
+  if (reduceMotion) return null;
 
   return (
     <div className="three-canvas" aria-hidden="true" data-testid="three-background">
-      <canvas ref={canvasRef} style={{ width: "100%", height: "100%", display: "block" }} />
-      {/* Minimal lens-ring accent — subtle, cinematic, not a tech/AI motif */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <svg
-          className="absolute right-10 top-1/2 -translate-y-1/2 opacity-[0.1]"
-          width="380" height="380" viewBox="0 0 380 380" fill="none"
-          style={{ animation: "spin 90s linear infinite" }}
-        >
-          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
-          <circle cx="190" cy="190" r="175" stroke="#a78bfa" strokeWidth="0.6" strokeDasharray="1 14" strokeLinecap="round" />
-          <circle cx="190" cy="190" r="120" stroke="#c084fc" strokeWidth="0.5" strokeDasharray="0.5 10" strokeLinecap="round" />
-        </svg>
-      </div>
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 60 }}
+        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        dpr={[1, 1.5]}
+        style={{ background: "transparent" }}
+      >
+        <SceneInner />
+      </Canvas>
     </div>
   );
 }

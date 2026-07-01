@@ -56,7 +56,7 @@ export default function About() {
   }, []);
 
   const stats = [
-    { num: 8.2, decimals: 1, label: "CGPA at IITDM", suffix: "" },
+    { num: 8.2, decimals: 1, label: "CGPA at IIITDM", suffix: "" },
     { num: 200, decimals: 0, label: "LeetCode Problems", suffix: "+" },
     { num: 5, decimals: 0, label: "Full-stack Projects", suffix: "+" },
     { num: 7, decimals: 0, label: "Months at AIMaster", suffix: "" },
@@ -111,7 +111,7 @@ export default function About() {
             <div className="space-y-4 md:space-y-5 text-white/45 text-sm sm:text-base leading-relaxed">
               <p>
                 I'm a Computer Science undergrad at{" "}
-                <span className="text-violet-400/80 font-medium">IITDM Kurnool</span>,
+                <span className="text-violet-400/80 font-medium">IIITDM Kurnool</span>,
                 mostly heads-down on data structures, system design, and shipping things that actually
                 run in production — not just demos.
               </p>
@@ -129,7 +129,7 @@ export default function About() {
             <div className="mt-6 md:mt-8 space-y-4">
               <div className="font-mono text-[10px] sm:text-xs text-violet-400/50 tracking-widest uppercase mb-3">Education</div>
               {[
-                { degree: "B.Tech — Computer Science & Engineering", inst: "IITDM Kurnool · Expected 2027", detail: "CGPA: 8.2" },
+                { degree: "B.Tech — Computer Science & Engineering", inst: "IIITDM Kurnool · Expected 2027", detail: "CGPA: 8.2" },
                 { degree: "Intermediate (Class XII)", inst: "Valley Oak Junior College, Hyderabad", detail: "98.8%" },
               ].map((edu, i) => (
                 <div key={i} className="group">

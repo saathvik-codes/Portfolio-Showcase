@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 import CustomCursor from "@/components/CustomCursor";
 import SKIntro from "@/components/SKIntro";
 import Navigation from "@/components/Navigation";
@@ -17,15 +19,36 @@ import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Portfolio() {
   const [introComplete, setIntroComplete] = useState(false);
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     if (!introComplete) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-      requestAnimationFrame(() => ScrollTrigger.refresh());
+      return;
     }
-    return () => { document.body.style.overflow = ""; };
+    document.body.style.overflow = "";
+
+    const lenis = new Lenis({
+      duration: 1.1,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      smoothWheel: true,
+    });
+    lenisRef.current = lenis;
+
+    lenis.on("scroll", ScrollTrigger.update);
+
+    const rafCb = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(rafCb);
+    gsap.ticker.lagSmoothing(0);
+
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => {
+      gsap.ticker.remove(rafCb);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
   }, [introComplete]);
 
   return (

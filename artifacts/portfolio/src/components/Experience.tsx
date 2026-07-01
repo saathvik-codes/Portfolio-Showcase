@@ -127,41 +127,31 @@ export default function Experience() {
                   style={{ background: `linear-gradient(to right, ${exp.color}40, transparent)` }} />
 
                 <div
-                  className="project-card p-4 sm:p-5 md:p-7 rounded-lg bg-white/[0.053] hover:bg-white/[0.07] transition-all duration-400 group-hover:translate-x-1"
-                  style={{ borderColor: `${exp.color}18` }}
+                  className="py-2 group-hover:translate-x-1 transition-transform duration-300"
                 >
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4 mb-4 md:mb-5">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
-                        <span
-                          className="font-mono text-xs tracking-widest uppercase px-2.5 py-1 rounded-full"
-                          style={{ background: `${exp.color}15`, color: exp.color, border: `1px solid ${exp.color}30` }}
-                        >
-                          {exp.type}
-                        </span>
-                        <span className="font-mono text-[11px] sm:text-xs text-white/20">{exp.location}</span>
-                      </div>
-                      <h3 className="text-lg sm:text-xl font-semibold text-white group-hover:text-violet-200 transition-colors duration-300"
-                        style={{ fontFamily: "'Syne', sans-serif" }}>
-                        {exp.role}
-                      </h3>
-                      <p style={{ color: exp.color }} className="font-mono text-sm mt-1 font-medium">{exp.company}</p>
-                    </div>
-                    <div className="font-mono text-[11px] sm:text-xs text-white/25 shrink-0 text-left md:text-right leading-relaxed">{exp.period}</div>
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
+                    <h3
+                      className="text-lg sm:text-xl font-semibold text-white group-hover:text-violet-200 transition-colors duration-300"
+                      style={{ fontFamily: "'Syne', sans-serif" }}
+                    >
+                      {exp.role}
+                    </h3>
+                    <span className="font-mono text-[11px] text-white/22 shrink-0">{exp.period}</span>
                   </div>
-
-                  <ul className="space-y-2.5 mb-5">
-                    {exp.points.map((point, j) => (
-                      <li key={j} className="flex items-start gap-2.5 sm:gap-3 text-white/40 text-xs sm:text-sm leading-relaxed">
-                        <span className="shrink-0 mt-1.5 w-1 h-1 rounded-full" style={{ background: exp.color, opacity: 0.7 }} />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap items-center gap-3 mt-1">
+                    <span style={{ color: exp.color }} className="font-mono text-sm">{exp.company}</span>
+                    <span className="font-mono text-[10px] text-white/20 uppercase tracking-wider">{exp.location}</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-4">
                     {exp.tags.map((tag) => (
-                      <span key={tag} className="skill-pill" data-testid={`exp-tag-${tag}`}>{tag}</span>
+                      <span
+                        key={tag}
+                        className="font-mono text-[10px] px-2.5 py-1 rounded-full border"
+                        style={{ borderColor: `${exp.color}20`, color: `${exp.color}88` }}
+                        data-testid={`exp-tag-${tag}`}
+                      >
+                        {tag}
+                      </span>
                     ))}
                   </div>
                 </div>

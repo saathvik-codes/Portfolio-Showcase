@@ -60,3 +60,17 @@ export function HackerRankLogo({ size = 20 }: { size?: number }) {
     </svg>
   );
 }
+
+export function InfosysLogo({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-label="Infosys Springboard">
+      {/* Background */}
+      <rect width="24" height="24" rx="4" fill="#FF7700" />
+      {/* Stylized "i" with dot */}
+      <circle cx="12" cy="6.5" r="2" fill="#fff" />
+      <rect x="9.5" y="10" width="5" height="9" rx="1.5" fill="#fff" />
+      {/* Springboard accent — small swoosh line */}
+      <path d="M8 21 Q12 18.5 16 21" stroke="#FF7700" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}

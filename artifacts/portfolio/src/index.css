@@ -459,6 +459,88 @@
   font-size: clamp(3.5rem, 10vw, 9rem);
 }
 
+/* ── Hero V3: editorial split-letter layout ── */
+
+/*
+  Oversized name — full section width, one word per line
+  At 1440px: 8.2vw ≈ 118px; "SAATHVIK" (8 chars) ≈ 1100px in 1312px col → single line ✓
+  At 390px:  8.2vw ≈ 32px → clamp kicks to 2.1rem ≈ 33.6px; 8 chars ≈ 328px in 342px → single line ✓
+*/
+.hero-name-v3 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.1rem, 8.2vw, 10rem);
+  color: #fff;
+  line-height: 0.9;
+}
+
+/* Per-letter gradient on "KALEPU." */
+.hero-letter-gradient {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 55%, #f0abfc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated CSS gradient blobs — hero atmosphere */
+.hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  animation: hero-blob-float 22s ease-in-out infinite alternate;
+}
+
+.hero-blob-1 {
+  width: 680px;
+  height: 680px;
+  top: -18%;
+  left: -8%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
+  animation-duration: 20s;
+  filter: blur(60px);
+}
+
+.hero-blob-2 {
+  width: 560px;
+  height: 560px;
+  top: 18%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.13) 0%, transparent 70%);
+  animation-duration: 26s;
+  animation-delay: -8s;
+  filter: blur(70px);
+}
+
+.hero-blob-3 {
+  width: 440px;
+  height: 440px;
+  bottom: 8%;
+  left: 30%;
+  background: radial-gradient(circle, rgba(240, 171, 252, 0.09) 0%, transparent 70%);
+  animation-duration: 32s;
+  animation-delay: -14s;
+  filter: blur(80px);
+}
+
+@keyframes hero-blob-float {
+  0%   { transform: translate(0,   0)   scale(1);    }
+  25%  { transform: translate(4%,  3%)  scale(1.06); }
+  50%  { transform: translate(1%, -4%)  scale(0.95); }
+  75%  { transform: translate(-3%, 5%)  scale(1.04); }
+  100% { transform: translate(3%, -2%)  scale(0.98); }
+}
+
+/* Legacy hero-name kept for any other usage */
+.hero-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4.5vw, 5.5rem);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
 .rolling-line {
   display: block;
   overflow: visible;
@@ -626,6 +708,18 @@
   .hero-rolling-title {
     font-size: clamp(2.25rem, 13.2vw, 3rem);
     line-height: 0.96;
+  }
+
+  .hero-name {
+    font-size: clamp(1.55rem, 7.8vw, 2.4rem);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  /* Mobile: 8.2vw still works — name stays one-word-per-line */
+  .hero-name-v3 {
+    font-size: clamp(2rem, 8.2vw, 3.5rem);
+    line-height: 0.92;
   }
 
   .rolling-title:not(.hero-rolling-title) {
