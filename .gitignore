@@ -52,4 +52,5 @@ Thumbs.db
 .cache/
 .local/
 .agents/
+.vercel/
 artifacts/portfolio/email-templates/
