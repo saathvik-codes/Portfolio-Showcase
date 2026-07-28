@@ -18,7 +18,7 @@ const projects = [
     copy: "Recipe discovery with JWT authentication, saved favourites and an external food API, split across a typed Next.js client and Express API.",
     stack: ["Next.js", "TypeScript", "Express", "MongoDB", "Docker"],
     repo: "https://github.com/saathvik-codes/SpiceTrail-Recipe-Finder",
-    live: "https://recipe-finder-swart-six.vercel.app",
+    live: "https://spice-trail-zeta.vercel.app/",
     tone: "coral",
   },
   {
