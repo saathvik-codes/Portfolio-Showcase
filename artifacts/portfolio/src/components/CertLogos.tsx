@@ -1,16 +1,16 @@
 export function NptelLogo({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-label="NPTEL IIT Kharagpur">
-      <rect width="24" height="24" rx="5" fill="#1b150e" stroke="#f59e0b" strokeOpacity="0.45" />
+      <rect width="24" height="24" rx="5" fill="#fef3c7" stroke="#d97706" strokeOpacity="0.45" />
       <path
         d="M5.5 16.5V7.5L11.5 16.5V7.5"
-        stroke="#f59e0b"
+        stroke="#b45309"
         strokeWidth="1.9"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="17" cy="9.5" r="2.2" stroke="#fcd34d" strokeWidth="1.6" />
-      <path d="M17 13.2V17" stroke="#f59e0b" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="17" cy="9.5" r="2.2" stroke="#d97706" strokeWidth="1.6" />
+      <path d="M17 13.2V17" stroke="#b45309" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
@@ -41,7 +41,7 @@ export function LinkedInLogo({ size = 20 }: { size?: number }) {
 export function UdemyLogo({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-label="Udemy">
-      <rect width="24" height="24" rx="5" fill="#A435F0" />
+      <rect width="24" height="24" rx="5" fill="#7c3aed" />
       <path
         fill="#fff"
         d="M7 7h2.4v7.1c0 1.6.9 2.5 2.6 2.5s2.6-.9 2.6-2.5V7H17v7.2c0 3-2.1 4.8-5 4.8s-5-1.8-5-4.8V7Z"
@@ -54,7 +54,7 @@ export function CiscoLogo({ size = 20 }: { size?: number }) {
   const bars = [7, 11, 14, 16, 14, 11, 7];
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-label="Cisco">
-      <g fill="#22d3ee">
+      <g fill="#0284c7">
         {bars.map((h, i) => (
           <rect key={i} x={1 + i * 3.3} y={18 - h} width="2" height={h} rx="1" />
         ))}
@@ -66,8 +66,8 @@ export function CiscoLogo({ size = 20 }: { size?: number }) {
 export function HackerRankLogo({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-label="HackerRank">
-      <path d="M12 1 22 6.5V17.5L12 23 2 17.5V6.5L12 1Z" fill="#00EA64" />
-      <path fill="#0a0a0a" d="M8.5 7.5h2v3.2h3v-3.2h2v9h-2v-3.8h-3v3.8h-2v-9Z" />
+      <path d="M12 1 22 6.5V17.5L12 23 2 17.5V6.5L12 1Z" fill="#059669" />
+      <path fill="#ffffff" d="M8.5 7.5h2v3.2h3v-3.2h2v9h-2v-3.8h-3v3.8h-2v-9Z" />
     </svg>
   );
 }
@@ -75,10 +75,10 @@ export function HackerRankLogo({ size = 20 }: { size?: number }) {
 export function InfosysLogo({ size = 20 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-label="Infosys Springboard">
-      <rect width="24" height="24" rx="4" fill="#FF7700" />
+      <rect width="24" height="24" rx="4" fill="#ea580c" />
       <circle cx="12" cy="6.5" r="2" fill="#fff" />
       <rect x="9.5" y="10" width="5" height="9" rx="1.5" fill="#fff" />
-      <path d="M8 21 Q12 18.5 16 21" stroke="#FF7700" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M8 21 Q12 18.5 16 21" stroke="#ea580c" strokeWidth="1.5" strokeLinecap="round" fill="none" />
     </svg>
   );
 }

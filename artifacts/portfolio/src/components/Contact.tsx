@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { magneticMove, magneticLeave } from "@/lib/utils";
 import { profile, socialLinks } from "@/data/portfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,17 +17,17 @@ export default function Contact() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".contact-reveal",
-        { y: 22, opacity: 0 },
+        { y: 14, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.6,
-          stagger: 0.08,
+          duration: 0.45,
+          stagger: 0.06,
           ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 78%",
-            toggleActions: "play none none reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         },
       );
@@ -78,88 +77,78 @@ export default function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative py-20 md:py-32 px-5 sm:px-10 md:px-14 border-t border-white/[0.08]"
+      className="relative py-20 md:py-28 px-5 sm:px-8"
       data-testid="contact-section"
     >
-      <div className="max-w-7xl mx-auto space-y-12">
-        <div className="contact-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.1] pb-8">
+      <div className="max-w-6xl mx-auto space-y-12">
+        <div className="contact-reveal flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="section-index mb-3">06 — Start a Conversation</div>
-            <h2 className="text-[clamp(2.4rem,5.8vw,5rem)] leading-[0.94] font-display font-bold text-[#f2ede4]">
-              Have a hard problem?{" "}
-              <span className="font-serif-editorial italic font-normal text-[#e8a85a]">
-                Let&rsquo;s build through it.
+            <div className="section-kicker mb-2">06 · Contact</div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#141413]">
+              Have a problem worth solving?{" "}
+              <span className="font-serif-editorial italic font-normal text-[#57534e]">
+                Let&rsquo;s talk.
               </span>
             </h2>
           </div>
-          <p className="text-sm sm:text-base text-white/55 max-w-md leading-relaxed">
-            Open to backend, full-stack, and applied AI roles, internships, and focused engineering work. I reply within 24 hours.
+          <p className="text-sm text-[#57534e] max-w-md leading-relaxed">
+            Open to backend, full-stack, and applied AI roles, internships, and focused engineering builds. Usually respond within 24 hours.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* Direct Channels */}
-          <div className="lg:col-span-5 space-y-6 contact-reveal">
-            <div className="studio-plate rounded-2xl p-6 space-y-5">
-              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#e8a85a]">
-                Direct Contact
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          {/* Left: Direct Channels & Links */}
+          <div className="lg:col-span-5 space-y-5 contact-reveal">
+            <div className="clean-card rounded-2xl p-6 space-y-5">
+              <div className="font-mono text-xs font-medium text-[#2563eb]">
+                Direct Channels
               </div>
 
               <div className="space-y-4">
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="block group"
-                  data-hover="true"
-                >
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-white/35">Email</div>
-                  <div className="text-sm sm:text-base text-[#f2ede4] group-hover:text-[#e8a85a] transition-colors mt-0.5 break-all">
+                <a href={`mailto:${profile.email}`} className="block group">
+                  <div className="text-xs text-[#78716c]">Email</div>
+                  <div className="text-sm sm:text-base font-medium text-[#141413] group-hover:text-[#2563eb] transition-colors mt-0.5 break-all">
                     {profile.email}
                   </div>
                 </a>
 
-                <a
-                  href={profile.phoneHref}
-                  className="block group"
-                  data-hover="true"
-                >
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-white/35">Phone</div>
-                  <div className="text-sm sm:text-base text-[#f2ede4]/85 group-hover:text-[#e8a85a] transition-colors mt-0.5">
+                <a href={profile.phoneHref} className="block group">
+                  <div className="text-xs text-[#78716c]">Phone</div>
+                  <div className="text-sm sm:text-base font-medium text-[#141413] group-hover:text-[#2563eb] transition-colors mt-0.5">
                     {profile.phone}
                   </div>
                 </a>
 
                 <div>
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-white/35">Location</div>
-                  <div className="text-sm text-white/75 mt-0.5">{profile.location}</div>
+                  <div className="text-xs text-[#78716c]">Location</div>
+                  <div className="text-sm text-[#57534e] mt-0.5">{profile.location}</div>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={copyEmail}
-                className="w-full py-2.5 rounded-xl border border-white/[0.14] font-mono text-[11px] uppercase tracking-widest text-white/75 hover:border-[#e8a85a] hover:text-[#e8a85a] transition-colors cursor-pointer"
-                data-hover="true"
+                className="w-full py-2.5 rounded-xl bg-[#f3f1ec] border border-[#dcd9d0] font-mono text-xs font-medium text-[#141413] hover:bg-[#141413] hover:text-[#faf9f6] hover:border-[#141413] transition-colors cursor-pointer"
               >
                 {copied ? "Copied to clipboard ✓" : "Copy Email Address"}
               </button>
             </div>
 
-            <div className="studio-plate rounded-2xl p-6 space-y-3">
-              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/40">
+            <div className="clean-card rounded-2xl p-6 space-y-3">
+              <div className="font-mono text-xs font-medium text-[#57534e]">
                 Profiles &amp; Code
               </div>
-              <div className="divide-y divide-white/[0.07]">
+              <div className="divide-y divide-[#eceae4]">
                 {socialLinks.map((s) => (
                   <a
                     key={s.label}
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="py-2.5 flex items-center justify-between gap-3 text-xs sm:text-sm text-white/70 hover:text-[#e8a85a] transition-colors"
-                    data-hover="true"
+                    className="py-2.5 flex items-center justify-between gap-3 text-xs sm:text-sm text-[#141413] hover:text-[#2563eb] transition-colors"
                   >
-                    <span>{s.label}</span>
-                    <span className="font-mono text-[10px] text-white/40 truncate max-w-[200px]">
+                    <span className="font-medium">{s.label}</span>
+                    <span className="font-mono text-[11px] text-[#78716c] truncate max-w-[190px]">
                       {s.handle} ↗
                     </span>
                   </a>
@@ -168,21 +157,21 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Contact Form */}
+          {/* Right: Clean Inquiry Form */}
           <div className="lg:col-span-7 contact-reveal">
             {sent ? (
-              <div className="studio-plate rounded-2xl p-10 text-center space-y-4">
-                <div className="w-12 h-12 mx-auto rounded-full border border-[#e8a85a]/50 bg-[#e8a85a]/10 flex items-center justify-center text-[#e8a85a] text-lg">
+              <div className="clean-card rounded-2xl p-10 text-center space-y-4">
+                <div className="w-11 h-11 mx-auto rounded-full bg-[#eff6ff] border border-[#bfdbfe] flex items-center justify-center text-[#2563eb] font-bold">
                   ✓
                 </div>
-                <h3 className="font-display text-2xl font-bold text-[#f2ede4]">Note Received</h3>
-                <p className="text-sm text-white/60 max-w-md mx-auto">
-                  Thanks for writing. I will respond directly from {profile.email} within 24 hours.
+                <h3 className="text-xl font-bold text-[#141413]">Note Received</h3>
+                <p className="text-sm text-[#57534e] max-w-md mx-auto">
+                  Thanks for reaching out. I will reply directly from {profile.email} within 24 hours.
                 </p>
                 <button
                   type="button"
                   onClick={() => setSent(false)}
-                  className="font-mono text-xs uppercase tracking-widest text-[#e8a85a] hover:text-white transition-colors cursor-pointer pt-2"
+                  className="text-xs font-medium text-[#2563eb] hover:underline underline-offset-4 cursor-pointer pt-1"
                 >
                   Send another note →
                 </button>
@@ -190,16 +179,16 @@ export default function Contact() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="studio-plate rounded-2xl p-6 sm:p-8 space-y-5"
+                className="clean-card rounded-2xl p-6 sm:p-8 space-y-5 shadow-[0_1px_2px_rgba(20,20,19,0.03)]"
                 data-testid="contact-form"
               >
-                <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#e8a85a]">
-                  Write Directly
+                <div className="font-mono text-xs font-medium text-[#2563eb]">
+                  Send a Note
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-mono text-[10px] uppercase tracking-widest text-white/45 mb-2">
+                    <label className="block text-xs font-medium text-[#57534e] mb-1.5">
                       Name *
                     </label>
                     <input
@@ -208,12 +197,12 @@ export default function Contact() {
                       value={form.name}
                       onChange={handleChange}
                       placeholder="Your name"
-                      className="form-input-studio"
+                      className="form-input-clean"
                       data-testid="contact-input-name"
                     />
                   </div>
                   <div>
-                    <label className="block font-mono text-[10px] uppercase tracking-widest text-white/45 mb-2">
+                    <label className="block text-xs font-medium text-[#57534e] mb-1.5">
                       Email *
                     </label>
                     <input
@@ -222,14 +211,14 @@ export default function Contact() {
                       value={form.email}
                       onChange={handleChange}
                       placeholder="you@company.com"
-                      className="form-input-studio"
+                      className="form-input-clean"
                       data-testid="contact-input-email"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-mono text-[10px] uppercase tracking-widest text-white/45 mb-2">
+                  <label className="block text-xs font-medium text-[#57534e] mb-1.5">
                     Topic / Role
                   </label>
                   <input
@@ -238,13 +227,13 @@ export default function Contact() {
                     value={form.subject}
                     onChange={handleChange}
                     placeholder="Backend role, AI systems collaboration, or project question"
-                    className="form-input-studio"
+                    className="form-input-clean"
                     data-testid="contact-input-subject"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-mono text-[10px] uppercase tracking-widest text-white/45 mb-2">
+                  <label className="block text-xs font-medium text-[#57534e] mb-1.5">
                     Message *
                   </label>
                   <textarea
@@ -253,20 +242,17 @@ export default function Contact() {
                     onChange={handleChange}
                     rows={5}
                     placeholder="What problem are you working on?"
-                    className="form-input-studio resize-none"
+                    className="form-input-clean resize-none"
                     data-testid="contact-input-message"
                   />
                 </div>
 
-                {error && <p className="font-mono text-xs text-red-400">{error}</p>}
+                {error && <p className="text-xs font-medium text-[#dc2626]">{error}</p>}
 
                 <button
                   type="submit"
                   disabled={sending}
-                  onMouseMove={(e) => !sending && magneticMove(e, 0.14)}
-                  onMouseLeave={magneticLeave}
-                  className="w-full py-3.5 rounded-xl bg-[#e8a85a] text-[#08080a] font-mono text-xs font-medium uppercase tracking-[0.2em] hover:bg-[#f2ede4] transition-colors disabled:opacity-45 cursor-pointer"
-                  data-hover="true"
+                  className="w-full py-3 rounded-xl bg-[#141413] text-[#faf9f6] text-xs sm:text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-45 cursor-pointer"
                   data-testid="contact-submit"
                 >
                   {sending ? "Sending..." : "Send Note →"}

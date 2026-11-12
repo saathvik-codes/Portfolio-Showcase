@@ -12,11 +12,6 @@ import Skills from "@/components/Skills";
 import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
-import ScrollProgress from "@/components/ScrollProgress";
-import SectionDivider from "@/components/SectionDivider";
-import WalkthroughHud from "@/components/WalkthroughHud";
-import { WALKTHROUGH_ACTS } from "@/theatre/portfolioStage";
 
 const CinematicStage3D = lazy(() => import("@/components/CinematicStage3D"));
 
@@ -24,16 +19,16 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Portfolio() {
   const [introDone, setIntroDone] = useState(false);
-  const [theatreTime, setTheatreTime] = useState(0);
-  const [activeActIndex, setActiveActIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const scrollProgressRef = useRef(0);
+  const lastUiRatioRef = useRef(0);
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     if (!introDone) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 1.05,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
@@ -43,20 +38,10 @@ export default function Portfolio() {
       const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
       const ratio = Math.min(Math.max(window.scrollY / max, 0), 1);
       scrollProgressRef.current = ratio;
-
-      // Determine active walkthrough act nearest viewport top
-      let bestIdx = 0;
-      let bestDist = Infinity;
-      WALKTHROUGH_ACTS.forEach((act, idx) => {
-        const el = document.querySelector(act.selector);
-        if (!el) return;
-        const dist = Math.abs(el.getBoundingClientRect().top - window.innerHeight * 0.25);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIdx = idx;
-        }
-      });
-      setActiveActIndex(bestIdx);
+      if (Math.abs(ratio - lastUiRatioRef.current) >= 0.005 || ratio === 0 || ratio === 1) {
+        lastUiRatioRef.current = ratio;
+        setScrollProgress(ratio);
+      }
     };
 
     lenis.on("scroll", () => {
@@ -90,48 +75,33 @@ export default function Portfolio() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#08080a] text-[#f2ede4] overflow-x-clip">
+    <div className="relative min-h-screen bg-[#faf9f6] text-[#141413] overflow-x-clip">
       {!introDone && <SKIntro onComplete={() => setIntroDone(true)} />}
 
-      {/* Persistent Theatre.js + Three.js 3D architectural backdrop */}
+      {/* Whisper-quiet Theatre.js + Three.js light architectural background */}
       <Suspense fallback={null}>
-        <CinematicStage3D
-          scrollProgressRef={scrollProgressRef}
-          onTimeUpdate={(sec) => setTheatreTime(sec)}
-        />
+        <CinematicStage3D scrollProgressRef={scrollProgressRef} />
       </Suspense>
-
-      {/* Subtle 35mm cinema grain overlay */}
-      <div className="cinema-grain" aria-hidden="true" />
 
       {introDone && (
         <>
-          <CustomCursor />
-          <ScrollProgress />
-          <Navigation visible={introDone} onNavigate={scrollToTarget} />
+          <Navigation
+            visible={introDone}
+            scrollProgress={scrollProgress}
+            onNavigate={scrollToTarget}
+          />
 
-          <main className="relative z-10 pb-14">
+          <main className="relative z-10">
             <Hero onNavigate={scrollToTarget} />
-            <SectionDivider index="01" label="Philosophy" accent />
             <About />
-            <SectionDivider index="02" label="Experience" />
             <Experience />
-            <SectionDivider index="03" label="Case Walkthrough" accent />
             <Projects />
-            <SectionDivider index="04" label="Technical Arsenal" />
             <Skills />
-            <SectionDivider index="05" label="Credentials" accent />
             <Certifications />
-            <SectionDivider index="06" label="Conversation" />
             <Contact />
           </main>
 
           <Footer onNavigate={scrollToTarget} />
-          <WalkthroughHud
-            currentTime={theatreTime}
-            activeActIndex={activeActIndex}
-            onJumpToAct={scrollToTarget}
-          />
         </>
       )}
     </div>

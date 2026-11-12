@@ -1,7 +1,7 @@
 import { Component, type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { getPortfolioStageRig, THEATRE_SEQUENCE_LENGTH } from "@/theatre/portfolioStage";
+import { getLightStageRig, THEATRE_SEQUENCE_LENGTH } from "@/theatre/portfolioStage";
 
 const pointerTarget = { x: 0, y: 0 };
 let pointerBound = false;
@@ -33,7 +33,7 @@ class StageErrorBoundary extends Component<
   }
 }
 
-const VEIL_VERTEX = /* glsl */ `
+const LIGHT_VEIL_VERTEX = /* glsl */ `
   varying vec2 vUv;
   void main() {
     vUv = uv;
@@ -41,90 +41,51 @@ const VEIL_VERTEX = /* glsl */ `
   }
 `;
 
-const VEIL_FRAGMENT = /* glsl */ `
+const LIGHT_VEIL_FRAGMENT = /* glsl */ `
   uniform float uTime;
-  uniform float uMix;
+  uniform float uShift;
   uniform vec2 uPointer;
   varying vec2 vUv;
 
-  float wave(vec2 p, float t) {
-    return sin(p.x * 2.4 + t * 0.35) * cos(p.y * 2.1 - t * 0.25)
-         + 0.5 * sin(p.x * 5.1 - t * 0.2 + p.y * 3.0);
-  }
-
   void main() {
-    vec2 uv = vUv - 0.5 + uPointer * 0.035;
-    float r = length(uv);
-    float n = wave(uv * 1.9, uTime);
-
-    vec3 obsidian = vec3(0.035, 0.035, 0.045);
-    vec3 tungsten = vec3(0.88, 0.58, 0.28);
-    vec3 violet   = vec3(0.54, 0.44, 0.96);
-
-    float band = smoothstep(0.65, 0.0, r) * (0.28 + 0.16 * n);
-    vec3 accent = mix(tungsten, violet, clamp(uMix + uv.x * 0.35, 0.0, 1.0));
-    vec3 col = obsidian + accent * band * 0.26;
-    float alpha = smoothstep(0.85, 0.12, r) * 0.65;
-    gl_FragColor = vec4(col, alpha);
+    vec2 uv = vUv - 0.5 + uPointer * 0.025;
+    float d = length(uv - vec2(0.28, 0.12));
+    float wash = smoothstep(0.75, 0.0, d) * (0.045 + 0.015 * sin(uTime * 0.25));
+    vec3 skyTint = mix(vec3(0.15, 0.39, 0.92), vec3(0.68, 0.48, 0.22), uShift);
+    gl_FragColor = vec4(skyTint, wash);
   }
 `;
 
 interface StageSceneProps {
   scrollProgressRef: React.MutableRefObject<number>;
-  onTimeUpdate?: (timeSeconds: number) => void;
 }
 
-function TheatreScene({ scrollProgressRef, onTimeUpdate }: StageSceneProps) {
-  const rig = useMemo(() => getPortfolioStageRig(), []);
+function LightTheatreScene({ scrollProgressRef }: StageSceneProps) {
+  const rig = useMemo(() => getLightStageRig(), []);
   const { camera, size } = useThree();
   const isMobile = size.width < 768;
 
-  const monolithGroupRef = useRef<THREE.Group>(null);
-  const innerCoreRef = useRef<THREE.Mesh>(null);
+  const groupRef = useRef<THREE.Group>(null);
   const ringARef = useRef<THREE.Mesh>(null);
   const ringBRef = useRef<THREE.Mesh>(null);
-  const ringCRef = useRef<THREE.Mesh>(null);
-  const keyLightRef = useRef<THREE.PointLight>(null);
-  const rimLightRef = useRef<THREE.PointLight>(null);
-  const pointsRef = useRef<THREE.Points>(null);
 
   const smoothTimeRef = useRef(0);
   const pointerSmooth = useRef({ x: 0, y: 0 });
-  const lookTargetVec = useMemo(() => new THREE.Vector3(), []);
-  const camTargetVec = useMemo(() => new THREE.Vector3(), []);
-  const keyColorObj = useMemo(() => new THREE.Color(), []);
-  const rimColorObj = useMemo(() => new THREE.Color(), []);
-  const lastHudEmit = useRef(0);
+  const targetVec = useMemo(() => new THREE.Vector3(), []);
 
   const veilUniforms = useMemo(
     () => ({
       uTime: { value: 0 },
-      uMix: { value: 0.2 },
+      uShift: { value: 0.15 },
       uPointer: { value: new THREE.Vector2(0, 0) },
     }),
     [],
   );
 
-  const particlePositions = useMemo(() => {
-    const count = isMobile ? 75 : 150;
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      // Deterministic golden-angle cylindrical scatter so it never flickers on re-mount
-      const theta = i * 2.3999632;
-      const radius = 2.4 + ((i * 7) % 19) * 0.26;
-      const y = (((i * 13) % 37) / 37 - 0.5) * 6.8;
-      arr[i * 3] = Math.cos(theta) * radius;
-      arr[i * 3 + 1] = y;
-      arr[i * 3 + 2] = Math.sin(theta) * radius - 2.6;
-    }
-    return arr;
-  }, [isMobile]);
-
   useFrame((state, delta) => {
     const dt = Math.min(delta, 0.05);
     const t = state.clock.elapsedTime;
 
-    // 1. Drive Theatre.js sequence playhead smoothly from scroll progress
     const targetSeqPos = THREE.MathUtils.clamp(
       scrollProgressRef.current * THEATRE_SEQUENCE_LENGTH,
       0,
@@ -133,183 +94,103 @@ function TheatreScene({ scrollProgressRef, onTimeUpdate }: StageSceneProps) {
     smoothTimeRef.current = THREE.MathUtils.lerp(
       smoothTimeRef.current,
       targetSeqPos,
-      1 - Math.exp(-dt * 6.5),
+      1 - Math.exp(-dt * 5.5),
     );
     rig.sheet.sequence.position = smoothTimeRef.current;
 
-    if (onTimeUpdate && t - lastHudEmit.current > 0.08) {
-      lastHudEmit.current = t;
-      onTimeUpdate(smoothTimeRef.current);
-    }
-
-    // 2. Subtle pointer damping layered over Theatre.js camera rig
     pointerSmooth.current.x = THREE.MathUtils.lerp(pointerSmooth.current.x, pointerTarget.x, 0.05);
     pointerSmooth.current.y = THREE.MathUtils.lerp(pointerSmooth.current.y, pointerTarget.y, 0.05);
 
     const camVal = rig.cameraObj.value;
-    camTargetVec.set(
-      camVal.position.x + pointerSmooth.current.x * 0.28,
-      camVal.position.y + pointerSmooth.current.y * 0.16,
+    targetVec.set(
+      camVal.position.x + pointerSmooth.current.x * 0.22,
+      camVal.position.y + pointerSmooth.current.y * 0.14,
       camVal.position.z,
     );
-    camera.position.lerp(camTargetVec, 0.14);
-    lookTargetVec.set(camVal.target.x, camVal.target.y, camVal.target.z);
-    camera.lookAt(lookTargetVec);
+    camera.position.lerp(targetVec, 0.12);
+    camera.lookAt(0, 0, -2.5);
 
     if (camera instanceof THREE.PerspectiveCamera && Math.abs(camera.fov - camVal.fov) > 0.05) {
-      camera.fov = THREE.MathUtils.lerp(camera.fov, camVal.fov, 0.12);
+      camera.fov = THREE.MathUtils.lerp(camera.fov, camVal.fov, 0.1);
       camera.updateProjectionMatrix();
     }
 
-    // 3. Apply Theatre.js lighting cues
-    const lightVal = rig.lightsObj.value;
-    if (keyLightRef.current) {
-      keyColorObj.setRGB(lightVal.keyColor.r, lightVal.keyColor.g, lightVal.keyColor.b);
-      keyLightRef.current.color.copy(keyColorObj);
-      keyLightRef.current.intensity = lightVal.keyIntensity;
-    }
-    if (rimLightRef.current) {
-      rimColorObj.setRGB(lightVal.rimColor.r, lightVal.rimColor.g, lightVal.rimColor.b);
-      rimLightRef.current.color.copy(rimColorObj);
-      rimLightRef.current.intensity = lightVal.rimIntensity;
-    }
-
-    // 4. Sculptural monolith & gimbal orbital assembly
     const mono = rig.monolithObj.value;
-    if (monolithGroupRef.current) {
-      monolithGroupRef.current.rotation.x = mono.rotation.x + Math.sin(t * 0.25) * 0.06;
-      monolithGroupRef.current.rotation.y = mono.rotation.y + t * 0.075;
-      const scale = (isMobile ? 0.72 : 1.0) * mono.coreScale;
-      monolithGroupRef.current.scale.setScalar(scale);
+    if (groupRef.current) {
+      groupRef.current.rotation.x = mono.rotation.x + Math.sin(t * 0.2) * 0.05;
+      groupRef.current.rotation.y = mono.rotation.y + t * 0.06;
+      groupRef.current.scale.setScalar(isMobile ? 0.65 : 1.0);
     }
 
-    if (innerCoreRef.current) {
-      innerCoreRef.current.rotation.y = -t * 0.14;
-      innerCoreRef.current.rotation.z = Math.sin(t * 0.3) * 0.12;
-    }
-
-    const spread = mono.ringSpread;
     if (ringARef.current) {
-      ringARef.current.rotation.x = Math.PI * 0.36 + t * 0.08;
-      ringARef.current.rotation.z = t * 0.11;
-      ringARef.current.scale.setScalar(spread);
+      ringARef.current.rotation.x = Math.PI * 0.35 + t * 0.06;
+      ringARef.current.rotation.z = t * 0.08;
+      ringARef.current.scale.setScalar(mono.ringSpread);
     }
     if (ringBRef.current) {
-      ringBRef.current.rotation.y = Math.PI * 0.28 - t * 0.09;
-      ringBRef.current.rotation.x = Math.PI * 0.68;
-      ringBRef.current.scale.setScalar(0.95 + (spread - 1) * 1.25);
-    }
-    if (ringCRef.current) {
-      ringCRef.current.rotation.z = -t * 0.05;
-      ringCRef.current.rotation.y = Math.cos(t * 0.18) * 0.25;
-      ringCRef.current.scale.setScalar(1.0 + (spread - 1) * 1.5);
+      ringBRef.current.rotation.y = Math.PI * 0.28 - t * 0.07;
+      ringBRef.current.scale.setScalar(0.95 + (mono.ringSpread - 1) * 1.1);
     }
 
-    // 5. Atmosphere shader & calibrated dust field
-    const atm = rig.atmosphereObj.value;
     veilUniforms.uTime.value = t;
-    veilUniforms.uMix.value = atm.shaderMix;
+    veilUniforms.uShift.value = rig.atmosphereObj.value.tintShift;
     veilUniforms.uPointer.value.set(pointerSmooth.current.x, pointerSmooth.current.y);
-
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y = t * 0.014;
-      pointsRef.current.scale.setScalar(atm.particleSpread);
-    }
   });
 
   return (
     <>
-      <fog attach="fog" args={["#070709", 4.5, 17]} />
-      <ambientLight intensity={0.22} color="#ded6c9" />
-      <pointLight ref={keyLightRef} position={[4.5, 3.2, 3.8]} intensity={3.2} distance={18} decay={1.6} />
-      <pointLight ref={rimLightRef} position={[-4.5, -2.0, 2.8]} intensity={2.2} distance={18} decay={1.6} />
-      <directionalLight position={[0, 6, -4]} intensity={0.55} color="#f3efe6" />
+      <ambientLight intensity={1.35} color="#ffffff" />
+      <directionalLight position={[5, 6, 4]} intensity={0.75} color="#ffffff" />
+      <directionalLight position={[-4, -2, 3]} intensity={0.45} color="#eff6ff" />
 
-      {/* Deep atmospheric GLSL horizon veil */}
-      <mesh position={[0, 0, -5.5]}>
-        <planeGeometry args={[22, 14]} />
+      {/* Whisper-quiet daylight tint wash */}
+      <mesh position={[0, 0, -7.2]}>
+        <planeGeometry args={[26, 18]} />
         <shaderMaterial
-          vertexShader={VEIL_VERTEX}
-          fragmentShader={VEIL_FRAGMENT}
+          vertexShader={LIGHT_VEIL_VERTEX}
+          fragmentShader={LIGHT_VEIL_FRAGMENT}
           uniforms={veilUniforms}
           transparent
           depthWrite={false}
         />
       </mesh>
 
-      {/* Architectural Monolith & Gyroscope Rings driven by Theatre.js */}
-      <group ref={monolithGroupRef} position={[isMobile ? 0 : 1.75, 0.05, -2.4]}>
-        <mesh ref={innerCoreRef}>
-          <octahedronGeometry args={[1.05, 0]} />
-          <meshPhysicalMaterial
-            color="#111018"
-            metalness={0.86}
-            roughness={0.18}
-            clearcoat={1}
-            clearcoatRoughness={0.12}
-            emissive="#1e1738"
-            emissiveIntensity={0.45}
-          />
-        </mesh>
-
-        {/* Precision anodized wireframe cage */}
+      {/* Weightless architectural hairline drafting geometry in outer margin */}
+      <group ref={groupRef} position={[isMobile ? 1.35 : 3.35, isMobile ? 1.1 : 0.2, -4.6]}>
         <mesh>
-          <icosahedronGeometry args={[1.45, 1]} />
+          <icosahedronGeometry args={[1.1, 0]} />
           <meshStandardMaterial
-            color="#e8a85a"
-            emissive="#9d8cff"
-            emissiveIntensity={0.35}
-            wireframe
+            color="#ffffff"
+            emissive="#f8fafc"
+            emissiveIntensity={0.45}
+            roughness={0.6}
+            metalness={0.02}
             transparent
-            opacity={0.19}
+            opacity={0.22}
           />
         </mesh>
-
+        <mesh>
+          <icosahedronGeometry args={[1.36, 1]} />
+          <meshBasicMaterial color="#94a3b8" wireframe transparent opacity={0.1} />
+        </mesh>
         <mesh ref={ringARef}>
-          <torusGeometry args={[1.95, 0.008, 12, 110]} />
-          <meshStandardMaterial color="#eab370" emissive="#eab370" emissiveIntensity={0.85} transparent opacity={0.42} />
+          <torusGeometry args={[2.0, 0.006, 10, 96]} />
+          <meshBasicMaterial color="#2563eb" transparent opacity={0.11} />
         </mesh>
-
         <mesh ref={ringBRef}>
-          <torusGeometry args={[2.35, 0.006, 12, 120]} />
-          <meshStandardMaterial color="#9d8cff" emissive="#9d8cff" emissiveIntensity={0.9} transparent opacity={0.32} />
-        </mesh>
-
-        <mesh ref={ringCRef}>
-          <torusGeometry args={[2.75, 0.004, 8, 120]} />
-          <meshBasicMaterial color="#ded6c9" transparent opacity={0.14} />
+          <torusGeometry args={[2.45, 0.005, 10, 96]} />
+          <meshBasicMaterial color="#78716c" transparent opacity={0.09} />
         </mesh>
       </group>
-
-      {/* Calibrated drifting ambient particles */}
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[particlePositions, 3]}
-            count={particlePositions.length / 3}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          color="#d9cef8"
-          size={0.024}
-          sizeAttenuation
-          transparent
-          opacity={0.36}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </points>
     </>
   );
 }
 
 interface CinematicStage3DProps {
   scrollProgressRef: React.MutableRefObject<number>;
-  onTimeUpdate?: (timeSeconds: number) => void;
 }
 
-export default function CinematicStage3D({ scrollProgressRef, onTimeUpdate }: CinematicStage3DProps) {
+export default function CinematicStage3D({ scrollProgressRef }: CinematicStage3DProps) {
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -328,7 +209,7 @@ export default function CinematicStage3D({ scrollProgressRef, onTimeUpdate }: Ci
       aria-hidden="true"
       style={{
         background:
-          "radial-gradient(ellipse 65% 50% at 75% 24%, rgba(232,168,90,0.08), transparent 60%), radial-gradient(ellipse 55% 50% at 22% 72%, rgba(157,140,255,0.08), transparent 65%), #09090b",
+          "radial-gradient(ellipse 60% 45% at 85% 18%, rgba(37,99,235,0.045), transparent 65%), #faf9f6",
       }}
     />
   );
@@ -339,12 +220,12 @@ export default function CinematicStage3D({ scrollProgressRef, onTimeUpdate }: Ci
     <StageErrorBoundary fallback={staticFallback}>
       <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true" data-testid="cinematic-stage-3d">
         <Canvas
-          camera={{ position: [0.55, 0.25, 6.4], fov: 44 }}
+          camera={{ position: [0.6, 0.3, 6.8], fov: 42 }}
           dpr={[1, 1.5]}
           gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
           style={{ background: "transparent" }}
         >
-          <TheatreScene scrollProgressRef={scrollProgressRef} onTimeUpdate={onTimeUpdate} />
+          <LightTheatreScene scrollProgressRef={scrollProgressRef} />
         </Canvas>
       </div>
     </StageErrorBoundary>

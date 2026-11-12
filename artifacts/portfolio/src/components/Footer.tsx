@@ -26,40 +26,38 @@ export default function Footer({ onNavigate }: FooterProps) {
   };
 
   return (
-    <footer className="relative border-t border-white/[0.1] bg-[#08080a]/90" data-testid="footer">
-      <div className="max-w-7xl mx-auto px-5 sm:px-10 md:px-14 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-white/[0.08]">
+    <footer className="relative border-t border-[#e4e2dd] bg-[#f3f1ec]" data-testid="footer">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-[#e4e2dd]">
           <div className="md:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-lg font-medium text-[#f2ede4]">
-                SK<span className="text-[#e8a85a]">.</span>
+            <div className="flex items-center gap-2.5">
+              <span className="font-mono text-base font-semibold text-[#141413]">
+                SK<span className="text-[#2563eb]">.</span>
               </span>
-              <span className="text-sm font-medium text-white/80">{profile.name}</span>
+              <span className="text-sm font-semibold text-[#141413]">{profile.name}</span>
             </div>
-            <p className="text-xs sm:text-sm text-white/50 max-w-sm leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#57534e] max-w-sm leading-relaxed">
               {profile.headlineRole} · {profile.subRole}. Built with React, Three.js, Theatre.js,
-              GSAP ScrollTrigger, and Lenis.
+              GSAP, and Lenis.
             </p>
             <a
               href={profile.resumePath}
               download
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#e8a85a]/40 font-mono text-[11px] uppercase tracking-widest text-[#e8a85a] hover:bg-[#e8a85a] hover:text-[#08080a] transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#dcd9d0] text-xs font-medium text-[#141413] hover:border-[#141413] transition-colors"
             >
               Download Resume ↓
             </a>
           </div>
 
           <div className="md:col-span-3 space-y-3">
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/35">
-              Chapters
-            </div>
+            <div className="text-xs font-medium text-[#78716c]">Sections</div>
             <nav className="flex flex-col gap-2">
               {navLinks.map(({ label, href }) => (
                 <a
                   key={href}
                   href={href}
                   onClick={(e) => handleNav(e, href)}
-                  className="font-mono text-xs uppercase tracking-wider text-white/55 hover:text-[#e8a85a] transition-colors"
+                  className="text-xs font-medium text-[#57534e] hover:text-[#2563eb] transition-colors"
                 >
                   {label}
                 </a>
@@ -68,9 +66,7 @@ export default function Footer({ onNavigate }: FooterProps) {
           </div>
 
           <div className="md:col-span-4 space-y-3">
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/35">
-              Verified Profiles
-            </div>
+            <div className="text-xs font-medium text-[#78716c]">Profiles</div>
             <div className="flex flex-col gap-2">
               {socialLinks.map((s) => (
                 <a
@@ -78,21 +74,23 @@ export default function Footer({ onNavigate }: FooterProps) {
                   href={s.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-mono text-xs text-white/60 hover:text-[#e8a85a] transition-colors"
+                  className="text-xs text-[#141413] hover:text-[#2563eb] transition-colors flex items-baseline gap-1.5 min-w-0"
                 >
-                  {s.short} — <span className="text-white/35">{s.handle} ↗</span>
+                  <span className="font-medium shrink-0">{s.short} —</span>
+                  <span className="font-mono text-[11px] text-[#57534e] truncate">{s.handle}</span>
+                  <span className="font-mono text-[11px] text-[#57534e] shrink-0">↗</span>
                 </a>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-white/35">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#78716c]">
           <p>© {year} {profile.name} · {profile.location}</p>
           <a
             href="#hero"
             onClick={(e) => handleNav(e, "#hero")}
-            className="hover:text-[#e8a85a] transition-colors uppercase tracking-widest"
+            className="font-medium hover:text-[#2563eb] transition-colors"
           >
             Back to top ↑
           </a>

@@ -34,10 +34,20 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes("node_modules/three") || id.includes("@react-three") || id.includes("@theatre")) {
-            return "stage-3d";
+          if (id.includes("node_modules/three")) {
+            return "three-core";
           }
-          if (id.includes("node_modules/gsap") || id.includes("node_modules/framer-motion") || id.includes("node_modules/lenis")) {
+          if (id.includes("@react-three")) {
+            return "r3f";
+          }
+          if (id.includes("@theatre")) {
+            return "theatre-core";
+          }
+          if (
+            id.includes("node_modules/gsap") ||
+            id.includes("node_modules/framer-motion") ||
+            id.includes("node_modules/lenis")
+          ) {
             return "motion-engine";
           }
           return undefined;

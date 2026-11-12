@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import AnimatedCinemaPlate from "./AnimatedCinemaPlate";
 import type { FlagshipProject } from "@/data/portfolioData";
 
 interface ProjectVisualStageProps {
   project: FlagshipProject;
 }
-
-const PHOTO_ILLUSTRATED_SLUGS = new Set(["aetherflow", "onroad"]);
 
 function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
   const [failedNode, setFailedNode] = useState<number | null>(null);
@@ -29,40 +26,37 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
   };
 
   const nodes = [
-    { id: 1, x: 200, y: 42, role: "Leader" },
-    { id: 2, x: 318, y: 112, role: "Follower" },
-    { id: 3, x: 274, y: 214, role: "Follower" },
-    { id: 4, x: 126, y: 214, role: "Follower" },
-    { id: 5, x: 82, y: 112, role: "Follower" },
+    { id: 1, x: 200, y: 42 },
+    { id: 2, x: 318, y: 112 },
+    { id: 3, x: 274, y: 214 },
+    { id: 4, x: 126, y: 214 },
+    { id: 5, x: 82, y: 112 },
   ];
 
   const activeLeader = failedNode === 1 ? 2 : 1;
   const leaderNode = nodes.find((x) => x.id === activeLeader)!;
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-5 sm:p-6 bg-[#0b0b10]">
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
       <div className="flex items-center justify-between gap-3">
-        <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45">
-          Raft Quorum + LSM Storage Topology
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
+          Raft Quorum + LSM Topology
         </span>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={failedNode ? resetNodes : triggerChaos}
-            className="px-2.5 py-1 rounded-full font-mono text-[10px] tracking-wider uppercase border transition-colors cursor-pointer"
-            style={{
-              borderColor: `${accent}66`,
-              color: accent,
-              background: `${accent}14`,
-            }}
-          >
-            {failedNode ? "Restore Cluster" : "Simulate Node Kill"}
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={failedNode ? resetNodes : triggerChaos}
+          data-testid="quorum-chaos-btn"
+          className="px-3 py-1 rounded-full font-mono text-[10px] tracking-wide border transition-colors cursor-pointer bg-white"
+          style={{
+            borderColor: `${accent}55`,
+            color: accent,
+          }}
+        >
+          {failedNode ? "Restore Cluster" : "Simulate Node Kill"}
+        </button>
       </div>
 
-      <svg viewBox="0 0 400 250" className="w-full max-h-[230px] my-2">
-        {/* Ring links */}
+      <svg viewBox="0 0 400 250" className="w-full max-h-[225px] my-2">
         {nodes.map((n, idx) => {
           const next = nodes[(idx + 1) % nodes.length];
           const deadEdge = failedNode === n.id || failedNode === next.id;
@@ -73,14 +67,13 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
               y1={n.y}
               x2={next.x}
               y2={next.y}
-              stroke={deadEdge ? "rgba(248,113,113,0.22)" : "rgba(232,168,90,0.28)"}
+              stroke={deadEdge ? "#fca5a5" : "#d6d3cb"}
               strokeDasharray={deadEdge ? "4 4" : undefined}
-              strokeWidth="1.2"
+              strokeWidth="1.25"
             />
           );
         })}
 
-        {/* Leader heartbeats + live animated appendEntries packets */}
         {nodes
           .filter((n) => n.id !== activeLeader && n.id !== failedNode)
           .map((n, idx) => (
@@ -90,9 +83,9 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
                 y1={leaderNode.y}
                 x2={n.x}
                 y2={n.y}
-                stroke="#9d8cff"
-                strokeOpacity="0.34"
-                strokeWidth="1"
+                stroke={accent}
+                strokeOpacity="0.28"
+                strokeWidth="1.2"
               />
               {!reduceMotion && (
                 <motion.g
@@ -123,8 +116,8 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
               {isLeader && !reduceMotion && (
                 <motion.g
                   style={{ transformOrigin: `${n.x}px ${n.y}px` }}
-                  initial={{ scale: 1, opacity: 0.65 }}
-                  animate={{ scale: [1, 1.42], opacity: [0.65, 0] }}
+                  initial={{ scale: 1, opacity: 0.55 }}
+                  animate={{ scale: [1, 1.38], opacity: [0.55, 0] }}
                   transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
                 >
                   <circle
@@ -133,7 +126,7 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
                     r={22}
                     fill="none"
                     stroke={accent}
-                    strokeWidth="1"
+                    strokeWidth="1.1"
                   />
                 </motion.g>
               )}
@@ -141,22 +134,17 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
                 cx={n.x}
                 cy={n.y}
                 r={isLeader ? 22 : 18}
-                fill={
-                  isDead
-                    ? "#1f1215"
-                    : isLeader
-                      ? "rgba(232,168,90,0.16)"
-                      : "rgba(157,140,255,0.09)"
-                }
-                stroke={isDead ? "#f87171" : isLeader ? accent : "rgba(242,237,228,0.28)"}
-                strokeWidth={isLeader ? 2 : 1.2}
+                fill={isDead ? "#fef2f2" : isLeader ? "#eff6ff" : "#ffffff"}
+                stroke={isDead ? "#dc2626" : isLeader ? accent : "#cbd5e1"}
+                strokeWidth={isLeader ? 2 : 1.4}
               />
               <text
                 x={n.x}
-                y={n.y + 3}
+                y={n.y + 3.5}
                 textAnchor="middle"
-                fill={isDead ? "#fca5a5" : "#f2ede4"}
+                fill={isDead ? "#dc2626" : isLeader ? accent : "#141413"}
                 fontSize="10"
+                fontWeight="600"
                 fontFamily="DM Mono, monospace"
               >
                 {isDead ? "DOWN" : isLeader ? `N${n.id}*` : `N${n.id}`}
@@ -166,25 +154,224 @@ function QuorumInteractiveBlueprint({ accent }: { accent: string }) {
         })}
       </svg>
 
-      <div className="grid grid-cols-3 gap-2 border-t border-white/[0.08] pt-3 font-mono text-[10px]">
+      <div className="grid grid-cols-3 gap-2 border-t border-[#e4e2dd] pt-3 font-mono text-[10px]">
         <div>
-          <div className="text-white/35 uppercase">State</div>
-          <div className="text-emerald-400 mt-0.5">
+          <div className="text-[#78716c] uppercase">State</div>
+          <div className="text-[#047857] font-medium mt-0.5" data-testid="quorum-state-text">
             {phase === "steady" && "QUORUM 5/5 OK"}
             {phase === "electing" && "RAFT FAILOVER (~2s)"}
             {phase === "recovered" && "QUORUM 4/5 SERVING"}
           </div>
         </div>
         <div>
-          <div className="text-white/35 uppercase">Write Path</div>
-          <div className="text-white/75 mt-0.5">WAL → MemTable → SST</div>
+          <div className="text-[#78716c] uppercase">Write Path</div>
+          <div className="text-[#141413] mt-0.5">WAL → MemTable → SST</div>
         </div>
         <div>
-          <div className="text-white/35 uppercase">Chaos Result</div>
-          <div style={{ color: accent }} className="mt-0.5">
+          <div className="text-[#78716c] uppercase">Chaos Test</div>
+          <div style={{ color: accent }} className="font-medium mt-0.5">
             17,658 Writes · 0 Loss
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+const RBFTP_FIELDS = [
+  {
+    id: "magic",
+    bytes: "0x00–01",
+    hex: "AF 52",
+    label: "Magic Header",
+    detail: "2-byte protocol signature (0xAF52) rejects malformed socket streams before buffer allocation.",
+  },
+  {
+    id: "flags",
+    bytes: "0x02",
+    hex: "01",
+    label: "Version & Flags",
+    detail: "Protocol v1 + operation flags (PUT / GET / ACK / STREAM_END) packed in a single byte.",
+  },
+  {
+    id: "seq",
+    bytes: "0x03",
+    hex: "1C",
+    label: "Frame Seq",
+    detail: "Monotonic frame sequence counter detecting out-of-order or dropped TCP chunks.",
+  },
+  {
+    id: "len",
+    bytes: "0x04–05",
+    hex: "04 00",
+    label: "Payload Length",
+    detail: "Network-endian uint16 declaring exact chunk size (1,024 B default block) for deterministic framing.",
+  },
+  {
+    id: "cksum",
+    bytes: "0x06–07",
+    hex: "E9 4B",
+    label: "RFC 1071 Checksum",
+    detail: "16-bit one's-complement checksum verified in C++ Winsock2 before disk commit + SHA-256 hash.",
+  },
+];
+
+function AetherFlowBlueprint({ accent }: { accent: string }) {
+  const [selectedField, setSelectedField] = useState(0);
+  const current = RBFTP_FIELDS[selectedField] ?? RBFTP_FIELDS[0];
+
+  return (
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
+          8-Byte RBFTP Binary Frame Inspector
+        </span>
+        <span className="font-mono text-[10px] font-medium" style={{ color: accent }}>
+          C++ Winsock2 + Python Bridge
+        </span>
+      </div>
+
+      {/* Interactive 8-byte header cells */}
+      <div className="space-y-3 my-3">
+        <div className="grid grid-cols-5 gap-1.5">
+          {RBFTP_FIELDS.map((field, idx) => {
+            const active = selectedField === idx;
+            return (
+              <button
+                key={field.id}
+                type="button"
+                onClick={() => setSelectedField(idx)}
+                data-testid={`rbftp-byte-${field.id}`}
+                className="p-2 rounded-lg border text-left transition-all cursor-pointer"
+                style={{
+                  background: active ? "#ffffff" : "#f1efe9",
+                  borderColor: active ? accent : "#dcd9d0",
+                }}
+              >
+                <div className="font-mono text-[9px] text-[#78716c]">{field.bytes}</div>
+                <div
+                  className="font-mono text-xs font-semibold mt-0.5"
+                  style={{ color: active ? accent : "#141413" }}
+                >
+                  {field.hex}
+                </div>
+                <div className="text-[10px] text-[#57534e] truncate mt-0.5">{field.label}</div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Active field callout */}
+        <div className="bg-white border border-[#e4e2dd] rounded-lg p-3.5 space-y-1">
+          <div className="flex items-center justify-between font-mono text-[10px]">
+            <span className="font-semibold" style={{ color: accent }}>
+              {current.label} ({current.bytes})
+            </span>
+            <span className="text-[#78716c]">HEX {current.hex}</span>
+          </div>
+          <p className="text-xs text-[#57534e] leading-relaxed">{current.detail}</p>
+        </div>
+
+        {/* Clean transport strip */}
+        <div className="grid grid-cols-3 gap-2 text-center font-mono text-[10px]">
+          <div className="bg-white border border-[#e4e2dd] rounded-md py-1.5 px-2 text-[#141413]">
+            HTTP Client
+          </div>
+          <div
+            className="bg-white border rounded-md py-1.5 px-2 font-medium"
+            style={{ borderColor: `${accent}44`, color: accent }}
+          >
+            Python Gateway
+          </div>
+          <div className="bg-white border border-[#e4e2dd] rounded-md py-1.5 px-2 text-[#141413]">
+            C++ TCP → SHA-256
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-[#e4e2dd] pt-3 font-mono text-[10px] text-[#57534e]">
+        <span>Deterministic Byte Framing</span>
+        <span style={{ color: accent }} className="font-medium">
+          Zero Partial Disk Writes
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const RTO_STATES = [
+  { code: "KA", name: "Karnataka", rtoPct: 18, cess: "₹18,750", insurance: "₹52,400", total: "₹14,96,150" },
+  { code: "MH", name: "Maharashtra", rtoPct: 13, cess: "₹12,500", insurance: "₹51,800", total: "₹14,26,800" },
+  { code: "TS", name: "Telangana", rtoPct: 17, cess: "₹14,000", insurance: "₹52,100", total: "₹14,78,600" },
+  { code: "DL", name: "Delhi NCR", rtoPct: 10, cess: "₹4,000", insurance: "₹50,900", total: "₹13,79,900" },
+];
+
+function OnRoadBlueprint({ accent }: { accent: string }) {
+  const [stateIdx, setStateIdx] = useState(0);
+  const s = RTO_STATES[stateIdx] ?? RTO_STATES[0];
+  const exShowroom = 1250000;
+  const rtoAmount = `₹${Math.round((exShowroom * s.rtoPct) / 100).toLocaleString("en-IN")}`;
+
+  return (
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
+          Deterministic State RTO Engine
+        </span>
+        <div className="flex items-center gap-1">
+          {RTO_STATES.map((item, idx) => {
+            const active = idx === stateIdx;
+            return (
+              <button
+                key={item.code}
+                type="button"
+                onClick={() => setStateIdx(idx)}
+                data-testid={`onroad-state-${item.code}`}
+                className="px-2 py-0.5 rounded font-mono text-[10px] border transition-colors cursor-pointer"
+                style={{
+                  background: active ? accent : "#ffffff",
+                  borderColor: active ? accent : "#dcd9d0",
+                  color: active ? "#ffffff" : "#57534e",
+                }}
+              >
+                {item.code}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Deterministic price breakdown ledger */}
+      <div className="bg-white border border-[#e4e2dd] rounded-lg p-3.5 my-3 space-y-2">
+        <div className="flex items-center justify-between pb-2 border-b border-[#eceae4] text-xs">
+          <span className="font-semibold text-[#141413]">Sample SUV · {s.name}</span>
+          <span className="font-mono text-[10px]" style={{ color: accent }}>
+            RTO Slab {s.rtoPct}%
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-y-1.5 text-xs">
+          <span className="text-[#57534e]">Ex-Showroom</span>
+          <span className="text-right font-mono text-[#141413]">₹12,50,000</span>
+          <span className="text-[#57534e]">State Road Tax ({s.rtoPct}%)</span>
+          <span className="text-right font-mono text-[#141413]">{rtoAmount}</span>
+          <span className="text-[#57534e]">Safety Cess &amp; Reg</span>
+          <span className="text-right font-mono text-[#141413]">{s.cess}</span>
+          <span className="text-[#57534e]">Insurance (1+3) &amp; FASTag</span>
+          <span className="text-right font-mono text-[#141413]">{s.insurance}</span>
+        </div>
+        <div className="pt-2 border-t border-[#eceae4] flex items-center justify-between text-xs font-semibold">
+          <span className="text-[#141413]">Exact On-Road Price</span>
+          <span className="font-mono text-sm" style={{ color: accent }} data-testid="onroad-total">
+            {s.total}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-[#e4e2dd] pt-3 font-mono text-[10px] text-[#57534e]">
+        <span>36 States &amp; UTs · MapLibre + 3D</span>
+        <span style={{ color: accent }} className="font-medium">
+          2,500+ Variants Indexed
+        </span>
       </div>
     </div>
   );
@@ -194,23 +381,24 @@ function SwitchboardBlueprint({ accent }: { accent: string }) {
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-5 sm:p-6 bg-[#0b0b10]">
-      <div className="flex items-center justify-between gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-white/45">
-        <span>77-Intent Banking Agent Pipeline &amp; Eval Loop</span>
-        <span className="inline-flex items-center gap-1.5 text-[9.5px]" style={{ color: accent }}>
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
+      <div className="flex items-center justify-between gap-2 font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
+        <span>77-Intent Agent &amp; Eval Loop</span>
+        <span className="inline-flex items-center gap-1.5 font-medium" style={{ color: accent }}>
           <span
             className={`h-1.5 w-1.5 rounded-full ${reduceMotion ? "" : "animate-pulse"}`}
             style={{ background: accent }}
           />
-          Eval Stream
+          Eval Verified
         </span>
       </div>
-      <svg viewBox="0 0 420 210" className="w-full max-h-[210px] my-2">
+
+      <svg viewBox="0 0 420 205" className="w-full max-h-[205px] my-2">
         {[
-          { x: 14, y: 74, w: 96, h: 58, t: "Query", s: "13K Banking77" },
-          { x: 142, y: 74, w: 112, h: 58, t: "Classifier", s: "93% Top-1 Acc" },
-          { x: 286, y: 26, w: 118, h: 52, t: "Tool Agent", s: "Constrained Schema" },
-          { x: 286, y: 122, w: 118, h: 52, t: "Eval Suite", s: "Pass: 67% → 83%" },
+          { x: 14, y: 72, w: 96, h: 58, t: "Query", s: "13K Banking77" },
+          { x: 142, y: 72, w: 112, h: 58, t: "Classifier", s: "93% Top-1 Acc" },
+          { x: 286, y: 24, w: 118, h: 52, t: "Tool Agent", s: "Schema Guard" },
+          { x: 286, y: 120, w: 118, h: 52, t: "Eval Suite", s: "Pass: 67% → 83%" },
         ].map((b, i) => (
           <g key={i}>
             <rect
@@ -219,14 +407,14 @@ function SwitchboardBlueprint({ accent }: { accent: string }) {
               width={b.w}
               height={b.h}
               rx="10"
-              fill="rgba(255,255,255,0.03)"
-              stroke={i === 1 || i === 3 ? accent : "rgba(242,237,228,0.22)"}
-              strokeWidth="1.2"
+              fill="#ffffff"
+              stroke={i === 1 || i === 3 ? accent : "#d6d3cb"}
+              strokeWidth="1.4"
             />
             <text
               x={b.x + 12}
               y={b.y + 24}
-              fill="#f2ede4"
+              fill="#141413"
               fontSize="11"
               fontFamily="Manrope, sans-serif"
               fontWeight="600"
@@ -245,47 +433,43 @@ function SwitchboardBlueprint({ accent }: { accent: string }) {
           </g>
         ))}
 
-        <path d="M110 103 L142 103" stroke={accent} strokeWidth="1.4" />
-        <path d="M254 96 L286 52" stroke="rgba(242,237,228,0.38)" strokeWidth="1.3" />
-        <path d="M254 110 L286 148" stroke={accent} strokeWidth="1.3" strokeDasharray="3 3" />
-        <path d="M345 78 L345 122" stroke="rgba(242,237,228,0.28)" strokeWidth="1.2" />
+        <path d="M110 101 L142 101" stroke={accent} strokeWidth="1.4" />
+        <path d="M254 94 L286 50" stroke="#94a3b8" strokeWidth="1.3" />
+        <path d="M254 108 L286 146" stroke={accent} strokeWidth="1.3" strokeDasharray="3 3" />
+        <path d="M345 76 L345 120" stroke="#94a3b8" strokeWidth="1.2" />
 
         {!reduceMotion && (
           <>
             <motion.g
-              initial={{ x: 110, y: 103, opacity: 0 }}
-              animate={{ x: [110, 142], y: [103, 103], opacity: [0, 1, 0] }}
+              initial={{ x: 110, y: 101, opacity: 0 }}
+              animate={{ x: [110, 142], y: [101, 101], opacity: [0, 1, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
             >
               <circle cx={0} cy={0} r={3} fill={accent} />
             </motion.g>
             <motion.g
-              initial={{ x: 254, y: 96, opacity: 0 }}
-              animate={{ x: [254, 286], y: [96, 52], opacity: [0, 1, 0] }}
+              initial={{ x: 254, y: 94, opacity: 0 }}
+              animate={{ x: [254, 286], y: [94, 50], opacity: [0, 1, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <circle cx={0} cy={0} r={3} fill="#f2ede4" />
+              <circle cx={0} cy={0} r={3} fill="#141413" />
             </motion.g>
             <motion.g
-              initial={{ x: 254, y: 110, opacity: 0 }}
-              animate={{ x: [254, 286], y: [110, 148], opacity: [0, 1, 0] }}
+              initial={{ x: 254, y: 108, opacity: 0 }}
+              animate={{ x: [254, 286], y: [108, 146], opacity: [0, 1, 0] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
             >
               <circle cx={0} cy={0} r={3} fill={accent} />
             </motion.g>
-            <motion.g
-              initial={{ x: 345, y: 78, opacity: 0 }}
-              animate={{ x: [345, 345], y: [78, 122], opacity: [0, 1, 0] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 1.25 }}
-            >
-              <circle cx={0} cy={0} r={2.5} fill="#34d399" />
-            </motion.g>
           </>
         )}
       </svg>
-      <div className="flex items-center justify-between border-t border-white/[0.08] pt-3 font-mono text-[10px] text-white/55">
+
+      <div className="flex items-center justify-between border-t border-[#e4e2dd] pt-3 font-mono text-[10px] text-[#57534e]">
         <span>3,080 Held-Out Examples</span>
-        <span style={{ color: accent }}>98.4% Top-3 Intent Recall</span>
+        <span style={{ color: accent }} className="font-medium">
+          98.4% Top-3 Intent Recall
+        </span>
       </div>
     </div>
   );
@@ -306,51 +490,49 @@ function QueryMindBlueprint({ accent }: { accent: string }) {
   const stages = ["1. LangChain SQL Gen", "2. Read-Only AST Guard", "3. DuckDB 1M+ Scan"];
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-5 sm:p-6 bg-[#0b0b10]">
-      <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45">
-        Read-Only NL2SQL Guarded Execution Flow
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
+      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
+        Read-Only NL2SQL AST Execution Flow
       </div>
+
       <div className="space-y-2.5 my-3 font-mono text-[11px]">
-        <div className="p-3 rounded-lg border border-white/[0.08] bg-white/[0.02] text-white/75">
-          USER → &ldquo;Compare Q4 basket retention vs returns by SKU tier&rdquo;
+        <div className="p-3 rounded-lg border border-[#e4e2dd] bg-white text-[#141413]">
+          PROMPT → &ldquo;Compare Q4 basket retention vs returns by SKU tier&rdquo;
         </div>
         <div className="grid grid-cols-3 gap-2 text-center">
           {stages.map((label, idx) => {
             const focused = activeStage === idx;
             return (
-              <motion.div
+              <div
                 key={label}
-                animate={
-                  reduceMotion
-                    ? undefined
-                    : {
-                        scale: focused ? 1.02 : 1,
-                        borderColor: focused
-                          ? idx === 2
-                            ? "rgba(52,211,153,0.75)"
-                            : `${accent}88`
-                          : "rgba(255,255,255,0.08)",
-                      }
-                }
-                transition={{ duration: 0.35 }}
-                className="p-2.5 rounded-lg border text-white/80"
+                className="p-2.5 rounded-lg border transition-colors"
                 style={{
-                  background: focused ? `${accent}14` : "rgba(255,255,255,0.015)",
+                  background: focused ? "#ffffff" : "#f1efe9",
+                  borderColor: focused
+                    ? idx === 2
+                      ? "#059669"
+                      : accent
+                    : "#dcd9d0",
+                  color: focused ? "#141413" : "#57534e",
+                  fontWeight: focused ? 600 : 400,
                 }}
               >
                 {label}
-              </motion.div>
+              </div>
             );
           })}
         </div>
-        <div className="p-2.5 rounded-lg border border-red-400/20 bg-red-500/[0.04] text-red-300/80 flex items-center justify-between text-[10px]">
+        <div className="p-2.5 rounded-lg border border-[#fecdd3] bg-[#fff1f2] text-[#be123c] flex items-center justify-between text-[10px]">
           <span>BLOCKED: DROP / DELETE / ALTER / PRAGMA</span>
-          <span>SELF-REPAIR ON SCHEMA ERR</span>
+          <span className="font-medium">AUTO-REPAIR ON SCHEMA ERR</span>
         </div>
       </div>
-      <div className="flex items-center justify-between border-t border-white/[0.08] pt-3 font-mono text-[10px] text-white/55">
+
+      <div className="flex items-center justify-between border-t border-[#e4e2dd] pt-3 font-mono text-[10px] text-[#57534e]">
         <span>UCI Online Retail Dataset</span>
-        <span style={{ color: accent }}>12 / 12 Query Classes Validated</span>
+        <span style={{ color: accent }} className="font-medium">
+          12 / 12 Query Classes Validated
+        </span>
       </div>
     </div>
   );
@@ -376,43 +558,44 @@ function PulseBlueprint({ accent }: { accent: string }) {
   ];
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-5 sm:p-6 bg-[#0b0b10]">
-      <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45">
-        RFM Cohort Retention Matrix · £17.7M Invoice Ledger
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
+      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
+        RFM Cohort Retention Matrix · £17.7M Ledger
       </div>
+
       <div className="space-y-2 my-3">
         {cohortRows.map((row) => (
           <div key={String(row[0])} className="grid grid-cols-6 gap-1.5 items-center font-mono text-[10px]">
-            <span className="text-white/45">{row[0]}</span>
+            <span className="text-[#57534e] font-medium">{row[0]}</span>
             {(row.slice(1) as number[]).map((val, idx) => {
               const isHighlighted = !reduceMotion && val > 0 && idx === highlightCol;
               return (
-                <motion.div
+                <div
                   key={idx}
-                  animate={{
-                    borderColor: isHighlighted ? accent : "rgba(255,255,255,0.06)",
-                    scale: isHighlighted ? 1.03 : 1,
-                  }}
-                  transition={{ duration: 0.35 }}
-                  className="h-8 rounded flex items-center justify-center border"
+                  className="h-8 rounded flex items-center justify-center border transition-all"
                   style={{
+                    borderColor: isHighlighted ? accent : "#e4e2dd",
                     background:
                       val > 0
-                        ? `rgba(232,168,90,${0.08 + val * 0.0045})`
-                        : "rgba(255,255,255,0.015)",
-                    color: val > 0 ? "#f2ede4" : "rgba(255,255,255,0.18)",
+                        ? `rgba(190,18,60,${0.05 + val * 0.0028})`
+                        : "#ffffff",
+                    color: val > 0 ? (val > 50 ? "#881337" : "#141413") : "#cbd5e1",
+                    fontWeight: isHighlighted ? 600 : 400,
                   }}
                 >
                   {val > 0 ? `${val}%` : "—"}
-                </motion.div>
+                </div>
               );
             })}
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between border-t border-white/[0.08] pt-3 font-mono text-[10px] text-white/55">
+
+      <div className="flex items-center justify-between border-t border-[#e4e2dd] pt-3 font-mono text-[10px] text-[#57534e]">
         <span>36,969 Verified Orders · DuckDB</span>
-        <span style={{ color: accent }}>Champions · At-Risk · Hibernating</span>
+        <span style={{ color: accent }} className="font-medium">
+          Champions · At-Risk · Hibernating
+        </span>
       </div>
     </div>
   );
@@ -431,105 +614,61 @@ function HybridGatewayBlueprint({ accent }: { accent: string }) {
   }, [reduceMotion]);
 
   return (
-    <div className="h-full w-full flex flex-col justify-between p-5 sm:p-6 bg-[#0b0b10]">
-      <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-white/45">
+    <div className="h-full w-full flex flex-col justify-between p-5 bg-[#f8f7f4] border border-[#e4e2dd] rounded-xl">
+      <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#57534e]">
         Semantic Cache Router + SQLite RBAC Guardrails
       </div>
-      <div className="grid grid-cols-2 gap-3 my-3 font-mono text-[10px]">
-        <motion.div
-          animate={
-            reduceMotion
-              ? undefined
-              : {
-                  borderColor:
-                    pulseSide === "cache" ? `${accent}88` : "rgba(255,255,255,0.09)",
-                }
-          }
-          transition={{ duration: 0.4 }}
-          className="p-3 rounded-xl border bg-white/[0.02] space-y-1.5"
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-3 font-mono text-[10px]">
+        <div
+          className="p-3.5 rounded-xl border bg-white space-y-1.5 transition-colors"
+          style={{
+            borderColor: pulseSide === "cache" ? accent : "#e4e2dd",
+          }}
         >
-          <div className="text-white/40 uppercase">Gateway Path</div>
-          <div className="text-white/85">Cosine Cache ({"<10ms"})</div>
-          <div style={{ color: accent }}>Hit → Zero Token Cost</div>
-          <div className="text-white/50">Miss → Ollama Local / Gemini</div>
-        </motion.div>
-        <motion.div
-          animate={
-            reduceMotion
-              ? undefined
-              : {
-                  borderColor:
-                    pulseSide === "guard" ? `${accent}88` : "rgba(255,255,255,0.09)",
-                }
-          }
-          transition={{ duration: 0.4 }}
-          className="p-3 rounded-xl border bg-white/[0.02] space-y-1.5"
+          <div className="text-[#78716c] uppercase">Gateway Path</div>
+          <div className="text-[#141413] font-semibold">Cosine Cache ({"<10ms"})</div>
+          <div style={{ color: accent }} className="font-medium">
+            Hit → Zero Token Cost
+          </div>
+          <div className="text-[#57534e]">Miss → Ollama Local / Gemini</div>
+        </div>
+
+        <div
+          className="p-3.5 rounded-xl border bg-white space-y-1.5 transition-colors"
+          style={{
+            borderColor: pulseSide === "guard" ? accent : "#e4e2dd",
+          }}
         >
-          <div className="text-white/40 uppercase">Security Plane</div>
-          <div className="text-white/85">SQLite Role Scoping</div>
-          <div style={{ color: accent }}>PII Redaction Middleware</div>
-          <div className="text-white/50">Self-Correcting Critic Loop</div>
-        </motion.div>
+          <div className="text-[#78716c] uppercase">Security Plane</div>
+          <div className="text-[#141413] font-semibold">SQLite Role Scoping</div>
+          <div style={{ color: accent }} className="font-medium">
+            PII Redaction Middleware
+          </div>
+          <div className="text-[#57534e]">Self-Correcting Critic Loop</div>
+        </div>
       </div>
-      <div className="flex items-center justify-between border-t border-white/[0.08] pt-3 font-mono text-[10px] text-white/55">
+
+      <div className="flex items-center justify-between border-t border-[#e4e2dd] pt-3 font-mono text-[10px] text-[#57534e]">
         <span>Local-First Cost &amp; Privacy Routing</span>
-        <span style={{ color: accent }}>2 Production Repos</span>
+        <span style={{ color: accent }} className="font-medium">
+          2 Companion Repos
+        </span>
       </div>
     </div>
   );
 }
 
 export default function ProjectVisualStage({ project }: ProjectVisualStageProps) {
-  const hasPhoto = PHOTO_ILLUSTRATED_SLUGS.has(project.slug);
-  const [viewMode, setViewMode] = useState<"scene" | "convo">("scene");
-
-  useEffect(() => {
-    setViewMode("scene");
-  }, [project.slug]);
-
-  if (hasPhoto) {
-    return (
-      <AnimatedCinemaPlate
-        key={project.slug}
-        src={project.illustration}
-        alt={`${project.title} conversational walkthrough scene`}
-        badgeLeft={`Convo Scene · ${project.index}`}
-        badgeRight={project.category}
-        kenBurnsDirection={project.slug === "aetherflow" ? "left" : "right"}
-        colorGradePreset={project.slug === "onroad" ? "matte-deep" : "editorial"}
-      >
-        <div className="flex flex-col justify-end gap-3 mt-auto">
-          <div className="flex items-center justify-end">
-            <button
-              type="button"
-              onClick={() => setViewMode((m) => (m === "scene" ? "convo" : "scene"))}
-              className="px-3 py-1.5 rounded-full bg-[#08080a]/82 backdrop-blur-md border border-white/[0.16] font-mono text-[10px] uppercase tracking-[0.14em] text-[#e8a85a] hover:border-[#e8a85a]/65 transition-colors cursor-pointer"
-            >
-              {viewMode === "scene" ? "Read Dialogue Notes" : "Hide Notes"}
-            </button>
-          </div>
-          {viewMode === "convo" && (
-            <div className="p-3.5 rounded-xl bg-[#08080a]/88 backdrop-blur-xl border border-white/[0.14] space-y-1.5">
-              <p className="font-mono text-[10px] uppercase tracking-wider text-[#e8a85a]">
-                Use-Case Question
-              </p>
-              <p className="text-xs text-[#f2ede4]/88 leading-relaxed">{project.convoPrompt}</p>
-            </div>
-          )}
-        </div>
-      </AnimatedCinemaPlate>
-    );
-  }
-
   return (
-    <div className="studio-frame rounded-2xl aspect-[16/10] w-full flex flex-col justify-between">
-      <div className="relative z-10 h-full w-full">
-        {project.slug === "quorumdb" && <QuorumInteractiveBlueprint accent={project.accent} />}
-        {project.slug === "switchboard" && <SwitchboardBlueprint accent={project.accent} />}
-        {project.slug === "querymind" && <QueryMindBlueprint accent={project.accent} />}
-        {project.slug === "pulse" && <PulseBlueprint accent={project.accent} />}
-        {project.slug === "hybrid-llm-rbac" && <HybridGatewayBlueprint accent={project.accent} />}
-      </div>
+    <div className="w-full" data-testid={`visual-stage-${project.slug}`}>
+      {project.slug === "quorumdb" && <QuorumInteractiveBlueprint accent={project.accent} />}
+      {project.slug === "aetherflow" && <AetherFlowBlueprint accent={project.accent} />}
+      {project.slug === "onroad" && <OnRoadBlueprint accent={project.accent} />}
+      {project.slug === "switchboard" && <SwitchboardBlueprint accent={project.accent} />}
+      {project.slug === "querymind" && <QueryMindBlueprint accent={project.accent} />}
+      {project.slug === "pulse" && <PulseBlueprint accent={project.accent} />}
+      {project.slug === "hybrid-llm-rbac" && <HybridGatewayBlueprint accent={project.accent} />}
     </div>
   );
 }

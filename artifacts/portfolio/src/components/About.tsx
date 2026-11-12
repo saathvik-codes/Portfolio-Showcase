@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import AnimatedCinemaPlate from "./AnimatedCinemaPlate";
 import CountUp from "./CountUp";
 import { education, profile } from "@/data/portfolioData";
 
@@ -14,17 +13,17 @@ export default function About() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".about-reveal",
-        { y: 26, opacity: 0 },
+        { y: 16, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.72,
-          stagger: 0.1,
-          ease: "power3.out",
+          duration: 0.55,
+          stagger: 0.08,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 78%",
-            toggleActions: "play none none reverse",
+            start: "top 85%",
+            toggleActions: "play none none none",
           },
         },
       );
@@ -34,147 +33,132 @@ export default function About() {
   }, []);
 
   const stats = [
-    { num: 8.2, decimals: 1, label: "CGPA at IIITDM", suffix: "" },
+    { num: 8.2, decimals: 1, label: "CGPA at IIITDM Kurnool", suffix: "" },
     { num: 350, decimals: 0, label: "LeetCode Solved (35 Hard)", suffix: "+" },
-    { num: 3, decimals: 0, label: "Production Internships", suffix: "" },
-    { num: 1500, decimals: 0, label: "Candidates via Voice AI", suffix: "+" },
+    { num: 3, decimals: 0, label: "Engineering Internships", suffix: "" },
+    { num: 1500, decimals: 0, label: "Candidates Screened via AI", suffix: "+" },
   ];
 
   return (
     <section
       ref={sectionRef}
       id="about"
-      className="relative py-20 md:py-32 px-5 sm:px-10 md:px-14"
+      className="relative py-20 md:py-28 px-5 sm:px-8 border-b border-[#e4e2dd]"
       data-testid="about-section"
     >
-      <div className="max-w-7xl mx-auto space-y-12 md:space-y-16">
-        <div className="about-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.1] pb-8">
+      <div className="max-w-6xl mx-auto space-y-12">
+        <div className="about-reveal flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="section-index mb-3">01 — Engineering Philosophy</div>
-            <h2 className="text-[clamp(2.2rem,5.2vw,4.4rem)] leading-[0.95] font-display font-bold text-[#f2ede4]">
+            <div className="section-kicker mb-2">01 · Background</div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#141413]">
               Built for production,{" "}
-              <span className="font-serif-editorial italic font-normal text-[#e8a85a]">
-                explained simply.
+              <span className="font-serif-editorial italic font-normal text-[#57534e]">
+                explained clearly.
               </span>
             </h2>
           </div>
-          <p className="text-sm sm:text-base text-white/55 max-w-md leading-relaxed">
-            CS undergrad at <span className="text-[#f2ede4]">IIITDM Kurnool</span> focused on
-            making distributed backends, AI agent workflows, and user interfaces agree cleanly.
+          <p className="text-sm text-[#57534e] max-w-md leading-relaxed">
+            B.Tech CSE undergraduate focusing on where backend invariants meet dependable AI systems and clean interfaces.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Left: Animated convo whiteboard frame + verified education */}
-          <div className="lg:col-span-6 space-y-8 about-reveal">
-            <AnimatedCinemaPlate
-              src="/illustrations/about-convo.jpg"
-              alt="Saathvik and a product teammate aligning system diagrams on a frosted glass whiteboard"
-              badgeLeft="Act I · Whiteboard Alignment"
-              kenBurnsDirection="left"
-              captionAuthor="Product & Backend Conversation"
-              caption="“If a user has to wonder why a workflow stalled, either the state machine is hiding an edge case or the interface didn’t tell the truth.”"
-            />
-
-            <div className="space-y-4">
-              <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#e8a85a]/80">
-                Education &amp; Academic Foundations
+        {/* Clean 4-column typographic metrics bar */}
+        <div
+          className="about-reveal grid grid-cols-2 lg:grid-cols-4 clean-card rounded-2xl divide-y lg:divide-y-0 lg:divide-x divide-[#e4e2dd]"
+          data-testid="stats-grid"
+        >
+          {stats.map(({ num, decimals, label, suffix }) => (
+            <div
+              key={label}
+              className="p-5 sm:p-6"
+              data-testid={`stat-${label.replace(/\s+/g, "-").toLowerCase()}`}
+            >
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[#141413]">
+                <CountUp to={num} decimals={decimals} />
+                <span className="text-[#2563eb]">{suffix}</span>
               </div>
-              <div className="space-y-4 divide-y divide-white/[0.08]">
-                {education.map((edu, i) => (
-                  <div key={i} className={i > 0 ? "pt-4" : ""}>
-                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                      <h3 className="text-base font-semibold text-[#f2ede4]">{edu.degree}</h3>
-                      <span className="font-mono text-xs text-[#e8a85a] shrink-0">{edu.metric}</span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-white/55 mt-1">{edu.institution}</p>
-                    <p className="font-mono text-[11px] text-white/35 mt-1.5">{edu.coursework}</p>
-                  </div>
-                ))}
-              </div>
+              <div className="text-xs text-[#57534e] mt-1.5">{label}</div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          {/* Right: Editorial biography + metrics + principles */}
-          <div className="lg:col-span-6 space-y-8 about-reveal">
-            <div className="space-y-4 text-sm sm:text-base text-white/65 leading-relaxed">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+          {/* Narrative + Links */}
+          <div className="about-reveal lg:col-span-6 space-y-6">
+            <div className="space-y-4 text-sm sm:text-base text-[#57534e] leading-relaxed">
               <p>
-                Most software breaks in the handoffs: between a webhook and a queue, between an LLM
-                tool call and deterministic business state, or between a complex pricing database and
+                Most software breaks in the handoffs — between a webhook and a queue, between an LLM
+                tool call and deterministic business state, or between a complex pricing dataset and
                 a first-time user.
               </p>
               <p>
-                That is where I spend my time. Over internships at{" "}
-                <span className="text-[#f2ede4] font-medium">Darwix AI</span>,{" "}
-                <span className="text-[#f2ede4] font-medium">Caterworld.ai</span>, and{" "}
-                <span className="text-[#f2ede4] font-medium">AIMaster.live</span>, alongside systems
-                projects in <span className="text-[#e8a85a]">Go</span>,{" "}
-                <span className="text-[#e8a85a]">C++</span>, and{" "}
-                <span className="text-[#9d8cff]">Python/TypeScript</span>, I work from storage and
-                sockets up through evaluation harnesses and interface craft.
+                Across internships at{" "}
+                <span className="text-[#141413] font-medium">Darwix AI</span>,{" "}
+                <span className="text-[#141413] font-medium">Caterworld.ai</span>, and{" "}
+                <span className="text-[#141413] font-medium">AIMaster.live</span>, along with core
+                projects in <span className="text-[#141413] font-medium">Go</span>,{" "}
+                <span className="text-[#141413] font-medium">C++</span>, and{" "}
+                <span className="text-[#141413] font-medium">Python / TypeScript</span>, I work from
+                storage engines and sockets up through automated evals and web products.
               </p>
             </div>
 
-            <div
-              className="grid grid-cols-2 gap-4 sm:gap-5"
-              data-testid="stats-grid"
-            >
-              {stats.map(({ num, decimals, label, suffix }) => (
-                <div
-                  key={label}
-                  className="studio-plate rounded-2xl p-4 sm:p-5"
-                  data-testid={`stat-${label.replace(/\s+/g, "-").toLowerCase()}`}
-                >
-                  <div className="font-display text-3xl sm:text-4xl font-bold text-[#f2ede4]">
-                    <CountUp to={num} decimals={decimals} />
-                    <span className="text-[#e8a85a]">{suffix}</span>
-                  </div>
-                  <div className="font-mono text-[11px] text-white/45 mt-1.5">{label}</div>
-                </div>
-              ))}
+            <div className="flex flex-wrap gap-2.5 pt-1">
+              <a
+                href="https://github.com/saathvik-codes"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-full bg-white border border-[#dcd9d0] text-xs font-medium text-[#141413] hover:border-[#141413] transition-colors"
+                data-testid="about-github"
+              >
+                GitHub ↗
+              </a>
+              <a
+                href="https://linkedin.com/in/saathvik-kalepu-17041228b"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-full bg-white border border-[#dcd9d0] text-xs font-medium text-[#141413] hover:border-[#141413] transition-colors"
+                data-testid="about-linkedin"
+              >
+                LinkedIn ↗
+              </a>
+              <a
+                href="https://leetcode.com/u/Sunny550/"
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-full bg-white border border-[#dcd9d0] text-xs font-medium text-[#141413] hover:border-[#141413] transition-colors"
+              >
+                LeetCode Sunny550 ↗
+              </a>
+              <a
+                href={profile.resumePath}
+                download
+                className="px-3.5 py-2 rounded-full bg-[#f3f1ec] border border-[#e4e2dd] text-xs font-medium text-[#2563eb] hover:bg-[#e8edf9] transition-colors"
+                data-testid="about-resume"
+              >
+                Download Resume ↓
+              </a>
             </div>
+          </div>
 
-            <div className="studio-plate rounded-2xl p-5 space-y-3">
-              <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/40">
-                Direct Links
+          {/* Education */}
+          <div className="about-reveal lg:col-span-6 clean-card rounded-2xl p-6 sm:p-7 divide-y divide-[#eceae4]">
+            {education.map((edu, i) => (
+              <div key={edu.degree} className={i > 0 ? "pt-5 mt-5" : ""}>
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="text-sm sm:text-base font-semibold text-[#141413]">
+                    {edu.degree}
+                  </h3>
+                  <span className="font-mono text-xs font-medium text-[#2563eb]">
+                    {edu.metric}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-[#57534e] mt-1">
+                  {edu.institution} · <span className="font-mono text-[11px]">{edu.period}</span>
+                </p>
+                <p className="text-xs text-[#78716c] mt-2 leading-relaxed">{edu.coursework}</p>
               </div>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href="https://github.com/saathvik-codes"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-3.5 py-2 rounded-full border border-white/[0.12] font-mono text-[11px] text-white/75 hover:border-[#e8a85a] hover:text-[#e8a85a] transition-colors"
-                  data-testid="about-github"
-                >
-                  GitHub ↗
-                </a>
-                <a
-                  href="https://linkedin.com/in/saathvik-kalepu-17041228b"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-3.5 py-2 rounded-full border border-white/[0.12] font-mono text-[11px] text-white/75 hover:border-[#e8a85a] hover:text-[#e8a85a] transition-colors"
-                  data-testid="about-linkedin"
-                >
-                  LinkedIn ↗
-                </a>
-                <a
-                  href="https://leetcode.com/u/Sunny550/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-3.5 py-2 rounded-full border border-white/[0.12] font-mono text-[11px] text-white/75 hover:border-[#9d8cff] hover:text-[#9d8cff] transition-colors"
-                >
-                  LeetCode Sunny550 ↗
-                </a>
-                <a
-                  href={profile.resumePath}
-                  download
-                  className="px-3.5 py-2 rounded-full border border-[#e8a85a]/40 bg-[#e8a85a]/10 font-mono text-[11px] text-[#e8a85a] hover:bg-[#e8a85a]/20 transition-colors"
-                  data-testid="about-resume"
-                >
-                  Download Resume ↓
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
