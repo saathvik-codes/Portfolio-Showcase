@@ -1,8 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="10" fill="#0a0a0a"/>
-  <path d="M 8 18 C 8 18 26 12 26 22 C 26 31 8 31 8 41 C 8 50 26 47 26 47" stroke="#a78bfa" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M 36 11 L 36 53" stroke="#a78bfa" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M 36 33 L 55 11" stroke="#a78bfa" stroke-width="3.5" stroke-linecap="round"/>
-  <path d="M 36 33 L 55 53" stroke="#a78bfa" stroke-width="3.5" stroke-linecap="round"/>
-  <circle cx="59" cy="53" r="3.5" fill="#c084fc"/>
+  <rect width="64" height="64" rx="14" fill="#08080a"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" stroke="rgba(242,237,228,0.12)" stroke-width="1"/>
+  <path d="M 10 18 C 10 18 26 12 26 22 C 26 31 10 31 10 41 C 10 50 26 47 26 47" stroke="#e8a85a" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 35 12 L 35 52" stroke="#f2ede4" stroke-width="3.6" stroke-linecap="round"/>
+  <path d="M 35 33 L 52 12" stroke="#f2ede4" stroke-width="3.6" stroke-linecap="round"/>
+  <path d="M 35 33 L 52 52" stroke="#f2ede4" stroke-width="3.6" stroke-linecap="round"/>
+  <circle cx="56" cy="52" r="3.4" fill="#9d8cff"/>
 </svg>

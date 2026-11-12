@@ -2,225 +2,219 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-  MicrosoftLogo,
-  LinkedInLogo,
-  InfosysLogo,
-  UdemyLogo,
   CiscoLogo,
   HackerRankLogo,
+  InfosysLogo,
+  LinkedInLogo,
+  MicrosoftLogo,
+  NptelLogo,
+  UdemyLogo,
 } from "./CertLogos";
+import { certifications, communityAndHackathons, type CertificationItem } from "@/data/portfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const certifications = [
-  {
-    title: "Azure AI Essentials Professional Certificate",
-    issuer: "Microsoft & LinkedIn",
-    date: "Dec 2024",
-    accent: "#0078d4",
-    tier: "pro",
-    Logo: () => (
-      <span className="flex items-center gap-1.5">
-        <MicrosoftLogo size={14} />
-        <LinkedInLogo size={14} />
-      </span>
-    ),
-  },
-  {
-    title: "Career Essentials in Generative AI",
-    issuer: "Microsoft & LinkedIn",
-    date: "2024",
-    accent: "#0a66c2",
-    tier: "pro",
-    Logo: () => (
-      <span className="flex items-center gap-1.5">
-        <MicrosoftLogo size={14} />
-        <LinkedInLogo size={14} />
-      </span>
-    ),
-  },
-  {
-    title: "Data Science Certification",
-    issuer: "Infosys Springboard",
-    date: "2024",
-    accent: "#ff7700",
-    tier: "course",
-    Logo: () => <InfosysLogo size={14} />,
-  },
-  {
-    title: "Full Stack Web Development",
-    issuer: "Udemy",
-    date: "2023",
-    accent: "#a435f0",
-    tier: "course",
-    Logo: () => <UdemyLogo size={14} />,
-  },
-  {
-    title: "Cisco CCST Networking",
-    issuer: "Cisco",
-    date: "Dec 2024",
-    accent: "#1ba0d7",
-    tier: "course",
-    Logo: () => <CiscoLogo size={14} />,
-  },
-  {
-    title: "Python (Basic) Certificate",
-    issuer: "HackerRank",
-    date: "Jun 2024",
-    accent: "#00ea64",
-    tier: "course",
-    Logo: () => <HackerRankLogo size={14} />,
-  },
-];
-
-const extras = [
-  { label: "Smart India Hackathon", sub: "National-level govt. hackathon", accent: "#f97316" },
-  { label: "Analytics Vidhya DataHack", sub: "Data science competition", accent: "#fbbf24" },
-  { label: "Adobe India Hackathon", sub: "Creative tech challenge", accent: "#e879f9" },
-  { label: "Technical Club Member", sub: "IIITDM Kurnool — seminars & workshops", accent: "#a78bfa" },
-  { label: "NSS Volunteer", sub: "Community development programs", accent: "#34d399" },
-  { label: "NSO Participant", sub: "Sports, teamwork, discipline", accent: "#818cf8" },
-];
+function renderBrandMark(brand: CertificationItem["brand"]) {
+  switch (brand) {
+    case "nptel":
+      return <NptelLogo size={18} />;
+    case "microsoft-linkedin":
+      return (
+        <span className="inline-flex items-center gap-1">
+          <MicrosoftLogo size={15} />
+          <LinkedInLogo size={15} />
+        </span>
+      );
+    case "cisco":
+      return <CiscoLogo size={18} />;
+    case "linkedin":
+      return <LinkedInLogo size={17} />;
+    case "udemy":
+      return <UdemyLogo size={17} />;
+    case "infosys":
+      return <InfosysLogo size={17} />;
+    case "hackerrank":
+      return <HackerRankLogo size={17} />;
+  }
+}
 
 export default function Certifications() {
   const sectionRef = useRef<HTMLElement>(null);
-  const certRowsRef = useRef<HTMLDivElement>(null);
-  const extrasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const certRows = certRowsRef.current?.querySelectorAll(".cert-row");
-      if (certRows) {
-        gsap.fromTo(certRows,
-          { x: -16, opacity: 0 },
-          {
-            x: 0, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.06,
-            scrollTrigger: { trigger: certRowsRef.current, start: "top 82%", toggleActions: "play none none reverse" },
+      gsap.fromTo(
+        ".cert-reveal",
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          stagger: 0.06,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 78%",
+            toggleActions: "play none none reverse",
           },
-        );
-      }
-      const extras = extrasRef.current?.querySelectorAll(".extra-item");
-      if (extras) {
-        gsap.fromTo(extras,
-          { y: 14, opacity: 0 },
-          {
-            y: 0, opacity: 1, duration: 0.45, ease: "power2.out", stagger: 0.05,
-            scrollTrigger: { trigger: extrasRef.current, start: "top 84%", toggleActions: "play none none reverse" },
-          },
-        );
-      }
+        },
+      );
     }, sectionRef);
+
     return () => ctx.revert();
   }, []);
 
-  const proCerts = certifications.filter(c => c.tier === "pro");
-  const courseCerts = certifications.filter(c => c.tier === "course");
+  const coreCerts = certifications.filter((c) => c.tier === "verified-core");
+  const specCerts = certifications.filter((c) => c.tier === "specialization");
 
   return (
     <section
       ref={sectionRef}
       id="certifications"
-      className="relative py-20 md:py-28 px-8 md:px-16 overflow-hidden"
+      className="relative py-20 md:py-28 px-5 sm:px-10 md:px-14 border-t border-white/[0.08]"
       data-testid="certifications-section"
     >
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 50% 45% at 20% 50%, rgba(139,92,246,0.04) 0%, transparent 65%)" }}
-      />
-
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="section-index mb-6 opacity-60">05 — Credentials</div>
-
-        <h2
-          className="text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.95] font-black text-white mb-14"
-          style={{ fontFamily: "'Syne', sans-serif" }}
-        >
-          Certs &<br />
-          <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-            Activities.
-          </span>
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-12 md:gap-20">
-
-          {/* LEFT: Certifications as table rows */}
+      <div className="max-w-7xl mx-auto space-y-12">
+        <div className="cert-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.1] pb-8">
           <div>
-            <div ref={certRowsRef}>
-              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-violet-400/45 mb-4">Professional</div>
-              <div className="divide-y divide-white/[0.055] mb-10">
-                {proCerts.map((cert, i) => (
-                  <div key={i} className="cert-row flex items-center justify-between gap-4 py-4 group hover:bg-white/[0.018] -mx-2 px-2 rounded-lg transition-colors duration-200">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="shrink-0 opacity-75 group-hover:opacity-100 transition-opacity">
-                        <cert.Logo />
-                      </span>
-                      <div className="min-w-0">
-                        <div className="text-white/80 text-sm font-medium group-hover:text-white transition-colors truncate">
+            <div className="section-index mb-3">05 — Verified Credentials &amp; Community</div>
+            <h2 className="text-[clamp(2.2rem,5.2vw,4.4rem)] leading-[0.95] font-display font-bold text-[#f2ede4]">
+              Audited{" "}
+              <span className="font-serif-editorial italic font-normal text-[#e8a85a]">
+                foundations.
+              </span>
+            </h2>
+          </div>
+          <p className="text-xs sm:text-sm text-white/50 max-w-md font-mono">
+            Every certificate below carries its verified ID and official verification URL.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-10">
+          {/* Left: Core + Specialization Certificates */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#e8a85a]">
+                Cloud, Networking &amp; AI Core
+              </div>
+              <div className="space-y-3">
+                {coreCerts.map((cert) => (
+                  <div
+                    key={cert.title}
+                    className="cert-reveal studio-plate rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-white/[0.22] transition-colors"
+                  >
+                    <div className="flex items-start gap-3.5 min-w-0">
+                      <span className="mt-0.5 shrink-0">{renderBrandMark(cert.brand)}</span>
+                      <div className="min-w-0 space-y-1">
+                        <h3 className="text-sm sm:text-base font-semibold text-[#f2ede4]">
                           {cert.title}
-                        </div>
-                        <div className="font-mono text-xs mt-0.5" style={{ color: cert.accent + "aa" }}>
-                          {cert.issuer}
-                        </div>
+                        </h3>
+                        <p className="font-mono text-[11px]" style={{ color: cert.accent }}>
+                          {cert.issuer} · {cert.date}
+                        </p>
+                        <p className="text-xs text-white/55">{cert.detail}</p>
+                        {cert.credentialId && (
+                          <p className="font-mono text-[10px] text-white/35 break-all">
+                            ID: {cert.credentialId}
+                          </p>
+                        )}
                       </div>
                     </div>
-                    <span className="font-mono text-[10px] text-white/20 shrink-0">{cert.date}</span>
+
+                    {cert.verifyUrl && (
+                      <a
+                        href={cert.verifyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 self-start sm:self-center px-3.5 py-1.5 rounded-full border border-white/[0.16] font-mono text-[10px] uppercase tracking-widest text-[#e8a85a] hover:bg-[#e8a85a] hover:text-[#08080a] transition-colors"
+                        data-hover="true"
+                      >
+                        Verify ↗
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>
+            </div>
 
-              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/25 mb-4">Courses</div>
-              <div className="divide-y divide-white/[0.045]">
-                {courseCerts.map((cert, i) => (
-                  <div key={i} className="cert-row flex items-center justify-between gap-4 py-3.5 group hover:bg-white/[0.018] -mx-2 px-2 rounded-lg transition-colors duration-200">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="shrink-0 opacity-60 group-hover:opacity-90 transition-opacity">
-                        <cert.Logo />
-                      </span>
+            <div className="space-y-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-white/45">
+                Engineering Specializations
+              </div>
+              <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+                {specCerts.map((cert) => (
+                  <div
+                    key={cert.title}
+                    className="cert-reveal py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  >
+                    <div className="flex items-start gap-3 min-w-0">
+                      <span className="mt-0.5 shrink-0">{renderBrandMark(cert.brand)}</span>
                       <div className="min-w-0">
-                        <div className="text-white/60 text-sm group-hover:text-white/85 transition-colors truncate">
-                          {cert.title}
+                        <div className="text-sm font-medium text-[#f2ede4]">{cert.title}</div>
+                        <div className="font-mono text-[11px] text-white/45 mt-0.5">
+                          {cert.issuer} · {cert.date}
+                          {cert.credentialId ? ` · ${cert.credentialId}` : ""}
                         </div>
-                        <div className="font-mono text-[10px] mt-0.5" style={{ color: cert.accent + "66" }}>{cert.issuer}</div>
+                        <div className="text-xs text-white/50 mt-0.5">{cert.detail}</div>
                       </div>
                     </div>
-                    <span className="font-mono text-[10px] text-white/18 shrink-0">{cert.date}</span>
+                    {cert.verifyUrl ? (
+                      <a
+                        href={cert.verifyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="shrink-0 self-start sm:self-center font-mono text-[10px] uppercase tracking-widest text-[#9d8cff] hover:text-white transition-colors"
+                      >
+                        Verify ↗
+                      </a>
+                    ) : (
+                      <span className="shrink-0 self-start sm:self-center font-mono text-[10px] uppercase tracking-widest text-white/30">
+                        Completed
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* RIGHT: Hackathons + Extra-curricular as compact list */}
-          <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/25 mb-6">Hackathons & Activities</div>
-            <div ref={extrasRef} className="space-y-0 divide-y divide-white/[0.05]">
-              {extras.map((item, i) => (
-                <div
-                  key={i}
-                  className="extra-item flex items-center gap-4 py-4 group -mx-2 px-2 rounded-lg hover:bg-white/[0.018] transition-colors duration-200"
-                >
-                  <div
-                    className="w-1.5 h-1.5 rounded-full shrink-0 mt-0.5"
-                    style={{ background: item.accent, boxShadow: `0 0 6px ${item.accent}66` }}
-                  />
-                  <div>
-                    <div className="text-white/75 text-sm font-medium group-hover:text-white transition-colors">
-                      {item.label}
+          {/* Right: Community, GDG & Hackathons */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="cert-reveal studio-plate rounded-2xl p-6 space-y-5">
+              <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#e8a85a]">
+                Hackathons &amp; Leadership
+              </div>
+              <div className="divide-y divide-white/[0.08]">
+                {communityAndHackathons.map((item) => (
+                  <div key={item.label} className="py-4 first:pt-1 last:pb-1 flex items-start gap-3">
+                    <span
+                      className="mt-1.5 h-2 w-2 rounded-full shrink-0"
+                      style={{ background: item.accent }}
+                    />
+                    <div>
+                      <div className="text-sm font-medium text-[#f2ede4]">{item.label}</div>
+                      <p className="text-xs text-white/55 mt-1 leading-relaxed">{item.sub}</p>
                     </div>
-                    <div className="font-mono text-xs text-white/28 mt-0.5">{item.sub}</div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            {/* Domains */}
-            <div className="mt-10 pt-8 border-t border-white/[0.055]">
-              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/25 mb-5">Learning Tracks</div>
+            <div className="cert-reveal studio-plate rounded-2xl p-6 space-y-3">
+              <div className="font-mono text-[10px] uppercase tracking-[0.24em] text-[#9d8cff]">
+                Focus Tracks · 2026
+              </div>
               <div className="flex flex-wrap gap-2">
-                {["AI & ML", "Cloud & Infra", "Data Engineering", "Systems & Networking", "Full Stack Dev"].map((track) => (
+                {[
+                  "Consensus & Storage Engines",
+                  "Voice & Dialogue AI Agents",
+                  "Read-Only NL2SQL Safety",
+                  "Cloud & CI/CD Automation",
+                  "Editorial Web Systems",
+                ].map((track) => (
                   <span
                     key={track}
-                    className="font-mono text-[10px] px-3 py-1.5 rounded-full border border-violet-400/15 text-violet-400/55"
+                    className="font-mono text-[10px] px-3 py-1.5 rounded-full border border-white/[0.12] text-white/70 bg-white/[0.02]"
                   >
                     {track}
                   </span>
@@ -228,7 +222,6 @@ export default function Certifications() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>

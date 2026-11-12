@@ -1,84 +1,36 @@
 import { useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import RollingTitle from "./RollingTitle";
+import AnimatedCinemaPlate from "./AnimatedCinemaPlate";
+import { experiences } from "@/data/portfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const experiences = [
-  {
-    role: "DevOps Engineer & UI/UX Designer",
-    company: "Caterworld Technologies",
-    period: "Apr 2026 – Jun 2026",
-    location: "Hybrid, Chennai",
-    type: "Internship",
-    color: "#e879f9",
-    points: [
-      "Streamlined deployment workflows and enhanced responsive UI/UX for core web application modules.",
-      "Improved system reliability and modernized the frontend interface for enterprise clients.",
-      "Reduced deployment times by optimizing CI/CD pipelines, accelerating product iterations.",
-      "Designed intuitive user journeys to bridge the gap between complex backend systems and end-users."
-    ],
-    tags: ["DevOps", "UI/UX Design", "CI/CD", "Web Development", "System Reliability"],
-  },
-  {
-    role: "Software Engineering Intern",
-    company: "AIMaster.live",
-    period: "Jul 2024 – Jan 2025",
-    location: "Remote",
-    type: "Internship",
-    color: "#a78bfa",
-    points: [
-      "Built full-stack features and REST APIs with React, Flask, and Node.js, and shipped cloud delivery pipelines for production workflows.",
-      "Analyzed datasets to surface trends and built dashboards that tracked key metrics for the product team.",
-      "Used SQL and Python to clean and process data, and optimized backend pipelines for better throughput.",
-      "Worked directly with the product team to turn data into decisions, end to end.",
-    ],
-    tags: ["React", "Python", "Node.js", "REST APIs", "SQL", "Data Visualization"],
-  },
-];
-
 export default function Experience() {
   const sectionRef = useRef<HTMLElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        lineRef.current,
-        { scaleY: 0, transformOrigin: "top" },
-        {
-          scaleY: 1,
-          duration: 1.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 72%",
-            end: "bottom 20%",
-            toggleActions: "play reverse play reverse",
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".exp-card",
-        { y: 34, opacity: 0, scale: 0.98 },
+        ".exp-reveal",
+        { y: 28, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          scale: 1,
-          duration: 0.68,
+          duration: 0.7,
+          stagger: 0.12,
           ease: "power3.out",
-          stagger: 0.14,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: "top 68%",
-            end: "bottom 18%",
-            toggleActions: "play reverse play reverse",
+            start: "top 76%",
+            toggleActions: "play none none reverse",
           },
         },
       );
     }, sectionRef);
+
     return () => ctx.revert();
   }, []);
 
@@ -86,68 +38,152 @@ export default function Experience() {
     <section
       ref={sectionRef}
       id="experience"
-      className="relative py-20 md:py-32 px-4 sm:px-8 md:px-16 overflow-hidden"
+      className="relative py-20 md:py-32 px-5 sm:px-10 md:px-14"
       data-testid="experience-section"
     >
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 50% 60% at 0% 50%, rgba(139,92,246,0.04) 0%, transparent 70%)" }} />
-
-      <div className="max-w-7xl mx-auto">
-        <div className="section-index mb-6">02 — Experience</div>
-
-        <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6 mb-10 md:mb-16">
-          <RollingTitle
-            lines={[
-              { text: "Where I've" },
-              { text: "grown.", gradient: true },
-            ]}
-            className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white"
-            testId="experience-heading"
-          />
-          <div className="md:ml-auto font-mono text-[11px] sm:text-xs text-white/25 tracking-widest">
-            AIMaster.live & Caterworld · Real-world Impact
+      <div className="max-w-7xl mx-auto space-y-12 md:space-y-16">
+        <div className="exp-reveal flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.1] pb-8">
+          <div>
+            <div className="section-index mb-3">02 — Production Experience</div>
+            <h2 className="text-[clamp(2.2rem,5.2vw,4.4rem)] leading-[0.95] font-display font-bold text-[#f2ede4]">
+              Shipped under{" "}
+              <span className="font-serif-editorial italic font-normal text-[#e8a85a]">
+                real traffic.
+              </span>
+            </h2>
+          </div>
+          <div className="font-mono text-xs text-white/45 tracking-wider">
+            Darwix AI · Caterworld.ai · AIMaster.live
           </div>
         </div>
 
-        <div className="relative pl-5 sm:pl-10 md:pl-16">
-          <div
-            ref={lineRef}
-            className="absolute left-0 top-3 bottom-3 w-px"
-            style={{ background: "linear-gradient(to bottom, rgba(167,139,250,0.7), rgba(167,139,250,0.1))" }}
-          />
-
-          <div className="space-y-8">
-            {experiences.map((exp, i) => (
-              <div key={i} className="exp-card relative group" data-testid={`exp-card-${i}`}>
-                <div
-                  className="absolute -left-5 sm:-left-10 md:-left-16 top-6 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 bg-background transition-all duration-300 group-hover:scale-125"
-                  style={{ borderColor: exp.color, boxShadow: `0 0 12px ${exp.color}60` }}
-                />
-                <div className="absolute -left-3 sm:-left-7 md:-left-13 top-[27px] w-3 sm:w-6 md:w-10 h-px"
-                  style={{ background: `linear-gradient(to right, ${exp.color}40, transparent)` }} />
-
-                <div
-                  className="py-2 group-hover:translate-x-1 transition-transform duration-300"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
-                    <h3
-                      className="text-lg sm:text-xl font-semibold text-white group-hover:text-violet-200 transition-colors duration-300"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      {exp.role}
-                    </h3>
-                    <span className="font-mono text-[11px] text-white/22 shrink-0">{exp.period}</span>
+        {/* Visual Convo Feature: Darwix AI Voice & Video Systems */}
+        <div className="exp-reveal grid lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-6">
+            <AnimatedCinemaPlate
+              src="/illustrations/experience-darwix.jpg"
+              alt="Saathvik reviewing LLM voice screening waveforms and deterministic state flows with a hiring operations lead"
+              badgeLeft="Act II · Darwix AI · Aug 2026 – Present"
+              badgeRight="226 Tests Verified"
+              kenBurnsDirection="right"
+            >
+              <div className="studio-plate rounded-xl p-3.5 max-w-md border-white/[0.14] space-y-2.5">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#e8a85a]">
+                    Voice Pipeline Telemetry
+                  </span>
+                  <div className="flex items-end gap-1 h-3.5" aria-hidden="true">
+                    {[0.45, 0.9, 0.65, 1, 0.55].map((heightRatio, idx) => (
+                      <motion.span
+                        key={idx}
+                        className="w-0.5 rounded-full bg-[#e8a85a]"
+                        animate={
+                          reduceMotion
+                            ? { height: `${Math.round(heightRatio * 12)}px` }
+                            : { height: ["4px", `${Math.round(heightRatio * 14)}px`, "5px"] }
+                        }
+                        transition={{
+                          duration: 0.9 + idx * 0.14,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: idx * 0.12,
+                        }}
+                      />
+                    ))}
                   </div>
-                  <div className="flex flex-wrap items-center gap-3 mt-1">
-                    <span style={{ color: exp.color }} className="font-mono text-sm">{exp.company}</span>
-                    <span className="font-mono text-[10px] text-white/20 uppercase tracking-wider">{exp.location}</span>
+                </div>
+                <p className="text-xs text-[#f2ede4]/88 leading-relaxed">
+                  Voice screening agents + deterministic dialogue state machines across 1,500+ candidates and 80+ hiring campaigns.
+                </p>
+              </div>
+            </AnimatedCinemaPlate>
+          </div>
+
+          <div className="lg:col-span-6 space-y-5">
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#e8a85a]">
+              Why Deterministic Guardrails Matter in Voice AI
+            </div>
+            <p className="text-white/75 text-base sm:text-lg leading-relaxed">
+              &ldquo;Letting an LLM talk freely on an insurance pre-issuance call is how compliance breaks. Pairing FastAPI, Deepgram STT, and ElevenLabs TTS with an explicit dialogue state machine meant every transition could be verified across 226 automated tests.&rdquo;
+            </p>
+            <div className="grid grid-cols-3 gap-3 pt-2">
+              <div className="studio-plate rounded-xl p-3.5">
+                <div className="font-display text-xl sm:text-2xl font-bold text-[#f2ede4]">1,500+</div>
+                <div className="font-mono text-[10px] text-white/45 mt-0.5">Candidates Screened</div>
+              </div>
+              <div className="studio-plate rounded-xl p-3.5">
+                <div className="font-display text-xl sm:text-2xl font-bold text-[#e8a85a]">9 Stages</div>
+                <div className="font-mono text-[10px] text-white/45 mt-0.5">Hiring Funnel</div>
+              </div>
+              <div className="studio-plate rounded-xl p-3.5">
+                <div className="font-display text-xl sm:text-2xl font-bold text-[#9d8cff]">226</div>
+                <div className="font-mono text-[10px] text-white/45 mt-0.5">Automated Tests</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Chronological Timeline */}
+        <div className="space-y-6">
+          {experiences.map((exp, i) => (
+            <article
+              key={exp.id}
+              className="exp-reveal studio-plate rounded-2xl p-6 sm:p-8 transition-colors duration-300 hover:border-white/[0.2]"
+              data-testid={`exp-card-${i}`}
+            >
+              <div className="grid lg:grid-cols-12 gap-6 items-start">
+                <div className="lg:col-span-4 space-y-2">
+                  <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: exp.accent }}>
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: exp.accent }} />
+                    {exp.type}
                   </div>
-                  <div className="flex flex-wrap gap-2 mt-4">
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#f2ede4]">
+                    {exp.role}
+                  </h3>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                    {exp.companyUrl ? (
+                      <a
+                        href={exp.companyUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-medium underline underline-offset-4 decoration-white/20 hover:decoration-current transition-colors"
+                        style={{ color: exp.accent }}
+                      >
+                        {exp.company} ↗
+                      </a>
+                    ) : (
+                      <span className="font-medium" style={{ color: exp.accent }}>
+                        {exp.company}
+                      </span>
+                    )}
+                    <span className="font-mono text-xs text-white/40">{exp.location}</span>
+                  </div>
+                  <div className="font-mono text-xs text-white/45 pt-1">{exp.period}</div>
+                </div>
+
+                <div className="lg:col-span-8 space-y-4">
+                  <p className="font-serif-editorial italic text-lg sm:text-xl text-[#f2ede4]/85 leading-snug">
+                    {exp.promptHook}
+                  </p>
+                  <p className="text-sm text-white/60 leading-relaxed">{exp.summary}</p>
+                  <ul className="space-y-2">
+                    {exp.highlights.map((bullet, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-white/75 leading-relaxed">
+                        <span className="mt-1.5 h-1 w-1 rounded-full shrink-0" style={{ background: exp.accent }} />
+                        <span>{bullet}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex flex-wrap gap-2 pt-2">
                     {exp.tags.map((tag) => (
                       <span
                         key={tag}
                         className="font-mono text-[10px] px-2.5 py-1 rounded-full border"
-                        style={{ borderColor: `${exp.color}20`, color: `${exp.color}88` }}
+                        style={{
+                          borderColor: `${exp.accent}35`,
+                          color: exp.accent,
+                          background: `${exp.accent}0f`,
+                        }}
                         data-testid={`exp-tag-${tag}`}
                       >
                         {tag}
@@ -156,8 +192,8 @@ export default function Experience() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

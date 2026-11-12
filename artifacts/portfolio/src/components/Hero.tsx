@@ -1,225 +1,221 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  motion,
-  useScroll,
-  useVelocity,
-  useTransform,
-  useSpring,
-  useAnimationFrame,
-  useMotionValue,
-} from "framer-motion";
+import AnimatedCinemaPlate from "./AnimatedCinemaPlate";
 import { magneticMove, magneticLeave } from "@/lib/utils";
+import { heroConvo, profile } from "@/data/portfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function wrap(min: number, max: number, v: number) {
-  const range = max - min;
-  return ((((v - min) % range) + range) % range) + min;
+interface HeroProps {
+  onNavigate?: (href: string) => void;
 }
 
-/* ── Velocity-aware scrolling marquee ── */
-function VelocityMarquee({ text }: { text: string }) {
-  const baseX      = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const vel        = useVelocity(scrollY);
-  const smooth     = useSpring(vel, { damping: 50, stiffness: 400 });
-  const factor     = useTransform(smooth, [0, 1000], [0, 4], { clamp: false });
-  const x          = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`);
-  const dir        = useRef(1);
-
-  useAnimationFrame((_, delta) => {
-    let move = dir.current * -2.5 * (delta / 1000);
-    if (factor.get() < 0) dir.current = -1;
-    else if (factor.get() > 0) dir.current = 1;
-    move += dir.current * move * factor.get();
-    baseX.set(baseX.get() + move);
-  });
-
-  return (
-    <div className="overflow-hidden" aria-hidden="true">
-      <motion.div
-        className="flex whitespace-nowrap font-mono text-[9px] sm:text-[10px] tracking-[0.32em] text-white/[0.12] uppercase py-3"
-        style={{ x }}
-      >
-        {[0, 1, 2, 3].map((n) => (
-          <span key={n} className="pr-6">{text}</span>
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
-/* ── Name line — individual letters clipped for slide-up reveal ── */
-function SplitLine({ text, gradient = false }: { text: string; gradient?: boolean }) {
-  return (
-    <div className="whitespace-nowrap leading-[0.9]" aria-hidden="true">
-      {text.split("").map((ch, i) => (
-        <span key={i} className="inline-block overflow-hidden" style={{ verticalAlign: "top" }}>
-          <span className={`name-letter inline-block${gradient ? " hero-letter-gradient" : ""}`}>
-            {ch}
-          </span>
-        </span>
-      ))}
-    </div>
-  );
-}
-
-export default function Hero() {
+export default function Hero({ onNavigate }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.1 });
+      const tl = gsap.timeline({ delay: 0 });
 
-      tl.from(".hero-top-rule", {
-        scaleX: 0, transformOrigin: "left", duration: 0.75, ease: "power3.out",
+      tl.from(".hero-rule", {
+        scaleX: 0,
+        transformOrigin: "left",
+        duration: 0.42,
+        ease: "power3.out",
       });
 
-      tl.from(".name-letter", {
-        y: "115%", duration: 0.82, stagger: 0.034, ease: "power4.out",
-      }, "-=0.3");
-
-      tl.from(".hero-meta-left", {
-        y: 14, opacity: 0, duration: 0.5, ease: "power3.out",
-      }, "-=0.35");
-
-      tl.from(".hero-meta-right > *", {
-        y: 20, opacity: 0, duration: 0.5, stagger: 0.09, ease: "power3.out",
-      }, "-=0.45");
-
-      tl.from(".hero-bottom-rule", {
-        scaleX: 0, transformOrigin: "left", duration: 0.75, ease: "power3.out",
-      }, "-=0.3");
-
-      gsap.to(heroRef.current, {
-        yPercent: -12, ease: "none",
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: "top top", end: "bottom top", scrub: true,
+      tl.from(
+        ".hero-title-word",
+        {
+          y: "108%",
+          duration: 0.5,
+          stagger: 0.06,
+          ease: "power4.out",
         },
-      });
+        0.03,
+      );
+
+      tl.fromTo(
+        ".hero-stagger",
+        { y: 14, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          stagger: 0.045,
+          ease: "power3.out",
+          clearProps: "transform",
+        },
+        0.08,
+      );
+
+      if (frameRef.current) {
+        gsap.fromTo(
+          frameRef.current,
+          { y: 18, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.55, ease: "power3.out", delay: 0.06 },
+        );
+
+        gsap.to(frameRef.current, {
+          yPercent: -6,
+          ease: "none",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
     }, heroRef);
 
     return () => ctx.revert();
   }, []);
 
-  const marquee =
-    "SAATHVIK KALEPU · SOFTWARE ENGINEER · BACKEND & DATA · AI/ML · HYDERABAD, INDIA · B.TECH CSE · IIITDM · 2027 ·";
-
   return (
     <section
       ref={heroRef}
       id="hero"
-      className="relative min-h-svh flex flex-col overflow-hidden bg-[#050412]"
+      className="relative min-h-svh flex flex-col justify-between pt-24 md:pt-28 pb-6 overflow-hidden"
       data-testid="hero-section"
     >
-      {/* CSS gradient atmosphere */}
-      <div className="hero-blob hero-blob-1" aria-hidden="true" />
-      <div className="hero-blob hero-blob-2" aria-hidden="true" />
-      <div className="hero-blob hero-blob-3" aria-hidden="true" />
-
-      <div className="relative z-10 flex flex-col flex-1">
-
-        {/* ── Top rule ── */}
-        <div className="px-6 sm:px-10 md:px-16 pt-[5.5rem] md:pt-24">
-          <div className="hero-top-rule h-px bg-white/[0.09] relative">
-            <span className="absolute left-0 -top-[18px] font-mono text-[9px] tracking-[0.28em] text-white/[0.18] uppercase">
-              Portfolio · 2025
-            </span>
-            <span className="absolute right-0 -top-[18px] font-mono text-[9px] tracking-[0.28em] text-white/[0.18] uppercase hidden sm:block">
-              ● Open to work · Hyderabad, India
-            </span>
-          </div>
+      {/* Top editorial rule */}
+      <div className="px-5 sm:px-10 md:px-14">
+        <div className="hero-rule flex items-center justify-between border-b border-white/[0.1] pb-3.5 font-mono text-[10px] tracking-[0.22em] text-white/45 uppercase">
+          <span>00 — Opening Scene · Systems &amp; Applied AI</span>
+          <span className="hidden sm:inline-flex items-center gap-2 text-emerald-300/80">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.85)]" />
+            {profile.availability}
+          </span>
         </div>
+      </div>
 
-        {/* ── FULL-WIDTH name — pushes to bottom of flex space ── */}
-        <div className="flex-1 flex flex-col justify-end px-6 sm:px-10 md:px-16 pt-10 md:pt-14 pb-5 md:pb-7">
-          <h1
-            className="hero-name-v3 font-serif tracking-[-0.025em]"
-            aria-label="Saathvik Kalepu"
-          >
-            <SplitLine text="SAATHVIK" />
-            <SplitLine text="KALEPU." gradient />
-          </h1>
-        </div>
-
-        {/* ── Meta row: left label + right role/desc/ctas ── */}
-        <div className="grid md:grid-cols-2 gap-x-8 gap-y-6 px-6 sm:px-10 md:px-16 pb-8 md:pb-10">
-
-          {/* Left: sub-label */}
-          <div className="hero-meta-left flex items-center gap-3 self-end">
-            <div className="w-7 h-px bg-white/[0.18]" />
-            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.24em] text-white/[0.28] uppercase">
-              B.Tech CSE · IIITDM Kurnool · Expected 2027
-            </span>
+      {/* Asymmetric two-column opening */}
+      <div className="max-w-7xl mx-auto w-full px-5 sm:px-10 md:px-14 my-auto py-8 md:py-10 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        {/* Left editorial typography + convo beat */}
+        <div className="lg:col-span-6 space-y-6">
+          <div className="hero-stagger font-mono text-[11px] tracking-[0.22em] uppercase text-[#e8a85a]">
+            {profile.university} · {profile.location}
           </div>
 
-          {/* Right: identity + description + CTAs */}
-          <div className="hero-meta-right flex flex-col gap-5 md:pl-8 lg:pl-16">
-
-            <div>
-              <p className="font-mono text-[9px] tracking-[0.32em] text-violet-400/55 uppercase mb-2">
-                Role
-              </p>
-              <p className="text-white/75 text-lg font-light leading-snug">
-                Software Engineer
-              </p>
-              <p className="font-mono text-[11px] text-white/30 mt-0.5 tracking-wide">
-                Backend · Data Pipelines · AI/ML
-              </p>
-            </div>
-
-            <p className="text-white/38 text-[13px] leading-[1.8] max-w-[22rem]">
-              Building intelligent systems from the ground up — APIs,
-              data pipelines, and AI applications that run reliably
-              in production.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-5 sm:gap-7">
-              <a
-                href="#projects"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="group inline-flex items-center gap-3.5 font-mono text-[11px] tracking-[0.22em] uppercase text-white hover:text-violet-400 transition-colors duration-300"
-                onMouseMove={(e) => magneticMove(e, 0.3)}
-                onMouseLeave={magneticLeave}
-                data-hover="true"
-                data-testid="hero-cta-work"
-              >
-                <span className="w-6 h-px bg-white/45 group-hover:w-12 group-hover:bg-violet-400 transition-all duration-500" />
-                View Work
-              </a>
-
-              <span className="hidden sm:flex items-center gap-2 font-mono text-[10px] text-emerald-400/60 tracking-widest">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                Open to work
+          <h1 className="leading-[0.92] tracking-[-0.025em]" aria-label={profile.name}>
+            <span className="clip-line-wrap">
+              <span className="hero-title-word inline-block font-display font-extrabold text-[clamp(1.95rem,7.1vw,3.65rem)] lg:text-[clamp(2.35rem,3.95vw,3.85rem)] text-[#f2ede4] whitespace-nowrap">
+                SAATHVIK
               </span>
+            </span>
+            <span className="clip-line-wrap mt-1">
+              <span className="hero-title-word inline-block font-serif-editorial italic font-normal text-[clamp(2.6rem,9vw,4.6rem)] lg:text-[clamp(3.15rem,5.2vw,5.15rem)] text-[#e8a85a]">
+                Kalepu<span className="text-[#9d8cff] not-italic">.</span>
+              </span>
+            </span>
+          </h1>
 
-              <a
-                href="mailto:saathvikk202@gmail.com"
-                className="font-mono text-[11px] tracking-[0.22em] uppercase text-white/[0.2] hover:text-white/55 transition-colors duration-300"
-                data-hover="true"
-                data-testid="hero-cta-contact"
-              >
-                Get in Touch
-              </a>
+          <p className="hero-stagger text-base sm:text-lg text-[#f2ede4]/78 leading-relaxed max-w-xl">
+            <span className="text-[#f2ede4] font-medium">{profile.headlineRole}</span> working on{" "}
+            <span className="text-[#e8a85a]/90">distributed storage in Go &amp; C++</span>, production{" "}
+            <span className="text-[#9d8cff]">voice &amp; retrieval AI pipelines</span>, and clear product interfaces.
+          </p>
+
+          {/* Opening conversation exchange */}
+          <div className="hero-stagger studio-plate rounded-2xl p-4 sm:p-5 space-y-3 max-w-xl">
+            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.2em] text-white/40">
+              <span>Prologue · Table Walkthrough</span>
+              <span className="text-[#e8a85a]/80">Scroll-Driven 3D Camera</span>
             </div>
+            <div className="space-y-2.5 text-xs sm:text-[13px] leading-relaxed">
+              {heroConvo.map((beat, idx) => (
+                <div key={idx} className="flex items-start gap-3">
+                  <span
+                    className={`shrink-0 font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border mt-0.5 ${
+                      beat.speaker === "Saathvik"
+                        ? "border-[#e8a85a]/45 text-[#e8a85a] bg-[#e8a85a]/10"
+                        : "border-white/15 text-white/55 bg-white/[0.03]"
+                    }`}
+                  >
+                    {beat.speaker}
+                  </span>
+                  <p className={beat.speaker === "Saathvik" ? "text-[#f2ede4]/88" : "text-white/55 italic"}>
+                    &ldquo;{beat.line}&rdquo;
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
 
+          {/* Primary actions */}
+          <div className="hero-stagger flex flex-wrap items-center gap-4 pt-1">
+            <a
+              href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate("#projects");
+                else document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              onMouseMove={(e) => magneticMove(e, 0.22)}
+              onMouseLeave={magneticLeave}
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#e8a85a] text-[#08080a] font-mono text-[11px] font-medium tracking-[0.18em] uppercase hover:bg-[#f2ede4] transition-colors"
+              data-hover="true"
+              data-testid="hero-cta-work"
+            >
+              Start Walkthrough <span>↓</span>
+            </a>
+
+            <a
+              href={profile.resumePath}
+              download
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-white/[0.16] font-mono text-[11px] tracking-[0.16em] uppercase text-[#f2ede4]/80 hover:border-[#e8a85a]/60 hover:text-[#e8a85a] transition-colors"
+              data-hover="true"
+            >
+              Resume PDF ↓
+            </a>
+
+            <a
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate("#contact");
+                else document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="font-mono text-[11px] tracking-[0.18em] uppercase text-white/50 hover:text-white underline underline-offset-8 decoration-white/20 hover:decoration-[#e8a85a] px-2 py-2 transition-colors"
+              data-hover="true"
+              data-testid="hero-cta-contact"
+            >
+              Get in Touch ↗
+            </a>
           </div>
         </div>
 
-        {/* ── Bottom rule ── */}
-        <div className="px-6 sm:px-10 md:px-16">
-          <div className="hero-bottom-rule h-px bg-white/[0.07]" />
+        {/* Right Cinema Frame: Animated Editorial Conversational Scene */}
+        <div ref={frameRef} className="lg:col-span-6">
+          <AnimatedCinemaPlate
+            src="/illustrations/hero-convo.jpg"
+            alt="Saathvik discussing system design architecture with a founder over sketches in an evening studio"
+            badgeLeft="Scene 01 · Studio Convo"
+            badgeRight="Hyderabad · 35mm Matte"
+            kenBurnsDirection="zoom"
+            priority
+          >
+            <div className="flex items-end justify-between gap-4 pt-12">
+              <p className="text-xs sm:text-sm text-[#f2ede4]/90 max-w-sm leading-snug drop-shadow">
+                &ldquo;Before touching any framework, sketch what breaks when the network splits.&rdquo;
+              </p>
+              <span className="font-mono text-[10px] tracking-widest uppercase text-white/60 shrink-0">
+                Darwix · Go · Python
+              </span>
+            </div>
+          </AnimatedCinemaPlate>
         </div>
+      </div>
 
-        {/* ── Velocity marquee ── */}
-        <VelocityMarquee text={marquee} />
-
+      {/* Bottom studio ticker */}
+      <div className="border-y border-white/[0.08] py-2.5 overflow-hidden bg-[#08080a]/55 backdrop-blur-sm">
+        <div className="marquee-track font-mono text-[10px] tracking-[0.28em] text-white/35 uppercase">
+          <span>{profile.marqueeText}&nbsp;&nbsp;</span>
+          <span>{profile.marqueeText}&nbsp;&nbsp;</span>
+        </div>
       </div>
     </section>
   );

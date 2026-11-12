@@ -1,347 +1,384 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ProjectVisualStage from "./ProjectVisualStage";
+import { archiveProjects, flagshipProjects, visualBuilds } from "@/data/portfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const projects = [
-  {
-    index: "01",
-    title: "QueryMind",
-    category: "AI · Data Systems",
-    tagline: "Natural-language interface over 1M+ real retail transactions — NL to SQL, self-correcting, 12/12 query types validated.",
-    tags: ["Python", "LangChain", "DuckDB", "FastAPI", "React"],
-    href: "https://github.com/saathvik-codes",
-    accent: "#8b5cf6",
-  },
-  {
-    index: "02",
-    title: "Switchboard",
-    category: "ML Engineering",
-    tagline: "Intent classifier trained on 13K+ real queries, 93% accuracy. LangChain agent raises tool-selection pass rate 67 → 83%.",
-    tags: ["HuggingFace", "LangChain", "Ollama", "scikit-learn", "FastAPI"],
-    href: "https://github.com/saathvik-codes",
-    accent: "#c084fc",
-  },
-  {
-    index: "03",
-    title: "AutoVista AI",
-    category: "ML · Prediction",
-    tagline: "Gradient Boosting model cuts pricing error 46% vs naive baseline. Zero-downtime retraining pipeline — hot-swaps on new data.",
-    tags: ["Python", "scikit-learn", "FastAPI", "MongoDB"],
-    href: "https://github.com/saathvik-codes",
-    accent: "#818cf8",
-  },
-  {
-    index: "04",
-    title: "Pulse",
-    category: "Analytics · BI",
-    tagline: "GBP 17.7M revenue across 36,969 orders — RFM segmentation, cohort retention, churn-risk scoring. Live on Vercel.",
-    tags: ["Python", "pandas", "DuckDB", "Next.js", "Recharts"],
-    href: "https://github.com/saathvik-codes",
-    accent: "#e879f9",
-  },
-  {
-    index: "05",
-    title: "Road Hazard CV",
-    category: "Computer Vision · Systems",
-    tagline: "Fine-tuned YOLOv8 instance-segmentation served as REST API. Live React dashboard with detections under 30 seconds.",
-    tags: ["YOLOv8", "Node.js", "React", "SQLite", "Python"],
-    href: "https://github.com/saathvik-codes",
-    accent: "#a78bfa",
-  },
-  {
-    index: "06",
-    title: "RAG Assistant",
-    category: "LLM · Backend",
-    tagline: "Hybrid semantic + keyword retrieval with hallucination-rejection. 16 unit tests + 11-case eval harness, 100% pass.",
-    tags: ["Python", "LangChain", "FAISS", "FastAPI", "Docker"],
-    href: "https://github.com/saathvik-codes",
-    accent: "#7c3aed",
-  },
-];
-
-const visualProjects = [
-  {
-    title: "Aryav",
-    subtitle: "Cinematic luxury real estate",
-    live: "https://aryav-cinematic-real-estate-api-ser.vercel.app",
-    repo: "https://github.com/saathvikvisuals/aryav-cinematic-real-estate",
-    accent: "#c084fc",
-  },
-  {
-    title: "AARNA Salon",
-    subtitle: "Luxury beauty editorial",
-    live: "https://aarna-salon.vercel.app",
-    repo: "https://github.com/saathvikvisuals/aarna-salon",
-    accent: "#f0abfc",
-  },
-  {
-    title: "Jaabili Tourism",
-    subtitle: "Premium travel experience",
-    live: "https://jaabili-tourism.vercel.app",
-    repo: "https://github.com/saathvikvisuals/jaabili-tourism",
-    accent: "#818cf8",
-  },
-];
-
 export default function Projects() {
-  const outerRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [archiveFilter, setArchiveFilter] = useState<
+    "All" | "Systems & Backend" | "AI / ML & Data" | "Full-Stack & Mobile"
+  >("All");
+
+  const activeProject = flagshipProjects[activeIndex] ?? flagshipProjects[0];
 
   useEffect(() => {
-    const outer = outerRef.current;
-    const track = trackRef.current;
-    if (!outer || !track) return;
-
-    const panels = track.querySelectorAll<HTMLElement>(".proj-panel");
-    const totalWidth = track.scrollWidth - window.innerWidth;
-
     const ctx = gsap.context(() => {
-      // Horizontal scroll pin
-      const hTween = gsap.to(track, {
-        x: () => -totalWidth,
-        ease: "none",
-        scrollTrigger: {
-          trigger: outer,
-          pin: true,
-          scrub: 0.9,
-          end: () => `+=${totalWidth}`,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      // Per-panel content reveal
-      panels.forEach((panel) => {
-        const num = panel.querySelector(".proj-num");
-        const cat = panel.querySelector(".proj-cat");
-        const title = panel.querySelector(".proj-title");
-        const line = panel.querySelector(".proj-line");
-        const tagline = panel.querySelector(".proj-tagline");
-        const tags = panel.querySelectorAll(".proj-tag");
-        const cta = panel.querySelector(".proj-cta");
-
-        gsap.set([num, cat, title, line, tagline, tags, cta], { opacity: 0, y: 24 });
-
+      const caseCards = gsap.utils.toArray<HTMLElement>(".walkthrough-case-card");
+      caseCards.forEach((card, idx) => {
         ScrollTrigger.create({
-          trigger: panel,
-          containerAnimation: hTween,
-          start: "left 80%",
-          end: "left 20%",
-          toggleActions: "play none none reverse",
-          onEnter: () => {
-            gsap.timeline()
-              .to(num, { opacity: 0.15, y: 0, duration: 0.4, ease: "power2.out" })
-              .to(cat, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.25")
-              .to(title, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "-=0.3")
-              .to(line, { opacity: 1, y: 0, scaleX: 1, duration: 0.5, transformOrigin: "left", ease: "power3.out" }, "-=0.4")
-              .to(tagline, { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, "-=0.35")
-              .to(tags, { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" }, "-=0.3")
-              .to(cta, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.2");
-          },
-          onLeaveBack: () => {
-            gsap.to([num, cat, title, line, tagline, tags, cta], { opacity: 0, y: 24, duration: 0.3 });
-          },
+          trigger: card,
+          start: "top 52%",
+          end: "bottom 48%",
+          onEnter: () => setActiveIndex(idx),
+          onEnterBack: () => setActiveIndex(idx),
         });
       });
 
-      // Progress label counter
-      ScrollTrigger.create({
-        trigger: outer,
-        scrub: true,
-        end: () => `+=${totalWidth}`,
-        onUpdate: (self) => {
-          const idx = Math.min(projects.length - 1, Math.floor(self.progress * projects.length));
-          if (labelRef.current) labelRef.current.textContent = `${idx + 1} / ${projects.length}`;
+      gsap.fromTo(
+        ".projects-header-reveal",
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
         },
-      });
-    }, outer);
+      );
+    }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
+  const scrollToProject = (idx: number) => {
+    setActiveIndex(idx);
+    const el = document.getElementById(`case-${flagshipProjects[idx].slug}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  const filteredArchive =
+    archiveFilter === "All"
+      ? archiveProjects
+      : archiveProjects.filter((p) => p.category === archiveFilter);
+
   return (
     <>
-      {/* ---- Horizontal scroll ---- */}
+      {/* Flagship Walkthrough Case Reel */}
       <section
-        ref={outerRef}
+        ref={sectionRef}
         id="projects"
-        className="relative overflow-hidden"
-        style={{ height: "100vh" }}
+        className="relative py-20 md:py-32 px-5 sm:px-10 md:px-14"
         data-testid="projects-section"
       >
-        {/* Progress counter */}
-        <div className="absolute top-8 right-8 z-20 font-mono text-xs text-white/25 tracking-widest pointer-events-none">
-          <div ref={labelRef}>1 / {projects.length}</div>
-        </div>
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="projects-header-reveal flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-white/[0.1] pb-8">
+            <div>
+              <div className="section-index mb-3">03 — Selected Engineering Walkthrough</div>
+              <h2 className="text-[clamp(2.2rem,5.2vw,4.4rem)] leading-[0.95] font-display font-bold text-[#f2ede4]">
+                Seven problems,{" "}
+                <span className="font-serif-editorial italic font-normal text-[#e8a85a]">
+                  verified live.
+                </span>
+              </h2>
+            </div>
 
-        {/* Section label */}
-        <div className="absolute top-8 left-8 z-20 flex items-center gap-3 pointer-events-none">
-          <span className="section-index opacity-60">03 — Selected Work</span>
-        </div>
-
-        {/* Drag hint */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-white/20 pointer-events-none">
-          <svg width="18" height="8" viewBox="0 0 18 8" fill="none" className="opacity-50">
-            <path d="M1 4H17M13 1L17 4L13 7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-          </svg>
-          Scroll to explore
-        </div>
-
-        {/* Track */}
-        <div
-          ref={trackRef}
-          className="flex items-center h-full will-change-transform"
-          style={{ width: `${projects.length * 100}vw` }}
-        >
-          {projects.map((p, i) => (
-            <div
-              key={p.index}
-              className="proj-panel relative flex flex-col justify-center px-10 sm:px-16 md:px-24 shrink-0"
-              style={{ width: "100vw", height: "100vh" }}
-            >
-              {/* Ambient glow */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `radial-gradient(ellipse 55% 60% at ${i % 2 === 0 ? "30%" : "70%"} 50%, ${p.accent}10 0%, transparent 65%)`,
-                }}
-              />
-
-              <div className="relative z-10 max-w-3xl">
-                <div className="proj-num font-mono text-[clamp(5rem,18vw,14rem)] font-black leading-none text-white select-none pointer-events-none absolute -top-4 -left-2 opacity-0"
-                  style={{ fontFamily: "'Syne', sans-serif", WebkitTextStroke: `1px ${p.accent}25`, color: "transparent" }}>
-                  {p.index}
-                </div>
-
-                <div className="proj-cat font-mono text-[10px] sm:text-xs uppercase tracking-[0.28em] mb-5 opacity-0" style={{ color: p.accent }}>
-                  {p.category}
-                </div>
-
-                <h2
-                  className="proj-title text-[clamp(3rem,8vw,7rem)] leading-[0.92] font-black text-white mb-6 opacity-0"
-                  style={{ fontFamily: "'Syne', sans-serif" }}
+            {/* Chapter index switcher */}
+            <div className="flex flex-wrap gap-1.5">
+              {flagshipProjects.map((proj, idx) => (
+                <button
+                  key={proj.slug}
+                  type="button"
+                  onClick={() => scrollToProject(idx)}
+                  className={`px-3 py-1.5 rounded-full font-mono text-[10px] tracking-wider uppercase transition-all cursor-pointer border ${
+                    activeIndex === idx
+                      ? "bg-[#e8a85a] text-[#08080a] border-[#e8a85a] font-medium"
+                      : "border-white/[0.12] text-white/50 hover:text-white hover:border-white/30"
+                  }`}
                 >
-                  {p.title}
-                </h2>
+                  {proj.index} {proj.title}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                <div className="proj-line h-px w-16 mb-6 opacity-0" style={{ background: p.accent }} />
+          {/* Sticky Dual-Pane Cinema Walkthrough on desktop */}
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+            {/* Left sticky cinema viewport */}
+            <div className="lg:col-span-6 lg:sticky lg:top-20 space-y-3.5">
+              <ProjectVisualStage project={activeProject} />
 
-                <p className="proj-tagline text-white/55 text-base sm:text-lg leading-relaxed max-w-xl mb-8 opacity-0">
-                  {p.tagline}
+              <div className="studio-plate rounded-2xl p-4 space-y-2.5">
+                <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em]">
+                  <span style={{ color: activeProject.accent }}>
+                    Case {activeProject.index} / {flagshipProjects.length} · {activeProject.category}
+                  </span>
+                  <span className="text-white/40">{activeProject.year}</span>
+                </div>
+                <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+                  {activeProject.convoReply}
                 </p>
-
-                <div className="flex flex-wrap gap-2 mb-10">
-                  {p.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="proj-tag font-mono text-[10px] sm:text-xs px-3 py-1.5 rounded-full border opacity-0"
-                      style={{ borderColor: `${p.accent}35`, color: `${p.accent}cc`, background: `${p.accent}0d` }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                <div className="font-mono text-[11px] pt-2 border-t border-white/[0.08]" style={{ color: activeProject.accent }}>
+                  Proof → {activeProject.proofMetric}
                 </div>
-
-                <a
-                  href={p.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="proj-cta group inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.22em] text-white/60 hover:text-white transition-colors duration-300 opacity-0"
-                  data-hover="true"
-                >
-                  View on GitHub
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-                  </svg>
-                </a>
               </div>
             </div>
-          ))}
+
+            {/* Right scrolling case stack */}
+            <div className="lg:col-span-6 space-y-6">
+              {flagshipProjects.map((project, idx) => {
+                const isActive = idx === activeIndex;
+                return (
+                  <article
+                    id={`case-${project.slug}`}
+                    key={project.slug}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                    className={`walkthrough-case-card studio-plate rounded-2xl p-6 sm:p-7 transition-all duration-300 ${
+                      isActive
+                        ? "border-white/[0.28] shadow-[0_18px_50px_-24px_rgba(232,168,90,0.35)]"
+                        : "opacity-80 hover:opacity-100"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-4 mb-3">
+                      <span className="font-mono text-[10px] uppercase tracking-[0.22em]" style={{ color: project.accent }}>
+                        {project.index} · {project.category}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setActiveIndex(idx)}
+                        className="font-mono text-[10px] uppercase tracking-widest text-white/45 hover:text-[#e8a85a] cursor-pointer"
+                      >
+                        {isActive ? "Active on Stage ●" : "Focus Stage →"}
+                      </button>
+                    </div>
+
+                    <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#f2ede4] mb-3">
+                      {project.title}
+                    </h3>
+
+                    <p className="font-serif-editorial italic text-lg text-[#e8a85a]/90 mb-3 leading-snug">
+                      {project.convoPrompt}
+                    </p>
+
+                    <p className="text-sm text-white/65 leading-relaxed mb-4">
+                      {project.architecture}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 mb-5">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="font-mono text-[10px] px-2.5 py-1 rounded-full border border-white/[0.11] text-white/65 bg-white/[0.02]"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-white/[0.08]">
+                      {project.live && (
+                        <a
+                          href={project.live}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#e8a85a] hover:text-[#f2ede4] transition-colors"
+                          data-hover="true"
+                        >
+                          Live Product ↗
+                        </a>
+                      )}
+                      {project.docsUrl && (
+                        <a
+                          href={project.docsUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#7dd3fc] hover:text-white transition-colors"
+                          data-hover="true"
+                        >
+                          API Docs ↗
+                        </a>
+                      )}
+                      {project.repo && (
+                        <a
+                          href={project.repo}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/65 hover:text-white transition-colors"
+                          data-hover="true"
+                        >
+                          Source on GitHub ↗
+                        </a>
+                      )}
+                      {project.secondaryRepo && (
+                        <a
+                          href={project.secondaryRepo.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="font-mono text-[11px] uppercase tracking-[0.16em] text-[#6ee7b7] hover:text-white transition-colors"
+                          data-hover="true"
+                        >
+                          {project.secondaryRepo.label} ↗
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Extended Engineering Repository Archive */}
+          <div className="pt-12 border-t border-white/[0.1] space-y-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <div className="section-index mb-2">Engineering Archive · saathvik-codes</div>
+                <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#f2ede4]">
+                  More Systems, ML &amp; Mobile Builds
+                </h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {(["All", "Systems & Backend", "AI / ML & Data", "Full-Stack & Mobile"] as const).map(
+                  (cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setArchiveFilter(cat)}
+                      className={`px-3.5 py-1.5 rounded-full font-mono text-[10px] uppercase tracking-wider border transition-colors cursor-pointer ${
+                        archiveFilter === cat
+                          ? "border-[#9d8cff] bg-[#9d8cff]/15 text-[#f2ede4]"
+                          : "border-white/[0.12] text-white/45 hover:text-white/80"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ),
+                )}
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredArchive.map((item) => (
+                <article
+                  key={item.title}
+                  className="studio-plate rounded-2xl p-5 flex flex-col justify-between gap-4 hover:border-white/[0.22] transition-colors"
+                >
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-[#9d8cff]/85">
+                      <span>{item.category}</span>
+                      {item.note && <span className="text-[#e8a85a]">{item.note}</span>}
+                    </div>
+                    <h4 className="font-display text-lg font-bold text-[#f2ede4]">{item.title}</h4>
+                    <p className="text-xs sm:text-sm text-white/60 leading-relaxed">{item.summary}</p>
+                  </div>
+
+                  <div className="space-y-3 pt-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      {item.stack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="font-mono text-[10px] px-2 py-0.5 rounded-full border border-white/[0.09] text-white/55"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-4 pt-2 border-t border-white/[0.07] font-mono text-[10px] uppercase tracking-widest">
+                      {item.live && (
+                        <a
+                          href={item.live}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#e8a85a] hover:text-white transition-colors"
+                        >
+                          Live ↗
+                        </a>
+                      )}
+                      {item.repo && (
+                        <a
+                          href={item.repo}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-white/60 hover:text-white transition-colors"
+                        >
+                          GitHub ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ---- Visual / UI builds ---- */}
-      <section className="relative py-20 md:py-28 px-8 md:px-16 overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse 55% 40% at 50% 0%, rgba(139,92,246,0.05) 0%, transparent 65%)" }}
-        />
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="section-index mb-6 opacity-60">Saathvik Visuals — UI/UX Studio</div>
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-            <h2
-              className="text-[clamp(2rem,6vw,4.5rem)] leading-[1.0] font-black text-white"
-              style={{ fontFamily: "'Syne', sans-serif" }}
-            >
-              Design<br />
-              <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
-                Builds.
-              </span>
-            </h2>
-            <a
-              href="https://github.com/saathvikvisuals"
-              target="_blank"
-              rel="noreferrer"
-              className="font-mono text-xs uppercase tracking-widest text-white/28 hover:text-violet-300 transition-colors"
-              data-hover="true"
-            >
-              github.com/saathvikvisuals ↗
-            </a>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {visualProjects.map((vp, i) => (
+      {/* Saathvik Visuals UI/UX Studio — no nested anchor elements */}
+      <section className="relative py-20 md:py-24 px-5 sm:px-10 md:px-14 border-t border-white/[0.08]">
+        <div className="max-w-7xl mx-auto space-y-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <div className="section-index mb-3">Saathvik Visuals — Frontend Craft Studio</div>
+              <h2 className="text-[clamp(2rem,5vw,3.8rem)] leading-[0.98] font-display font-bold text-[#f2ede4]">
+                Interface &amp; Visual{" "}
+                <span className="font-serif-editorial italic font-normal text-[#9d8cff]">
+                  Monographs.
+                </span>
+              </h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 font-mono text-xs uppercase tracking-widest">
               <a
-                key={i}
-                href={vp.live}
+                href="https://saathvik-visuals-portfolio.vercel.app"
                 target="_blank"
                 rel="noreferrer"
-                className="group relative border rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2"
-                style={{
-                  borderColor: `${vp.accent}20`,
-                  background: `linear-gradient(160deg, ${vp.accent}08 0%, transparent 50%)`,
-                  minHeight: 200,
-                }}
-                data-hover="true"
+                className="text-[#e8a85a] hover:text-white transition-colors"
               >
-                <div className="p-6 sm:p-8 flex flex-col justify-between h-full min-h-[200px]">
-                  <div>
-                    <div className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4 opacity-60" style={{ color: vp.accent }}>
-                      Live UI/UX Build
-                    </div>
-                    <h3
-                      className="text-2xl sm:text-3xl font-black text-white mb-2 group-hover:text-opacity-90"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      {vp.title}
-                    </h3>
-                    <p className="font-mono text-xs text-white/30">{vp.subtitle}</p>
-                  </div>
-                  <div className="mt-8 flex items-center justify-between">
-                    <span className="font-mono text-[10px] uppercase tracking-widest transition-colors duration-300" style={{ color: vp.accent }}>
-                      View Live ↗
-                    </span>
-                    <a
-                      href={vp.repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="font-mono text-[10px] uppercase tracking-widest text-white/20 hover:text-white/60 transition-colors"
-                      data-hover="true"
-                    >
-                      Repo
-                    </a>
-                  </div>
-                </div>
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: `radial-gradient(circle at 30% 40%, ${vp.accent}14, transparent 65%)` }}
-                />
+                Visuals Casebook ↗
               </a>
+              <a
+                href="https://github.com/saathvikvisuals"
+                target="_blank"
+                rel="noreferrer"
+                className="text-white/50 hover:text-white transition-colors"
+              >
+                github.com/saathvikvisuals ↗
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {visualBuilds.map((vp) => (
+              <div
+                key={vp.title}
+                className="studio-plate rounded-2xl p-6 flex flex-col justify-between min-h-[210px] hover:-translate-y-1 transition-all duration-300"
+                style={{ borderColor: `${vp.accent}2c` }}
+              >
+                <div className="space-y-2.5">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.22em]" style={{ color: vp.accent }}>
+                    {vp.subtitle}
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-[#f2ede4]">{vp.title}</h3>
+                  <p className="text-xs sm:text-sm text-white/60 leading-relaxed">{vp.focus}</p>
+                </div>
+
+                <div className="mt-6 pt-3 border-t border-white/[0.08] flex items-center justify-between font-mono text-[10px] uppercase tracking-widest">
+                  <a
+                    href={vp.live}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition-colors"
+                    style={{ color: vp.accent }}
+                    data-hover="true"
+                  >
+                    Visit Live ↗
+                  </a>
+                  <a
+                    href={vp.repo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-white/45 hover:text-white transition-colors"
+                    data-hover="true"
+                  >
+                    Source Repo ↗
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </div>

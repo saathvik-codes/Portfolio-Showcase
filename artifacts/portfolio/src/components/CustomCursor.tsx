@@ -5,56 +5,72 @@ export default function CustomCursor() {
   const followerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (
+      typeof window === "undefined" ||
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
     const cursor = cursorRef.current;
     const follower = followerRef.current;
     if (!cursor || !follower) return;
 
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
+    let mouseX = -100;
+    let mouseY = -100;
+    let followerX = -100;
+    let followerY = -100;
+    let rafId = 0;
 
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      cursor.style.left = mouseX + "px";
-      cursor.style.top = mouseY + "px";
+      cursor.style.left = `${mouseX}px`;
+      cursor.style.top = `${mouseY}px`;
     };
 
     const animate = () => {
-      followerX += (mouseX - followerX) * 0.12;
-      followerY += (mouseY - followerY) * 0.12;
-      follower.style.left = followerX + "px";
-      follower.style.top = followerY + "px";
-      requestAnimationFrame(animate);
+      followerX += (mouseX - followerX) * 0.14;
+      followerY += (mouseY - followerY) * 0.14;
+      follower.style.left = `${followerX}px`;
+      follower.style.top = `${followerY}px`;
+      rafId = requestAnimationFrame(animate);
     };
 
-    const onEnter = () => {
-      cursor.classList.add("hovering");
-      follower.classList.add("hovering");
-    };
-    const onLeave = () => {
-      cursor.classList.remove("hovering");
-      follower.classList.remove("hovering");
+    const onOver = (e: MouseEvent) => {
+      const target = e.target;
+      if (target instanceof Element && target.closest("a, button, [data-hover]")) {
+        cursor.classList.add("hovering");
+        follower.classList.add("hovering");
+      }
     };
 
-    document.addEventListener("mousemove", onMove);
-    const raf = requestAnimationFrame(animate);
+    const onOut = (e: MouseEvent) => {
+      const target = e.target;
+      if (target instanceof Element && target.closest("a, button, [data-hover]")) {
+        cursor.classList.remove("hovering");
+        follower.classList.remove("hovering");
+      }
+    };
 
-    const links = document.querySelectorAll("a, button, [data-hover]");
-    links.forEach(el => {
-      el.addEventListener("mouseenter", onEnter);
-      el.addEventListener("mouseleave", onLeave);
-    });
+    document.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onOver, { passive: true });
+    document.addEventListener("mouseout", onOut, { passive: true });
+    rafId = requestAnimationFrame(animate);
 
     return () => {
       document.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout", onOut);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <>
-      <div ref={cursorRef} className="cursor" />
-      <div ref={followerRef} className="cursor-follower" />
+      <div ref={cursorRef} className="cursor" aria-hidden="true" />
+      <div ref={followerRef} className="cursor-follower" aria-hidden="true" />
     </>
   );
 }

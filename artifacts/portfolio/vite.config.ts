@@ -30,6 +30,20 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
+    chunkSizeWarningLimit: 950,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules/three") || id.includes("@react-three") || id.includes("@theatre")) {
+            return "stage-3d";
+          }
+          if (id.includes("node_modules/gsap") || id.includes("node_modules/framer-motion") || id.includes("node_modules/lenis")) {
+            return "motion-engine";
+          }
+          return undefined;
+        },
+      },
+    },
   },
   server: {
     port,

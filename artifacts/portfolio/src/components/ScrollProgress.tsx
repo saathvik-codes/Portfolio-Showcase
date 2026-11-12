@@ -14,12 +14,15 @@ export default function ScrollProgress() {
       const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
       setProgress(Math.min(scrollTop / maxScroll, 1));
 
-      const current = sections.reduce((nearest, id) => {
-        const element = document.getElementById(id);
-        if (!element) return nearest;
-        const distance = Math.abs(element.getBoundingClientRect().top - window.innerHeight * 0.28);
-        return distance < nearest.distance ? { id, distance } : nearest;
-      }, { id: "hero", distance: Number.POSITIVE_INFINITY });
+      const current = sections.reduce(
+        (nearest, id) => {
+          const element = document.getElementById(id);
+          if (!element) return nearest;
+          const distance = Math.abs(element.getBoundingClientRect().top - window.innerHeight * 0.28);
+          return distance < nearest.distance ? { id, distance } : nearest;
+        },
+        { id: "hero", distance: Number.POSITIVE_INFINITY },
+      );
 
       setActive(current.id);
     };
@@ -49,11 +52,6 @@ export default function ScrollProgress() {
         {sections.map((id) => (
           <span key={id} className={`motion-node ${active === id ? "is-active" : ""}`} />
         ))}
-      </div>
-      <div className="motion-orbit">
-        <span />
-        <span />
-        <span />
       </div>
     </div>
   );
