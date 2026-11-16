@@ -614,7 +614,7 @@ export const communityAndHackathons = [
 export const achievements = [
   { year: "2026", title: "Two more NPTEL courses completed", body: "Introduction to Large Language Models (73%) and Natural Language Processing (66%), 4 credits each, Jul–Oct 2026." },
   { year: "2026", title: "NPTEL Elite — Cloud Computing", body: "81% consolidated score, 25/25 on assignments (Jan–Apr 2026)." },
-  { year: "2026", title: "8 Google Cloud skill badges", body: "Kubernetes, DevOps, AlloyDB, Prometheus monitoring, and the Vision, Speech and Natural Language APIs. All verifiable on Credly." },
+  { year: "2026", title: "Google Cloud skill badges", body: "Kubernetes, DevOps, AlloyDB, Prometheus monitoring, and the Vision, Speech and Natural Language APIs. All verifiable on Credly." },
   { year: "Ongoing", title: "350+ LeetCode problems", body: "35 Hard, 150+ Medium." },
 ];
 
@@ -649,14 +649,12 @@ export const googleProfiles = {
   credly: "https://www.credly.com/users/saathvik-kalepu/badges",
 };
 
-/** Google Cloud skill badges, issued via Credly (each link verifies the badge). */
-export const cloudBadges = [
-  { title: "Implement DevOps Workflows in Google Cloud", date: "Oct 2026", img: "implement-devops-workflows-in-google-cloud", id: "a684975a-9790-42df-9a06-8a1977d265f8" },
-  { title: "Deploy Kubernetes Applications on Google Cloud", date: "Oct 2026", img: "deploy-kubernetes-applications-on-google-cloud", id: "4d9459f5-d021-4f19-a931-34087f7ea6a5" },
-  { title: "Create and Manage AlloyDB Instances", date: "Oct 2026", img: "create-and-manage-alloydb-instances", id: "20c9e8c5-7627-4f6a-af40-6c852c149467" },
-  { title: "Monitor Environments with Google Cloud Managed Service for Prometheus", date: "Oct 2026", img: "monitor-environments-with-google-cloud-managed-s", id: "dbe5049f-dadf-40a7-830c-f52197e13959" },
-  { title: "Implement Speech and Language Solutions with Pre-trained APIs", date: "Oct 2026", img: "implement-speech-and-language-solutions-with-pre", id: "65e02604-83ac-4617-b543-b25d37a7160f" },
-  { title: "Analyze Speech and Language with Google APIs", date: "Oct 2026", img: "analyze-speech-and-language-with-google-apis", id: "d58f0e78-33c4-450a-984a-830d043b34a8" },
-  { title: "Analyze Images with the Cloud Vision API", date: "Oct 2026", img: "analyze-images-with-the-cloud-vision-api", id: "c77153a3-391a-47b1-89c5-c2bd3f1a52f4" },
-  { title: "Using the Google Cloud Speech API", date: "Oct 2026", img: "using-the-google-cloud-speech-api", id: "2013c65a-949c-4076-ba9d-1e099d55d072" },
-];
+import credly from "./credly.generated.json";
+
+/** Google Cloud skill badges. Refreshed from Credly by scripts/sync-credly.mjs on every build. */
+export const cloudBadges = credly.badges.map((b) => ({
+  title: b.title,
+  date: new Date(b.issued + "T00:00:00").toLocaleDateString("en-GB", { month: "short", year: "numeric" }),
+  img: b.img,
+  id: b.id,
+}));

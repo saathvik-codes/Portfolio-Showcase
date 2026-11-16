@@ -1,0 +1,61 @@
+{
+  "syncedAt": "2026-11-16",
+  "badges": [
+    {
+      "title": "Analyze Speech and Language with Google APIs",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-27",
+      "img": "analyze-speech-and-language-with-google-apis",
+      "id": "d58f0e78-33c4-450a-984a-830d043b34a8"
+    },
+    {
+      "title": "Create and Manage AlloyDB Instances",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-27",
+      "img": "create-and-manage-alloydb-instances",
+      "id": "20c9e8c5-7627-4f6a-af40-6c852c149467"
+    },
+    {
+      "title": "Deploy Kubernetes Applications on Google Cloud",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-27",
+      "img": "deploy-kubernetes-applications-on-google-cloud",
+      "id": "4d9459f5-d021-4f19-a931-34087f7ea6a5"
+    },
+    {
+      "title": "Implement DevOps Workflows in Google Cloud",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-27",
+      "img": "implement-devops-workflows-in-google-cloud",
+      "id": "a684975a-9790-42df-9a06-8a1977d265f8"
+    },
+    {
+      "title": "Implement Speech and Language Solutions with Pre-trained APIs",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-27",
+      "img": "implement-speech-and-language-solutions-with-pre",
+      "id": "65e02604-83ac-4617-b543-b25d37a7160f"
+    },
+    {
+      "title": "Monitor Environments with Google Cloud Managed Service for Prometheus",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-27",
+      "img": "monitor-environments-with-google-cloud-managed-s",
+      "id": "dbe5049f-dadf-40a7-830c-f52197e13959"
+    },
+    {
+      "title": "Analyze Images with the Cloud Vision API",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-24",
+      "img": "analyze-images-with-the-cloud-vision-api",
+      "id": "c77153a3-391a-47b1-89c5-c2bd3f1a52f4"
+    },
+    {
+      "title": "Using the Google Cloud Speech API",
+      "issuer": "Google Cloud",
+      "issued": "2026-10-24",
+      "img": "using-the-google-cloud-speech-api",
+      "id": "2013c65a-949c-4076-ba9d-1e099d55d072"
+    }
+  ]
+}
