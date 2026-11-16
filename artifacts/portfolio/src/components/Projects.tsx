@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { archiveProjects, flagshipProjects, visualBuilds } from "@/data/portfolioData";
+import { archiveProjects, flagshipProjects, numberWord, visualBuilds } from "@/data/portfolioData";
 import { BookOpen, ExternalLink, Filter, Github } from "lucide-react";
 import { ChapterHead, IconLink, Reveal } from "./primitives";
 import { TechList } from "./TechIcon";
@@ -15,11 +15,11 @@ const caption: Record<string, string> = {
   "hybrid-llm-rbac": "Reviewing access boundaries with a security architect.",
 };
 
-const stage: StageItem[] = flagshipProjects.map((p) => ({
+const stageFor = (): StageItem[] => flagshipProjects.map((p) => ({
   id: `p-${p.slug}`,
   image: `proj-${p.slug}.jpg`,
-  alt: `${p.title}: ${caption[p.slug]}`,
-  caption: caption[p.slug],
+  alt: `${p.title}: ${caption[p.slug] ?? p.category}`,
+  caption: caption[p.slug] ?? p.category,
 }));
 
 const cats = ["All", "Systems & Backend", "AI / ML & Data", "Full-Stack & Mobile"] as const;
@@ -34,12 +34,12 @@ export default function Projects() {
         <ChapterHead
           no="III"
           label="Projects"
-          title={<>Seven projects, each one starting from a real question.</>}
+          title={<>{numberWord(flagshipProjects.length)} projects, each one starting from a real question.</>}
           lede="Every entry below is framed the way it began: who was asking, what they needed to be true, and what I built to prove it."
         />
         <div className="mt-16 lg:mt-24">
           <ScrollStage
-            items={stage}
+            items={stageFor()}
             render={(i) => {
               const p = flagshipProjects[i];
               return (

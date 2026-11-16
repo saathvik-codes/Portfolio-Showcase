@@ -1,20 +1,27 @@
 import { ArrowUpRight, Building2, CalendarDays, MapPin } from "lucide-react";
-import { experiences } from "@/data/portfolioData";
+import { experiences, numberWord } from "@/data/portfolioData";
 import { ChapterHead, IconLink, Reveal } from "./primitives";
 import ScrollStage, { type StageItem } from "./ScrollStage";
 import { TechList } from "./TechIcon";
 
-const items: StageItem[] = [
-  { id: "xp-darwix", image: "experience-darwix.jpg", alt: "Saathvik with a hiring operations lead reviewing voice screening flows", caption: "Darwix AI: voice and video hiring systems." },
-  { id: "xp-caterworld", image: "experience-caterworld.jpg", alt: "Saathvik pairing with a teammate on a release pipeline", caption: "Caterworld.ai: release automation and an offline-first PWA." },
-  { id: "xp-aimaster", image: "experience-aimaster.jpg", alt: "Saathvik reviewing API endpoints with a product lead", caption: "AIMaster.live: backend APIs and SQL tuning." },
-];
+// Captions for known roles; any new role from the content gets a sensible default.
+const captions: Record<string, string> = {
+  darwix: "Darwix AI: voice and video hiring systems.",
+  caterworld: "Caterworld.ai: release automation and an offline-first PWA.",
+  aimaster: "AIMaster.live: backend APIs and SQL tuning.",
+};
 
 export default function Experience() {
+  const items: StageItem[] = experiences.map((x) => ({
+    id: `xp-${x.id}`,
+    image: `experience-${x.id}.jpg`,
+    alt: `${x.role} at ${x.company}`,
+    caption: captions[x.id] ?? `${x.company}: ${x.summary}`,
+  }));
   return (
     <section id="experience" className="py-24 sm:py-32 border-t border-hairline bg-surface">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <ChapterHead no="II" label="Experience" title={<>Three internships, each with something real in production.</>} />
+        <ChapterHead no="II" label="Experience" title={<>{numberWord(experiences.length)} roles, each with something real in production.</>} />
         <div className="mt-16 lg:mt-24">
           <ScrollStage
             items={items}

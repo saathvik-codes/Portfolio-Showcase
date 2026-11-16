@@ -1,5 +1,5 @@
 import { ArrowDown, MapPin, MessageCircle } from "lucide-react";
-import { heroStats, profile } from "@/data/portfolioData";
+import { currentRole, heroStats, profile } from "@/data/portfolioData";
 import Illustration from "./Illustration";
 import { CountUp, Reveal, SocialRow } from "./primitives";
 
@@ -16,7 +16,7 @@ export default function Hero({ onNavigate }: { onNavigate: (id: string) => void 
               Backend systems that keep working when things <em className="italic text-accent">fail</em>.
             </h1>
             <p className="mt-7 max-w-xl text-lg text-muted leading-relaxed">
-              I&rsquo;m Saathvik, a final-year CS student at IIITDM Kurnool and AI Engineer Intern at Darwix AI.
+              I&rsquo;m Saathvik, a final-year CS student at IIITDM Kurnool{currentRole() ? <> and {currentRole()}</> : null}.
               This page is a short walkthrough in five chapters. Scroll, or use the guide at the bottom.
             </p>
             <p className="mt-3 hidden lg:block text-sm text-faint">

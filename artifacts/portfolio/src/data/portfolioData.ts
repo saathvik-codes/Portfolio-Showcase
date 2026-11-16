@@ -74,6 +74,7 @@ export const profile = {
   phoneHref: "tel:+919908179816",
   resumePath: "/Saathvik_Kalepu_Resume.pdf",
   availability: "Open to SWE & Applied AI roles",
+  leetcodeSolved: 350,
 };
 
 export const socialLinks = [
@@ -587,11 +588,12 @@ export const chapters = [
   { id: "contact", no: "V", label: "Contact", narration: "Last stop. Say hello, I reply personally." },
 ];
 
+// Values are recalculated from the content in loadContent.ts.
 export const heroStats = [
-  { value: 3, suffix: "", label: "software internships" },
+  { value: 3, suffix: "", label: "software roles" },
   { value: 7, suffix: "", label: "flagship projects, all on GitHub" },
   { value: 350, suffix: "+", label: "LeetCode problems solved" },
-  { value: 7, suffix: "", label: "certifications, verifiable below" },
+  { value: 15, suffix: "", label: "certifications and cloud badges" },
 ];
 
 export const journey = [
@@ -612,9 +614,20 @@ export const googleProfiles = {
 import credly from "./credly.generated.json";
 
 /** Google Cloud skill badges. Refreshed from Credly by scripts/sync-credly.mjs on every build. */
-export const cloudBadges = credly.badges.map((b) => ({
+export const toBadge = (b: { title: string; issued: string; id: string; image: string }) => ({
   title: b.title,
   date: new Date(b.issued + "T00:00:00").toLocaleDateString("en-GB", { month: "short", year: "numeric" }),
-  img: b.img,
+  image: b.image,
   id: b.id,
-}));
+});
+export const cloudBadges = credly.badges.map((b) => toBadge({ ...b, image: `/badges/${b.img}.png` }));
+
+const WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
+/** "Seven" for 7, "13" for 13. Used so headings follow the content. */
+export const numberWord = (n: number) => WORDS[n] ?? String(n);
+
+/** The role marked "Present", if any, e.g. "AI Engineer Intern at Darwix AI". */
+export const currentRole = () => {
+  const x = experiences.find((e) => /present/i.test(e.period));
+  return x ? `${x.role} at ${x.company}` : null;
+};
