@@ -1,11 +1,12 @@
 import nodemailer from "nodemailer";
 
 const OWNER_NAME = "Saathvik Kalepu";
-const SITE = "https://saathvik-kalepu.vercel.app";
+// Used for email images when the request comes from localhost (images must be public).
+const FALLBACK_SITE = "https://saathvik-kalepu-walkthrough.vercel.app";
 const LINKS = {
   github: "https://github.com/saathvik-codes",
   linkedin: "https://linkedin.com/in/saathvik-kalepu-17041228b",
-  resume: `${SITE}/Saathvik_Kalepu_Resume.pdf`,
+  leetcode: "https://leetcode.com/u/Sunny550/",
 };
 
 // Best-effort per-instance rate limit (serverless instances are short-lived).
@@ -22,16 +23,114 @@ const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const clean = (s, max) => String(s ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
 
-const shell = (body) => `
-<div style="background:#f7f5f0;padding:32px 12px;font-family:Georgia,'Times New Roman',serif;color:#16181d">
-  <div style="max-width:560px;margin:0 auto;background:#fffefb;border:1px solid #e1ddd3">
-    <div style="padding:28px 32px;border-bottom:1px solid #e1ddd3">
-      <div style="font-size:22px;letter-spacing:-0.01em">${OWNER_NAME}</div>
-      <div style="font:12px/1.4 Arial,Helvetica,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#80858f;margin-top:4px">Software Engineer</div>
-    </div>
-    <div style="padding:32px;font:15px/1.7 Arial,Helvetica,sans-serif">${body}</div>
-  </div>
-</div>`;
+/* ---------- Email building blocks (table layout, inline styles: works in Gmail, Outlook, Apple Mail) ---------- */
+
+const FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+const C = { paper: "#f7f5f0", card: "#ffffff", ink: "#16181d", muted: "#555b66", faint: "#80858f", line: "#e1ddd3", accent: "#23408e", soft: "#f3f1ec" };
+
+const icon = (site, name, size, alt = "") =>
+  `<img src="${site}/email/${name}.png" width="${size}" height="${size}" alt="${alt}" style="display:block;border:0;outline:none;width:${size}px;height:${size}px">`;
+
+function layout(site, { preheader, label, body, footer }) {
+  return `<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"></head>
+<body style="margin:0;padding:0;background:${C.paper}">
+<span style="display:none;max-height:0;overflow:hidden;opacity:0">${esc(preheader)}</span>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.paper}">
+<tr><td align="center" style="padding:32px 12px">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:${C.card};border:1px solid ${C.line};border-radius:6px">
+    <tr><td style="padding:24px 32px;border-bottom:1px solid ${C.line}">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td valign="middle"><a href="${site}" style="text-decoration:none"><img src="${site}/email/sk.png" width="52" height="42" alt="SK" style="display:block;border:0;width:52px;height:42px"></a></td>
+        <td valign="middle" align="right" style="font:600 11px/1 ${FONT};letter-spacing:.14em;text-transform:uppercase;color:${C.faint}">${label}</td>
+      </tr></table>
+    </td></tr>
+    <tr><td style="padding:32px;font:15px/1.65 ${FONT};color:${C.ink}">${body}</td></tr>
+    <tr><td style="padding:20px 32px;border-top:1px solid ${C.line};background:${C.soft};border-radius:0 0 6px 6px;font:12px/1.6 ${FONT};color:${C.faint}">${footer}</td></tr>
+  </table>
+</td></tr>
+</table>
+</body></html>`;
+}
+
+/** One labelled detail row: icon, small label, value. */
+const detail = (site, name, label, value) => `
+<tr>
+  <td width="28" valign="top" style="padding:10px 0">${icon(site, name, 18, "")}</td>
+  <td valign="top" style="padding:10px 0;border-bottom:1px solid ${C.line}">
+    <div style="font:600 11px/1.4 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.faint}">${label}</div>
+    <div style="font:15px/1.5 ${FONT};color:${C.ink};margin-top:2px">${value}</div>
+  </td>
+</tr>`;
+
+const quote = (text, border) =>
+  `<div style="white-space:pre-wrap;font:15px/1.65 ${FONT};color:${C.ink};background:${C.soft};border-left:3px solid ${border};padding:16px 18px;border-radius:0 4px 4px 0">${esc(text)}</div>`;
+
+/** Round icon-only link (alt + title carry the label for screen readers and hover). */
+const iconLink = (site, name, href, label) => `
+<td style="padding:0 6px">
+  <a href="${href}" title="${label}" style="display:block;width:44px;height:44px;border:1px solid ${C.line};border-radius:22px;background:${C.card};text-decoration:none">
+    <table role="presentation" width="44" height="44" cellpadding="0" cellspacing="0"><tr><td align="center" valign="middle">${icon(site, name, 22, label)}</td></tr></table>
+  </a>
+</td>`;
+
+function ownerEmail(site, { name, email, label, message }) {
+  const first = esc(name.split(" ")[0]);
+  const replyHref = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent("Re: " + label)}`;
+  return layout(site, {
+    preheader: `${name}: ${message.slice(0, 90)}`,
+    label: "New message",
+    body: `
+      <h1 style="margin:0 0 6px;font:600 22px/1.3 ${FONT};color:${C.ink}">${esc(name)} wrote to you</h1>
+      <p style="margin:0 0 20px;color:${C.muted}">Via the contact form on your portfolio.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+        ${detail(site, "user", "Name", esc(name))}
+        ${detail(site, "mail", "Email", `<a href="mailto:${esc(email)}" style="color:${C.accent};text-decoration:none">${esc(email)}</a>`)}
+        ${detail(site, "tag", "Subject", esc(label))}
+      </table>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:10px"><tr>
+        <td width="26" valign="middle">${icon(site, "message", 18)}</td>
+        <td style="font:600 11px/1 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.faint}">Message</td>
+      </tr></table>
+      ${quote(message, C.accent)}
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px"><tr>
+        <td style="background:${C.ink};border-radius:4px">
+          <a href="${replyHref}" style="display:block;padding:12px 20px;font:600 14px/1 ${FONT};color:#ffffff;text-decoration:none">
+            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+              <td valign="middle" style="padding-right:8px">${icon(site, "reply", 16)}</td>
+              <td valign="middle" style="font:600 14px/1 ${FONT};color:#ffffff">Reply to ${first}</td>
+            </tr></table>
+          </a>
+        </td>
+      </tr></table>`,
+    footer: `Hitting reply in your mail app also goes straight to ${esc(name)}.`,
+  });
+}
+
+function autoReply(site, { name, message }) {
+  const first = esc(name.split(" ")[0]);
+  return layout(site, {
+    preheader: "Got your message. I'll reply personally, usually within a day or two.",
+    label: "Message received",
+    body: `
+      <h1 style="margin:0 0 16px;font:600 22px/1.3 ${FONT};color:${C.ink}">Thanks, ${first}.</h1>
+      <p style="margin:0 0 14px">Your message reached me. I read every one myself and usually reply within one or two days.</p>
+      <p style="margin:0 0 22px;color:${C.muted}">For your records, here is what you sent:</p>
+      ${quote(message, C.line)}
+      <p style="margin:28px 0 12px;font:600 11px/1 ${FONT};letter-spacing:.1em;text-transform:uppercase;color:${C.faint}">While you wait</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-left:-6px"><tr>
+        ${iconLink(site, "resume", `${site}/Saathvik_Kalepu_Resume.pdf`, "Resume")}
+        ${iconLink(site, "github", LINKS.github, "GitHub")}
+        ${iconLink(site, "linkedin", LINKS.linkedin, "LinkedIn")}
+        ${iconLink(site, "leetcode", LINKS.leetcode, "LeetCode")}
+        ${iconLink(site, "site", site, "Portfolio")}
+      </tr></table>
+      <p style="margin:28px 0 0">Talk soon,<br>Saathvik</p>`,
+    footer: `This is an automatic confirmation from ${esc(site.replace(/^https?:\/\//, ""))}. Replying to it reaches me directly.`,
+  });
+}
+
+/* ---------- Handler ---------- */
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -65,6 +164,10 @@ export default async function handler(req, res) {
   }
   const owner = process.env.CONTACT_TO || user;
 
+  // Images in the emails are served from whichever deployment handled the request.
+  const host = String(req.headers["x-forwarded-host"] || req.headers.host || "");
+  const site = process.env.SITE_URL || (host && !/localhost|127\.0\.0\.1/.test(host) ? `https://${host}` : FALLBACK_SITE);
+
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -73,24 +176,7 @@ export default async function handler(req, res) {
   });
 
   const label = subject || "Portfolio inquiry";
-
-  const ownerHtml = shell(`
-    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">From</p>
-    <p style="margin:0 0 20px"><strong>${esc(name)}</strong> &lt;<a href="mailto:${esc(email)}" style="color:#23408e">${esc(email)}</a>&gt;</p>
-    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Subject</p>
-    <p style="margin:0 0 20px">${esc(label)}</p>
-    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Message</p>
-    <div style="white-space:pre-wrap;border-left:2px solid #a8541f;padding-left:14px">${esc(message)}</div>
-    <p style="margin:24px 0 0;color:#80858f;font-size:12px">Reply to this email to respond directly to ${esc(name)}.</p>`);
-
-  const replyHtml = shell(`
-    <p style="margin:0 0 16px">Hi ${esc(name.split(" ")[0])},</p>
-    <p style="margin:0 0 16px">Thanks for getting in touch. I have received your message and will reply personally, usually within one to two days.</p>
-    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Your message</p>
-    <div style="white-space:pre-wrap;border-left:2px solid #e1ddd3;padding-left:14px;color:#555b66;margin-bottom:20px">${esc(message)}</div>
-    <p style="margin:0 0 16px">In the meantime: <a href="${LINKS.resume}" style="color:#23408e">resume</a> · <a href="${LINKS.github}" style="color:#23408e">GitHub</a> · <a href="${LINKS.linkedin}" style="color:#23408e">LinkedIn</a></p>
-    <p style="margin:0">Regards,<br/>${OWNER_NAME}</p>
-    <p style="margin:24px 0 0;color:#80858f;font-size:12px">This is an automatic confirmation. You can reply to it and it will reach me.</p>`);
+  const first = name.split(" ")[0];
 
   try {
     await transporter.sendMail({
@@ -99,7 +185,7 @@ export default async function handler(req, res) {
       replyTo: `"${name.replace(/"/g, "")}" <${email}>`,
       subject: `Portfolio: ${label} — ${name}`,
       text: `From: ${name} <${email}>\nSubject: ${label}\n\n${message}`,
-      html: ownerHtml,
+      html: ownerEmail(site, { name, email, label, message }),
     });
     // Auto-reply failure should not hide that the owner already received the message.
     try {
@@ -107,9 +193,9 @@ export default async function handler(req, res) {
         from: `"${OWNER_NAME}" <${user}>`,
         to: email,
         replyTo: owner,
-        subject: `Thanks for reaching out, ${name.split(" ")[0]}`,
-        text: `Hi ${name.split(" ")[0]},\n\nThanks for getting in touch. I have received your message and will reply personally, usually within one to two days.\n\nRegards,\n${OWNER_NAME}`,
-        html: replyHtml,
+        subject: `Thanks for reaching out, ${first}`,
+        text: `Hi ${first},\n\nYour message reached me. I read every one myself and usually reply within one or two days.\n\nTalk soon,\nSaathvik\n\nResume: ${site}/Saathvik_Kalepu_Resume.pdf\nGitHub: ${LINKS.github}\nLinkedIn: ${LINKS.linkedin}`,
+        html: autoReply(site, { name, message }),
       });
     } catch (err) {
       console.error("Auto-reply failed:", err);
@@ -124,3 +210,6 @@ export default async function handler(req, res) {
 function safeParse(s) {
   try { return JSON.parse(s); } catch { return {}; }
 }
+
+// Exposed for local previews of the templates.
+export const __templates = { ownerEmail, autoReply };
