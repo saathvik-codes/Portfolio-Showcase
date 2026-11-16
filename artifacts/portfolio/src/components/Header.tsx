@@ -9,6 +9,18 @@ export default function Header() {
   const { scrollYProgress } = useScroll();
   const w = useSpring(scrollYProgress, { stiffness: 120, damping: 28 });
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setHidden(y > last && y > 160);
+      last = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -20,7 +32,7 @@ export default function Header() {
   const nav = (id: string) => { setOpen(false); go(id); };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-hairline bg-paper/90 backdrop-blur">
+    <header className={`fixed inset-x-0 top-0 z-50 border-b border-hairline bg-paper/90 backdrop-blur transition-transform duration-300 ${hidden && !open ? "-translate-y-full" : ""}`}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
         <button onClick={() => nav("prologue")} className="font-serif text-xl tracking-tight text-ink">
           {profile.name}

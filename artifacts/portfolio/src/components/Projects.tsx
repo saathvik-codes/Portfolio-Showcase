@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { archiveProjects, flagshipProjects, visualBuilds } from "@/data/portfolioData";
 import { BookOpen, ExternalLink, Filter, Github } from "lucide-react";
-import { ChapterHead, IconLink, Reveal } from "./primitives";
+import { ChapterHead, IconLink, Mark, Reveal } from "./primitives";
 import { TechList } from "./TechIcon";
 import ScrollStage, { type StageItem } from "./ScrollStage";
 
@@ -29,12 +29,12 @@ export default function Projects() {
   const list = archiveProjects.filter((p) => cat === "All" || p.category === cat);
 
   return (
-    <section id="projects" className="py-24 sm:py-32 border-t border-hairline">
+    <section id="projects" className="py-24 sm:py-32 border-t border-hairline bg-surface">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <ChapterHead
           no="III"
           label="Projects"
-          title={<>Seven projects, each one starting from a real question.</>}
+          title={<>Seven projects, each one starting from a <Mark from="right">real question</Mark>.</>}
           lede="Every entry below is framed the way it began: who was asking, what they needed to be true, and what I built to prove it."
         />
         <div className="mt-16 lg:mt-24">

@@ -620,7 +620,7 @@ export const achievements = [
 export const chapters = [
   { id: "prologue", no: "00", label: "Intro", narration: "Start here: who I am and the questions I like." },
   { id: "about", no: "I", label: "About", narration: "How I approach a problem before writing code." },
-  { id: "experience", no: "II", label: "Experience", narration: "Three internships with real systems in production." },
+  { id: "experience", no: "II", label: "Journey", narration: "School to Gurugram, on a map: education and internships." },
   { id: "projects", no: "III", label: "Projects", narration: "Seven builds, each answering one hard question." },
   { id: "credentials", no: "IV", label: "Credentials", narration: "Coursework, certificates and community work." },
   { id: "contact", no: "V", label: "Contact", narration: "Last stop. Say hello, I reply personally." },

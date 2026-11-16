@@ -9,6 +9,7 @@ import Projects from "@/components/Projects";
 import Credentials from "@/components/Credentials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import { PaperTear } from "@/components/primitives";
 import { ChapterProvider, ChapterRail, WalkthroughDock } from "@/components/walkthrough";
 
 const seenIntro = () => {
@@ -62,10 +63,12 @@ export default function Portfolio() {
         <ChapterRail />
         <main>
           <Hero onNavigate={go} />
+          <PaperTear />
           <About />
           <Experience />
           <Projects />
           <Credentials />
+          <PaperTear />
           <Contact />
         </main>
         <Footer />

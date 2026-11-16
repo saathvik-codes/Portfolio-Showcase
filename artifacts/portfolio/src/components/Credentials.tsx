@@ -1,17 +1,17 @@
 import { achievements, certifications, communityAndHackathons } from "@/data/portfolioData";
 import Illustration from "./Illustration";
 import { BadgeCheck, CalendarDays, Trophy, Users } from "lucide-react";
-import { ChapterHead, IconLink, Reveal } from "./primitives";
+import { ChapterHead, IconLink, Mark, Reveal } from "./primitives";
 
 export default function Credentials() {
   return (
-    <section id="credentials" className="py-24 sm:py-32 border-t border-hairline bg-surface">
+    <section id="credentials" className="py-24 sm:py-32 border-t border-hairline">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-14 lg:gap-20 items-end">
           <ChapterHead
             no="IV"
             label="Credentials"
-            title={<>Steady study alongside the shipping.</>}
+            title={<>Steady <Mark>study</Mark> alongside the shipping.</>}
             lede="Coursework, certifications and community work, with documents you can open to verify."
           />
           <Reveal>

@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { profile } from "@/data/portfolioData";
 import Illustration from "./Illustration";
 import { CircleAlert, CircleCheck, LoaderCircle, Mail, Phone, Send } from "lucide-react";
-import { ChapterHead, IconLink, Reveal, SocialRow } from "./primitives";
+import { ChapterHead, IconLink, Mark, Reveal, SocialRow } from "./primitives";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -36,14 +36,14 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-24 sm:py-32 border-t border-hairline">
+    <section id="contact" className="pt-16 pb-24 sm:pb-32 bg-surface">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-14 lg:gap-20">
           <div>
             <ChapterHead
               no="V"
               label="Contact"
-              title={<>Have a hard problem? Let&rsquo;s talk it through.</>}
+              title={<>Have a hard problem? <Mark from="right">Let&rsquo;s talk it through.</Mark></>}
               lede="Roles, projects or just a technical question: write a few lines and I will reply personally. You will get an automatic confirmation straight away."
             />
             <Reveal delay={0.1}>

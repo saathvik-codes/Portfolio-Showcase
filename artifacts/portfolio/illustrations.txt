@@ -4,6 +4,10 @@ ILLUSTRATIONS — Saathvik Kalepu portfolio (handcrafted direction)
 Put files in:  artifacts/portfolio/public/illustrations/   (exact filenames below)
 Missing files show a plain paper placeholder, so add them one at a time.
 
+On the portfolio-journey branch: experience-*.jpg (files 3–5) are not used
+(the Journey chapter is a watercolour map), and hero-convo.jpg is shown as a
+square inside a taped polaroid, so compose it to survive a 1:1 crop.
+
 
 WHY THE LAST BATCH LOOKED AI-MADE (avoid all of these)
 ------------------------------------------------------

@@ -1,19 +1,19 @@
 import { education, skillMatrix } from "@/data/portfolioData";
 import Illustration from "./Illustration";
-import { ChapterHead, Reveal } from "./primitives";
+import { ChapterHead, Mark, Reveal } from "./primitives";
 import { TechList } from "./TechIcon";
 import { Award, CalendarDays, GraduationCap } from "lucide-react";
 
 export default function About() {
   return (
-    <section id="about" className="py-24 sm:py-32 border-t border-hairline">
+    <section id="about" className="pt-16 pb-24 sm:pb-32 bg-surface">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-14 lg:gap-20">
           <div>
             <ChapterHead
               no="I"
               label="About"
-              title={<>Get the shape of the problem right, then write the code.</>}
+              title={<>Get the <Mark>shape of the problem</Mark> right, then write the code.</>}
               lede="I like systems where the rules can be stated plainly and tested: a quorum, a state machine, a tax slab, a read-only SQL guard. Most of what I build starts by writing those rules down and trying to break them."
             />
             <Reveal delay={0.1} className="mt-14 space-y-10">
@@ -35,10 +35,10 @@ export default function About() {
 
         <Reveal className="mt-24">
           <p className="eyebrow mb-6">Toolbox</p>
-          <dl className="grid md:grid-cols-2 gap-x-14">
-            {skillMatrix.map((g) => (
-              <div key={g.label} className="grid sm:grid-cols-[9.5rem_1fr] gap-x-6 gap-y-1 border-t border-hairline py-5">
-                <dt className="text-sm font-medium text-ink">{g.label}</dt>
+          <dl className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {skillMatrix.map((g, k) => (
+              <div key={g.label} className={`relative border border-hairline bg-paper p-5 shadow-[3px_3px_0_0_var(--color-hairline)] ${k % 2 ? "rotate-[0.4deg]" : "-rotate-[0.4deg]"}`}>
+                <dt className="mb-3 font-serif text-lg text-ink">{g.label}</dt>
                 <dd><TechList items={g.items.split(" · ")} /></dd>
               </div>
             ))}

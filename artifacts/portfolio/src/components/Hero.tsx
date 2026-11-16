@@ -1,83 +1,79 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowDown, MapPin, MessageCircle, MessagesSquare } from "lucide-react";
-import { useState } from "react";
-import { heroStats, heroWalkthroughTopics, profile } from "@/data/portfolioData";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowDown, FileText, MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import { heroStats, profile } from "@/data/portfolioData";
 import Illustration from "./Illustration";
-import { CountUp, Reveal, SocialRow } from "./primitives";
+import { CountUp, Mark, Reveal, SocialRow } from "./primitives";
+
+const GREETING = "Hi, I'm Saathvik.";
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+/** Letters resolve from random glyphs into the greeting. */
+function useScramble(text: string) {
+  const reduce = useReducedMotion();
+  const [out, setOut] = useState(reduce ? text : "");
+  useEffect(() => {
+    if (reduce) return;
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1 / 3;
+      setOut(text.split("").map((c, k) => (k < i || c === " " ? c : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join(""));
+      if (i >= text.length) clearInterval(id);
+    }, 40);
+    return () => clearInterval(id);
+  }, [text, reduce]);
+  return out;
+}
 
 export default function Hero({ onNavigate }: { onNavigate: (id: string) => void }) {
-  const [i, setI] = useState(0);
-  const topic = heroWalkthroughTopics[i];
+  const greeting = useScramble(GREETING);
+  const { scrollY } = useScroll();
+  const reduce = useReducedMotion();
+  const tilt = useTransform(scrollY, [0, 300], [0, -5]);
+  const lift = useTransform(scrollY, [0, 300], [0, 30]);
 
   return (
-    <section id="prologue" className="pt-32 sm:pt-40 pb-20">
+    <section id="prologue" className="pt-32 sm:pt-40 pb-16">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="grid lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-14 lg:gap-20 items-center">
+        <div className="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-14 lg:gap-16 items-center">
           <Reveal>
-            <p className="eyebrow mb-6 inline-flex items-center gap-1.5">
-              <MapPin size={13} aria-hidden /> {profile.headlineRole} · {profile.location}
-            </p>
-            <h1 className="display text-[2.9rem] sm:text-6xl lg:text-[4.4rem] text-ink">
-              Backend systems that keep working when things <em className="italic text-accent">fail</em>.
+            <p className="font-mono text-sm text-accent h-6" aria-label={GREETING}>{greeting}</p>
+            <h1 className="display mt-4 text-[2.7rem] sm:text-6xl lg:text-[4.2rem] text-ink">
+              I build <Mark>backend systems</Mark> that keep working when things fail.
             </h1>
             <p className="mt-7 max-w-xl text-lg text-muted leading-relaxed">
-              I&rsquo;m Saathvik, a final-year CS student at IIITDM Kurnool and AI Engineer Intern at Darwix AI.
-              This page is a short walkthrough in five chapters: scroll, use the guide at the bottom, or pick a
-              question below.
+              Final-year Computer Science student at IIITDM Kurnool and AI Engineer Intern at Darwix AI.
+              I work on distributed storage, voice and video pipelines, and data products.
             </p>
-            <p className="mt-3 hidden lg:block text-sm text-faint">
-              Tip: press <kbd className="rounded-sm border border-hairline bg-surface px-1.5 font-mono text-[.75rem]">J</kbd> for the next chapter,{" "}
-              <kbd className="rounded-sm border border-hairline bg-surface px-1.5 font-mono text-[.75rem]">K</kbd> for the previous one.
+            <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-faint">
+              <MapPin size={15} strokeWidth={1.8} aria-hidden /> {profile.location} · {profile.availability}
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <button onClick={() => onNavigate("about")} className="inline-flex items-center gap-2 rounded-sm bg-ink px-5 py-3 text-sm font-medium text-paper hover:bg-accent">
                 Start the walkthrough <ArrowDown size={16} aria-hidden />
               </button>
-              <button onClick={() => onNavigate("contact")} className="inline-flex items-center gap-2 rounded-sm border border-hairline bg-surface px-5 py-3 text-sm font-medium text-ink hover:border-ink">
-                <MessageCircle size={16} strokeWidth={1.8} aria-hidden /> Get in touch
-              </button>
+              <a href={profile.resumePath} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-hairline bg-surface px-5 py-3 text-sm font-medium text-ink hover:border-ink">
+                <FileText size={16} strokeWidth={1.8} aria-hidden /> Resume
+              </a>
             </div>
             <SocialRow className="mt-8" />
           </Reveal>
-          <Reveal delay={0.1}>
-            <div className="drift">
-              <Illustration name="hero-convo.jpg" alt="Saathvik talking through a system sketch with a founder" caption="Where most of my projects start: a conversation about the problem." ratio="4 / 5" priority />
-            </div>
+
+          {/* Polaroid: tilts as you start scrolling, straightens on hover */}
+          <Reveal delay={0.15} className="mx-auto w-full max-w-sm">
+            <motion.div
+              style={reduce ? undefined : { rotate: tilt, y: lift }}
+              whileHover={{ rotate: 0, scale: 1.02 }}
+              className="relative bg-surface p-3 pb-14 shadow-[0_18px_40px_-20px_rgba(22,24,29,.35)] border border-hairline"
+            >
+              <span aria-hidden className="absolute -top-3 left-1/2 h-6 w-24 -translate-x-1/2 rotate-2 bg-[#efe3c4]/85" />
+              <Illustration name="hero-convo.jpg" alt="Saathvik sketching a system diagram with a founder over coffee" ratio="1 / 1" parallax={false} priority />
+              <p className="absolute bottom-4 inset-x-0 text-center font-serif italic text-muted">Most projects start with a conversation.</p>
+            </motion.div>
           </Reveal>
         </div>
 
-        {/* Conversation panel */}
-        <Reveal delay={0.1} className="mt-20">
-          <div className="grid md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] border border-hairline bg-surface rounded-sm">
-            <div role="tablist" aria-label="Questions" className="border-b md:border-b-0 md:border-r border-hairline">
-              {heroWalkthroughTopics.map((t, k) => (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={k === i}
-                  onClick={() => setI(k)}
-                  className={`flex w-full items-start gap-3 text-left px-6 py-5 border-b border-hairline last:border-b-0 ${k === i ? "bg-accent-soft" : "hover:bg-sand"}`}
-                >
-                  <MessagesSquare size={16} strokeWidth={1.8} aria-hidden className={`mt-1 shrink-0 ${k === i ? "text-accent" : "text-faint"}`} />
-                  <span className={`text-[.95rem] ${k === i ? "text-ink font-medium" : "text-muted"}`}>{t.label}</span>
-                </button>
-              ))}
-            </div>
-            <div className="p-7 sm:p-10 min-h-[17rem]">
-              <AnimatePresence mode="wait">
-                <motion.div key={topic.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-                  <p className="eyebrow mb-3">Question</p>
-                  <p className="font-serif text-2xl sm:text-[1.7rem] leading-snug text-ink">{topic.question}</p>
-                  <p className="eyebrow mt-7 mb-3">Answer</p>
-                  <p className="text-muted leading-relaxed">{topic.answer}</p>
-                  <p className="mt-6 inline-block border-t border-clay pt-2 font-mono text-[.8rem] text-clay">{topic.metric}</p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </Reveal>
-
-        <dl className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 border-t border-hairline pt-10">
+        <dl className="mt-20 grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 border-t border-hairline pt-10">
           {heroStats.map((s) => (
             <div key={s.label}>
               <dt className="display text-4xl sm:text-5xl text-ink"><CountUp to={s.value} suffix={s.suffix} /></dt>
