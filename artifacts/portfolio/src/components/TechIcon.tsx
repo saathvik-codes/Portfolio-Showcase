@@ -4,7 +4,7 @@ import {
   SiFirebase, SiFlask, SiGit, SiGithubactions, SiGo, SiGooglegemini, SiHuggingface, SiJavascript, SiJetpackcompose,
   SiKotlin, SiLangchain, SiLinux, SiMaplibre, SiMongodb, SiMysql, SiNextdotjs, SiNodedotjs, SiOllama, SiOpenai,
   SiOpenjdk, SiPandas, SiPostgresql, SiPrometheus, SiPython, SiReact, SiRedis, SiScikitlearn, SiSpringboot, SiSqlite,
-  SiTailwindcss, SiThreedotjs, SiTypescript, SiWhatsapp,
+  SiLeetcode, SiTailwindcss, SiThreedotjs, SiTypescript, SiWhatsapp,
 } from "react-icons/si";
 
 /** Brand logo + brand colour per tech name (Simple Icons). Matching is case-insensitive on the leading word(s). */
@@ -52,6 +52,7 @@ const MAP: [RegExp, IconType, string][] = [
   [/^elevenlabs/i, SiElevenlabs, "#16181d"],
   [/^whatsapp/i, SiWhatsapp, "#25D366"],
   [/^room/i, SiAndroid, "#3DDC84"],
+  [/^leetcode/i, SiLeetcode, "#FFA116"],
 ];
 
 export function techIcon(name: string) {
