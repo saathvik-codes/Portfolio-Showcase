@@ -123,7 +123,7 @@ export const heroWalkthroughTopics: WalkthroughTopic[] = [
     label: "Storage & Consensus",
     question: "How do you prove a distributed key-value store handles crashes safely?",
     answer:
-      "In QuorumDB (Go, zero third-party deps), Raft leader election, Dynamo quorum R/W, and WAL replay were chaos-tested under node kills across 17,658 concurrent writes with zero dropped writes.",
+      "In QuorumDB I kill random nodes while 17,658 writes are in flight. Raft elects a new leader, quorum reads and writes carry on, and the WAL replays on restart. Nothing was lost.",
     metric: "~2s failover · 0 data loss",
   },
   {
@@ -131,7 +131,7 @@ export const heroWalkthroughTopics: WalkthroughTopic[] = [
     label: "Production Voice AI",
     question: "How do you stop an LLM voice agent from skipping mandatory checks?",
     answer:
-      "At Darwix AI, I paired FastAPI, Deepgram STT, and ElevenLabs TTS with an explicit deterministic dialogue state machine verified across 226 automated tests, plus Vapi phone screens for 1,500+ applicants.",
+      "Don't let the model decide the order. At Darwix AI the video agent follows a fixed state machine, and 226 tests walk every path through it. The phone screening side has called 1,500+ candidates.",
     metric: "1,500+ candidates · 226 tests",
   },
   {
@@ -139,7 +139,7 @@ export const heroWalkthroughTopics: WalkthroughTopic[] = [
     label: "Full-Stack Data",
     question: "Where do data tools usually fail first-time users?",
     answer:
-      "Hidden state rules. Whether computing state-wise Indian RTO taxes in OnRoad or enforcing read-only AST guards over 1M+ DuckDB rows in QueryMind, every rule is deterministic and inspectable.",
+      "When the rules are hidden. OnRoad shows every tax line for each state, and QueryMind refuses any SQL that would change data. In both, you can see why you got the answer you did.",
     metric: "36 States & UTs · 1M+ rows",
   },
 ];
@@ -208,7 +208,7 @@ export const experiences: ExperienceItem[] = [
     summary:
       "Backend APIs and product features for an early-stage team.",
     highlights: [
-      "Engineered 20+ RESTful backend API endpoints in Python/Flask and Node.js covering authentication, session management and request workflows.",
+      "Built 20+ REST API endpoints in Python/Flask and Node.js covering authentication, session management and request workflows.",
       "Optimized SQL queries to cut retrieval latency by 15%; shipped user-facing features in TypeScript/React.",
     ],
     tags: ["Python", "Flask", "Node.js", "TypeScript", "React", "SQL"],
@@ -241,7 +241,7 @@ export const flagshipProjects: FlagshipProject[] = [
     accent: "#4338ca",
     question: "Why build a raw binary wire framing protocol instead of standard JSON/HTTP?",
     answer:
-      "To own every byte across socket boundaries — validating an 8-byte RBFTP header, RFC 1071 checksums in C++ Winsock2, and SHA-256 disk integrity.",
+      "To see what HTTP normally hides. Every frame carries an 8-byte header and an RFC 1071 checksum over Winsock2, and every file is checked with SHA-256 once it lands on disk.",
     architecture:
       "Multi-threaded C++ binary protocol engine implementing an 8-byte RBFTP frame header with RFC 1071 checksums, SHA-256 persistence verification, and a Python HTTP-to-TCP bridge gateway.",
     proofMetric: "8-byte RBFTP header · RFC 1071 checksums · SHA-256 verified",
@@ -342,14 +342,14 @@ export const archiveProjects: ArchiveProject[] = [
     title: "ClaimFlow — Prior-Authorization Platform",
     category: "AI / ML & Data",
     summary:
-      "Gradient-boosting denial-risk scoring (15 features) + GPT-4o-mini ICD-10/CPT extraction with regex fallback, Redis TTL cache, JWT RBAC, Prometheus metrics & 20 pytest tests.",
+      "Predicts which insurance claims are likely to be denied and explains why. GPT-4o-mini pulls ICD-10 and CPT codes out of clinical notes, with a regex fallback when it fails. Covered by 20 tests.",
     stack: ["FastAPI", "PostgreSQL", "Redis", "scikit-learn", "Prometheus"],
   },
   {
     title: "CareerFlow — Multi-Agent Application Compiler",
     category: "AI / ML & Data",
     summary:
-      "Google Cloud × AIM Code Kitchen S01 Track 3 build with RBAC-scoped vector grounding, automated follow-ups, and tailored document compilation.",
+      "Built for Google Cloud × AIM Code Kitchen S01 (Track 3). A set of agents that drafts tailored application documents, using only the data each user is allowed to see.",
     stack: ["Python", "Multi-Agent RAG", "RBAC", "Full-Stack"],
     repo: "https://github.com/saathvik-codes/careerflow",
   },
@@ -357,7 +357,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "AutoVista AI — Valuation & Hot-Swap MLOps",
     category: "AI / ML & Data",
     summary:
-      "Used-car pricing cutting MAE 46% vs baseline using Gradient Boosting with zero-downtime model retraining pipelines over MongoDB.",
+      "Prices used cars with gradient boosting, 46% lower error than the baseline. A retrained model can be swapped in without taking the API down.",
     stack: ["Python", "scikit-learn", "FastAPI", "MongoDB"],
     repo: "https://github.com/saathvik-codes/autovista-ai",
   },
@@ -365,7 +365,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "Road Hazard CV — YOLOv8 Segmentation",
     category: "AI / ML & Data",
     summary:
-      "Fine-tuned YOLOv8 instance segmentation served via REST with Google Maps severity tagging and sub-30s end-to-end detection.",
+      "Finds potholes and road damage in photos with a fine-tuned YOLOv8 model, then pins them on Google Maps by severity. Upload to map in under 30 seconds.",
     stack: ["YOLOv8", "Python", "Node.js", "React", "SQLite"],
     repo: "https://github.com/saathvik-codes/road-hazard-monitoring-system",
   },
@@ -373,7 +373,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "RouteForge — Supply Chain LP Optimizer",
     category: "AI / ML & Data",
     summary:
-      "Statsmodels demand forecasting paired with PuLP linear-programming network optimization over UK/EU e-commerce orders.",
+      "Forecasts demand from UK and EU e-commerce orders with statsmodels, then uses linear programming (PuLP) to decide where stock should ship from.",
     stack: ["Python", "statsmodels", "PuLP", "Optimization"],
     repo: "https://github.com/saathvik-codes/routeforge",
   },
@@ -381,7 +381,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "TruthLens AI — Misinformation Triage",
     category: "AI / ML & Data",
     summary:
-      "Multimodal NLP + computer vision credibility analyzer scoring claims, visual cues, and evidence rationales.",
+      "Checks a post's text and images for signs of misinformation and explains each score with the evidence it found.",
     stack: ["Python", "NLP", "Computer Vision", "Next.js"],
     repo: "https://github.com/saathvik-codes/truthlens-ai",
     live: "https://truthlens-ai-two.vercel.app",
@@ -390,7 +390,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "RAG Document Assistant",
     category: "AI / ML & Data",
     summary:
-      "Hybrid semantic + keyword retrieval with hallucination rejection, 16 unit tests, and an 11-case evaluation harness (100% pass).",
+      "Answers questions from your documents and says so when the answer isn't there. Combines semantic and keyword search; 16/16 tests and 11/11 eval cases pass.",
     stack: ["Python", "LangChain", "FAISS", "FastAPI", "Docker"],
     repo: "https://github.com/saathvik-codes/RAG-Document-Assistant",
   },
@@ -406,7 +406,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "HabitLoop — Offline-First Android App",
     category: "Full-Stack & Mobile",
     summary:
-      "Privacy-first Android tracker with local Room persistence, Jetpack Compose UI, adaptive Growth Lab insights & optional Firebase sync.",
+      "A habit tracker for Android that keeps your data on the phone (Room), with weekly insights and optional Firebase sync.",
     stack: ["Kotlin", "Jetpack Compose", "Room DB", "Firebase"],
     repo: "https://github.com/saathvik-codes/HabitLoop",
   },
@@ -414,7 +414,7 @@ export const archiveProjects: ArchiveProject[] = [
     title: "SpiceTrail — Full-Stack Recipe Discovery",
     category: "Full-Stack & Mobile",
     summary:
-      "Next.js 16 + Express/MongoDB app with JWT auth, saved recipe collections, and Dockerized deployment.",
+      "Search recipes, save them into collections and come back to them later. Next.js front end, Express and MongoDB behind it.",
     stack: ["Next.js 16", "TypeScript", "Express", "MongoDB", "Docker"],
     repo: "https://github.com/saathvik-codes/SpiceTrail-Recipe-Finder",
     live: "https://spice-trail-zeta.vercel.app/",
@@ -425,7 +425,7 @@ export const visualBuilds: VisualBuild[] = [
   {
     title: "Saathvik Visuals",
     subtitle: "Interactive UI/UX Casebook",
-    focus: "Four adaptive experience modes, localized typography & visual storytelling studio.",
+    focus: "My design casebook: layout experiments, type studies and write-ups of client work.",
     live: "",
     repo: "https://github.com/saathvikvisuals/saathvik-visuals",
     accent: "#1d4ed8",
@@ -433,7 +433,7 @@ export const visualBuilds: VisualBuild[] = [
   {
     title: "Aryav",
     subtitle: "Architectural 3D Real Estate",
-    focus: "Interactive 3D villa showcase, editorial journal & scroll-choreographed property staging.",
+    focus: "A 3D villa you can walk around, plus a scrolling property page and a short journal.",
     live: "https://aryav-cinematic-real-estate-api-ser.vercel.app",
     repo: "https://github.com/saathvikvisuals/aryav-cinematic-real-estate",
     accent: "#4338ca",
@@ -441,7 +441,7 @@ export const visualBuilds: VisualBuild[] = [
   {
     title: "NAAD",
     subtitle: "Indian Classical Sound Heritage",
-    focus: "Multilingual cultural discovery around ragas, taal & handcrafted instruments.",
+    focus: "A site about ragas, taal and handmade instruments, in more than one language.",
     live: "https://naad-music-label.vercel.app",
     repo: "https://github.com/saathvikvisuals/naad-music-label",
     accent: "#0369a1",
@@ -449,7 +449,7 @@ export const visualBuilds: VisualBuild[] = [
   {
     title: "AARNA Salon",
     subtitle: "Luxury Beauty Editorial",
-    focus: "Editorial package presentation, artist profiles & appointment booking experience.",
+    focus: "Services, stylists and appointment booking for a salon, laid out like a magazine.",
     live: "https://aarna-salon.vercel.app",
     repo: "https://github.com/saathvikvisuals/aarna-salon",
     accent: "#be123c",
@@ -457,7 +457,7 @@ export const visualBuilds: VisualBuild[] = [
   {
     title: "Jaabili Tourism",
     subtitle: "Travel Destination Monograph",
-    focus: "Story-led destination filtering, visual postcards & guided journey planning.",
+    focus: "Destination guide with filters, postcard-style cards and a simple trip planner.",
     live: "https://jaabili-tourism.vercel.app",
     repo: "https://github.com/saathvikvisuals/jaabili-tourism",
     accent: "#0f766e",
@@ -465,7 +465,7 @@ export const visualBuilds: VisualBuild[] = [
   {
     title: "BazaarX & Pawly",
     subtitle: "Multi-Vendor & Pet Care Commerce",
-    focus: "Vendor/admin analytics storefronts & warm mobile-first checkout flows.",
+    focus: "A multi-vendor shop with vendor and admin dashboards, and a pet-care store built for phones.",
     live: "https://bazaarx-tau.vercel.app",
     repo: "https://github.com/saathvikvisuals/BazaarX",
     accent: "#b45309",
@@ -614,6 +614,7 @@ export const communityAndHackathons = [
 export const achievements = [
   { year: "2026", title: "Two more NPTEL courses completed", body: "Introduction to Large Language Models (73%) and Natural Language Processing (66%), 4 credits each, Jul–Oct 2026." },
   { year: "2026", title: "NPTEL Elite — Cloud Computing", body: "81% consolidated score, 25/25 on assignments (Jan–Apr 2026)." },
+  { year: "2026", title: "8 Google Cloud skill badges", body: "Kubernetes, DevOps, AlloyDB, Prometheus monitoring, and the Vision, Speech and Natural Language APIs. All verifiable on Credly." },
   { year: "Ongoing", title: "350+ LeetCode problems", body: "35 Hard, 150+ Medium." },
 ];
 
@@ -641,4 +642,21 @@ export const journey = [
   { id: "j-aimaster", experience: "aimaster", place: "Hyderabad", coords: [17.44, 78.38] as [number, number] },
   { id: "j-caterworld", experience: "caterworld", place: "Chennai", coords: [13.0827, 80.2707] as [number, number] },
   { id: "j-darwix", experience: "darwix", place: "Gurugram", coords: [28.4595, 77.0266] as [number, number] },
+];
+
+export const googleProfiles = {
+  skills: "https://www.skills.google/public_profiles/14e43afb-2b3d-4255-a98e-eaf6c0a41338",
+  credly: "https://www.credly.com/users/saathvik-kalepu/badges",
+};
+
+/** Google Cloud skill badges, issued via Credly (each link verifies the badge). */
+export const cloudBadges = [
+  { title: "Implement DevOps Workflows in Google Cloud", date: "Oct 2026", img: "implement-devops-workflows-in-google-cloud", id: "a684975a-9790-42df-9a06-8a1977d265f8" },
+  { title: "Deploy Kubernetes Applications on Google Cloud", date: "Oct 2026", img: "deploy-kubernetes-applications-on-google-cloud", id: "4d9459f5-d021-4f19-a931-34087f7ea6a5" },
+  { title: "Create and Manage AlloyDB Instances", date: "Oct 2026", img: "create-and-manage-alloydb-instances", id: "20c9e8c5-7627-4f6a-af40-6c852c149467" },
+  { title: "Monitor Environments with Google Cloud Managed Service for Prometheus", date: "Oct 2026", img: "monitor-environments-with-google-cloud-managed-s", id: "dbe5049f-dadf-40a7-830c-f52197e13959" },
+  { title: "Implement Speech and Language Solutions with Pre-trained APIs", date: "Oct 2026", img: "implement-speech-and-language-solutions-with-pre", id: "65e02604-83ac-4617-b543-b25d37a7160f" },
+  { title: "Analyze Speech and Language with Google APIs", date: "Oct 2026", img: "analyze-speech-and-language-with-google-apis", id: "d58f0e78-33c4-450a-984a-830d043b34a8" },
+  { title: "Analyze Images with the Cloud Vision API", date: "Oct 2026", img: "analyze-images-with-the-cloud-vision-api", id: "c77153a3-391a-47b1-89c5-c2bd3f1a52f4" },
+  { title: "Using the Google Cloud Speech API", date: "Oct 2026", img: "using-the-google-cloud-speech-api", id: "2013c65a-949c-4076-ba9d-1e099d55d072" },
 ];
