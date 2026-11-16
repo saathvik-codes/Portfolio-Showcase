@@ -1,163 +1,54 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import RollingTitle from "./RollingTitle";
+import { ArrowUpRight, Building2, CalendarDays, MapPin } from "lucide-react";
+import { experiences, numberWord } from "@/data/portfolioData";
+import { ChapterHead, IconLink, Reveal } from "./primitives";
+import ScrollStage, { type StageItem } from "./ScrollStage";
+import { TechList } from "./TechIcon";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const experiences = [
-  {
-    role: "DevOps Engineer & UI/UX Designer",
-    company: "Caterworld Technologies",
-    period: "Apr 2026 – Jun 2026",
-    location: "Hybrid, Chennai",
-    type: "Internship",
-    color: "#e879f9",
-    points: [
-      "Streamlined deployment workflows and enhanced responsive UI/UX for core web application modules.",
-      "Improved system reliability and modernized the frontend interface for enterprise clients.",
-      "Reduced deployment times by optimizing CI/CD pipelines, accelerating product iterations.",
-      "Designed intuitive user journeys to bridge the gap between complex backend systems and end-users."
-    ],
-    tags: ["DevOps", "UI/UX Design", "CI/CD", "Web Development", "System Reliability"],
-  },
-  {
-    role: "Software Engineering Intern",
-    company: "AIMaster.live",
-    period: "Jul 2024 – Jan 2025",
-    location: "Remote",
-    type: "Internship",
-    color: "#a78bfa",
-    points: [
-      "Built full-stack features and REST APIs with React, Flask, and Node.js, and shipped cloud delivery pipelines for production workflows.",
-      "Analyzed datasets to surface trends and built dashboards that tracked key metrics for the product team.",
-      "Used SQL and Python to clean and process data, and optimized backend pipelines for better throughput.",
-      "Worked directly with the product team to turn data into decisions, end to end.",
-    ],
-    tags: ["React", "Python", "Node.js", "REST APIs", "SQL", "Data Visualization"],
-  },
-];
+// Captions for known roles; any new role from the content gets a sensible default.
+const captions: Record<string, string> = {
+  darwix: "Darwix AI: voice and video hiring systems.",
+  caterworld: "Caterworld.ai: release automation and an offline-first PWA.",
+  aimaster: "AIMaster.live: backend APIs and SQL tuning.",
+};
 
 export default function Experience() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        lineRef.current,
-        { scaleY: 0, transformOrigin: "top" },
-        {
-          scaleY: 1,
-          duration: 1.1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 72%",
-            end: "bottom 20%",
-            toggleActions: "play reverse play reverse",
-          },
-        },
-      );
-
-      gsap.fromTo(
-        ".exp-card",
-        { y: 34, opacity: 0, scale: 0.98 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.68,
-          ease: "power3.out",
-          stagger: 0.14,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 68%",
-            end: "bottom 18%",
-            toggleActions: "play reverse play reverse",
-          },
-        },
-      );
-    }, sectionRef);
-    return () => ctx.revert();
-  }, []);
-
+  const items: StageItem[] = experiences.map((x) => ({
+    id: `xp-${x.id}`,
+    image: `experience-${x.id}.jpg`,
+    alt: `${x.role} at ${x.company}`,
+    caption: captions[x.id] ?? `${x.company}: ${x.summary}`,
+  }));
   return (
-    <section
-      ref={sectionRef}
-      id="experience"
-      className="relative py-20 md:py-32 px-4 sm:px-8 md:px-16 overflow-hidden"
-      data-testid="experience-section"
-    >
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 50% 60% at 0% 50%, rgba(139,92,246,0.04) 0%, transparent 70%)" }} />
-
-      <div className="max-w-7xl mx-auto">
-        <div className="section-index mb-6">02 — Experience</div>
-
-        <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-6 mb-10 md:mb-16">
-          <RollingTitle
-            lines={[
-              { text: "Where I've" },
-              { text: "grown.", gradient: true },
-            ]}
-            className="font-serif text-[clamp(1.75rem,8.4vw,2.15rem)] md:text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.06] md:leading-[1.05] text-white"
-            testId="experience-heading"
-          />
-          <div className="md:ml-auto font-mono text-[11px] sm:text-xs text-white/25 tracking-widest">
-            AIMaster.live & Caterworld · Real-world Impact
-          </div>
-        </div>
-
-        <div className="relative pl-5 sm:pl-10 md:pl-16">
-          <div
-            ref={lineRef}
-            className="absolute left-0 top-3 bottom-3 w-px"
-            style={{ background: "linear-gradient(to bottom, rgba(167,139,250,0.7), rgba(167,139,250,0.1))" }}
-          />
-
-          <div className="space-y-8">
-            {experiences.map((exp, i) => (
-              <div key={i} className="exp-card relative group" data-testid={`exp-card-${i}`}>
-                <div
-                  className="absolute -left-5 sm:-left-10 md:-left-16 top-6 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 bg-background transition-all duration-300 group-hover:scale-125"
-                  style={{ borderColor: exp.color, boxShadow: `0 0 12px ${exp.color}60` }}
-                />
-                <div className="absolute -left-3 sm:-left-7 md:-left-13 top-[27px] w-3 sm:w-6 md:w-10 h-px"
-                  style={{ background: `linear-gradient(to right, ${exp.color}40, transparent)` }} />
-
-                <div
-                  className="py-2 group-hover:translate-x-1 transition-transform duration-300"
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-4">
-                    <h3
-                      className="text-lg sm:text-xl font-semibold text-white group-hover:text-violet-200 transition-colors duration-300"
-                      style={{ fontFamily: "'Syne', sans-serif" }}
-                    >
-                      {exp.role}
-                    </h3>
-                    <span className="font-mono text-[11px] text-white/22 shrink-0">{exp.period}</span>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-3 mt-1">
-                    <span style={{ color: exp.color }} className="font-mono text-sm">{exp.company}</span>
-                    <span className="font-mono text-[10px] text-white/20 uppercase tracking-wider">{exp.location}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {exp.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-mono text-[10px] px-2.5 py-1 rounded-full border"
-                        style={{ borderColor: `${exp.color}20`, color: `${exp.color}88` }}
-                        data-testid={`exp-tag-${tag}`}
-                      >
-                        {tag}
-                      </span>
+    <section id="experience" className="py-24 sm:py-32 border-t border-hairline bg-surface">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <ChapterHead no="II" label="Experience" title={<>{numberWord(experiences.length)} roles, each with something real in production.</>} />
+        <div className="mt-16 lg:mt-24">
+          <ScrollStage
+            items={items}
+            render={(i) => {
+              const x = experiences[i];
+              return (
+                <Reveal>
+                  <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-faint">
+                    <span className="inline-flex items-center gap-1.5"><CalendarDays size={14} aria-hidden />{x.period}</span>
+                    <span className="inline-flex items-center gap-1.5"><MapPin size={14} aria-hidden />{x.location}</span>
+                  </p>
+                  <h3 className="mt-3 font-serif text-3xl sm:text-4xl leading-tight text-ink">{x.role}</h3>
+                  <p className="mt-1 inline-flex items-center gap-1.5 text-lg text-accent">
+                    <Building2 size={17} aria-hidden />
+                    {x.companyUrl ? <IconLink href={x.companyUrl} icon={ArrowUpRight} className="!text-accent">{x.company}</IconLink> : x.company}
+                  </p>
+                  <p className="mt-6 text-muted leading-relaxed">{x.summary}</p>
+                  <ul className="mt-6 space-y-3 text-[.95rem] text-ink/85 leading-relaxed">
+                    {x.highlights.map((h) => (
+                      <li key={h} className="flex gap-3"><span aria-hidden className="mt-[.7em] h-px w-4 shrink-0 bg-clay" />{h}</li>
                     ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                  </ul>
+                  <div className="mt-6"><TechList items={x.tags} /></div>
+                </Reveal>
+              );
+            }}
+          />
         </div>
       </div>
     </section>
