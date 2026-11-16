@@ -10,7 +10,7 @@ export default function CloudBadges() {
         <div>
           <p className="eyebrow mb-3">Google Cloud skill badges</p>
           <p className="max-w-xl text-muted">
-            Hands-on labs graded inside real Google Cloud projects, finished in October 2026.
+            Hands-on labs graded inside real Google Cloud projects.
             Click a badge to verify it on Credly.
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function CloudBadges() {
               aria-label={`${b.title}, verify on Credly`}
             >
               <img
-                src={`/badges/${b.img}.png`}
+                src={b.image}
                 alt=""
                 width={96}
                 height={96}

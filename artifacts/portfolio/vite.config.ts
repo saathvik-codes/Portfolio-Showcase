@@ -16,15 +16,17 @@ const basePath = process.env.BASE_PATH ?? "/";
 // Dev-only: serve /api/contact (same handler Vercel runs in production).
 function devApi(): Plugin {
   return {
-    name: "dev-api-contact",
+    name: "dev-api",
     configureServer(server) {
       Object.assign(process.env, loadEnv("development", import.meta.dirname, ""));
-      server.middlewares.use("/api/contact", (req, res) => {
+      server.middlewares.use("/api", (req, res, next) => {
+        const name = (req.url || "").split("?")[0].replace(/^\//, "");
+        if (!/^[a-z-]+$/.test(name)) return next();
         let raw = "";
         req.on("data", (c) => (raw += c));
         req.on("end", async () => {
           try {
-            const mod = await server.ssrLoadModule("/api/contact.js");
+            const mod = await server.ssrLoadModule(`/api/${name}.js`);
             const r: any = req;
             try { r.body = raw ? JSON.parse(raw) : {}; } catch { r.body = {}; }
             const out: any = res;

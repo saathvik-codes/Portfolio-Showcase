@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { BookOpen, ExternalLink, Filter, Github } from "lucide-react";
 import { useState } from "react";
-import { archiveProjects, flagshipProjects, visualBuilds } from "@/data/portfolioData";
+import { archiveProjects, flagshipProjects, numberWord, visualBuilds } from "@/data/portfolioData";
 import Illustration from "./Illustration";
 import { ChapterHead, IconLink, Mark, Reveal } from "./primitives";
 import { TechList } from "./TechIcon";
@@ -36,8 +36,8 @@ function Page({ i }: { i: number }) {
         className="relative mx-auto w-full max-w-sm bg-surface p-3 pb-12 border border-hairline shadow-[0_18px_36px_-22px_rgba(34,29,23,.45)]"
       >
         <span aria-hidden className="tape -top-3 left-1/2 -translate-x-1/2 rotate-[-4deg]" />
-        <Illustration name={`proj-${p.slug}.jpg`} alt={`${p.title}: ${caption[p.slug]}`} ratio="4 / 5" parallax={false} />
-        <p className="hand absolute inset-x-0 bottom-2 text-center text-2xl text-muted">{caption[p.slug]}</p>
+        <Illustration name={`proj-${p.slug}.jpg`} alt={`${p.title}: ${caption[p.slug] ?? p.category}`} ratio="4 / 5" parallax={false} />
+        <p className="hand absolute inset-x-0 bottom-2 text-center text-2xl text-muted">{caption[p.slug] ?? p.category.toLowerCase()}</p>
       </motion.div>
 
       {/* Notes */}
@@ -78,7 +78,7 @@ export default function Projects() {
         <ChapterHead
           no="III"
           label="Projects"
-          title={<>Seven projects, each one starting from a <Mark from="right">real question</Mark>.</>}
+          title={<>{numberWord(flagshipProjects.length)} projects, each one starting from a <Mark from="right">real question</Mark>.</>}
           lede="Pages from the build log: the question someone asked, what I made to answer it, and the number that proves it works."
         />
 

@@ -1,7 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, FileText, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
-import { heroStats, profile } from "@/data/portfolioData";
+import { currentRole, heroStats, profile } from "@/data/portfolioData";
 import Illustration from "./Illustration";
 import { CountUp, Mark, Reveal, SocialRow } from "./primitives";
 
@@ -42,7 +42,7 @@ export default function Hero({ onNavigate }: { onNavigate: (id: string) => void 
               I build <Mark>backend systems</Mark> that keep working when things fail.
             </h1>
             <p className="mt-7 max-w-xl text-lg text-muted leading-relaxed">
-              Final-year Computer Science student at IIITDM Kurnool and AI Engineer Intern at Darwix AI.
+              Final-year Computer Science student at IIITDM Kurnool{currentRole() ? <> and {currentRole()}</> : null}.
               I work on distributed storage, voice and video pipelines, and data products.
             </p>
             <p className="mt-4 inline-flex items-center gap-1.5 text-sm text-faint">

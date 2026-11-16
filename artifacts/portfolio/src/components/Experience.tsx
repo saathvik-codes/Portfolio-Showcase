@@ -2,7 +2,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Building2, CalendarDays, GraduationCap, MapPin, RotateCcw } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { experiences, journey } from "@/data/portfolioData";
 import { ChapterHead, IconLink, Mark } from "./primitives";
 import { TechList } from "./TechIcon";
@@ -11,9 +11,8 @@ type Stop = (typeof journey)[number];
 type LL = [number, number];
 const xp = (s: Stop) => ("experience" in s ? experiences.find((e) => e.id === s.experience) : undefined);
 
-// One pin per city, even when several stops share it.
-const places = Array.from(new Map(journey.map((s) => [s.place, s.coords as LL])).entries());
-const placeIndex = (name: string) => places.findIndex(([p]) => p === name);
+/** Stops from the live content; drops any that point at a role no longer listed. */
+const liveStops = () => journey.filter((s) => !("experience" in s) || xp(s));
 
 const pinIcon = (name: string, state: "upcoming" | "visited" | "current") =>
   L.divIcon({
@@ -38,17 +37,22 @@ function arc(a: LL, b: LL, steps = 40): LL[] {
   return pts;
 }
 
-// Route as a list of points, plus the index where each stop is reached.
-const legs: LL[] = [journey[0].coords as LL];
-const reachedAt: number[] = [0];
-for (let i = 1; i < journey.length; i++) {
-  const a = journey[i - 1].coords as LL, b = journey[i].coords as LL;
-  if (journey[i - 1].place !== journey[i].place) legs.push(...arc(a, b).slice(1));
-  reachedAt.push(legs.length - 1);
+/** Pins (one per city) and the route through every stop, with where each stop is reached. */
+function buildRoute(stops: Stop[]) {
+  const places = Array.from(new Map(stops.map((s) => [s.place, s.coords as LL])).entries());
+  const legs: LL[] = [stops[0].coords as LL];
+  const reachedAt: number[] = [0];
+  for (let i = 1; i < stops.length; i++) {
+    const a = stops[i - 1].coords as LL, b = stops[i].coords as LL;
+    if (stops[i - 1].place !== stops[i].place) legs.push(...arc(a, b).slice(1));
+    reachedAt.push(legs.length - 1);
+  }
+  return { places, legs, reachedAt, placeIndex: (name: string) => places.findIndex(([p]) => p === name) };
 }
 
 /** Watercolour map: flies between stops and draws the route travelled so far. */
-function JourneyMap({ active }: { active: number }) {
+function JourneyMap({ active, stops }: { active: number; stops: Stop[] }) {
+  const { places, legs, reachedAt, placeIndex } = useMemo(() => buildRoute(stops), [stops]);
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const pins = useRef<L.Marker[]>([]);
@@ -64,7 +68,7 @@ function JourneyMap({ active }: { active: number }) {
       dragging: !L.Browser.mobile,
       zoomSnap: 0.25,
       attributionControl: false,
-    }).setView(journey[0].coords as LL, 6.5);
+    }).setView(stops[0].coords as LL, 6.5);
     L.tileLayer("https://watercolormaps.collection.cooperhewitt.org/tile/watercolor/{z}/{x}/{y}.jpg", {
       maxZoom: 12,
     }).addTo(m);
@@ -84,8 +88,8 @@ function JourneyMap({ active }: { active: number }) {
     if (!m) return;
 
     // Pins: current city pulses, cities already passed are filled.
-    const cur = placeIndex(journey[active].place);
-    const seen = new Set(journey.slice(0, active + 1).map((s) => placeIndex(s.place)));
+    const cur = placeIndex(stops[active].place);
+    const seen = new Set(stops.slice(0, active + 1).map((s) => placeIndex(s.place)));
     pins.current.forEach((mk, i) => mk.setIcon(pinIcon(places[i][0], i === cur ? "current" : seen.has(i) ? "visited" : "upcoming")));
     pins.current[cur]?.setZIndexOffset(1000);
 
@@ -108,8 +112,8 @@ function JourneyMap({ active }: { active: number }) {
     }
 
     // Camera: frame the previous and current stop together.
-    const here = journey[active].coords as LL;
-    const prev = journey[Math.max(active - 1, 0)].coords as LL;
+    const here = stops[active].coords as LL;
+    const prev = stops[Math.max(active - 1, 0)].coords as LL;
     const opts = { duration: reduce ? 0 : 1.2, padding: [70, 70] as [number, number], maxZoom: 7 };
     if (prev[0] === here[0] && prev[1] === here[1]) m.flyTo(here, 6.5, { duration: opts.duration });
     else m.flyToBounds(L.latLngBounds([prev, here]), opts);
@@ -125,7 +129,7 @@ function JourneyMap({ active }: { active: number }) {
         <RotateCcw size={13} aria-hidden /> Whole route
       </button>
       <ol className="absolute right-3 top-3 z-[500] flex gap-1" aria-hidden>
-        {journey.map((s, i) => (
+        {stops.map((s, i) => (
           <li key={s.id} className={`h-1.5 w-5 rounded-full transition-colors ${i <= active ? "bg-clay" : "bg-surface/90 border border-hairline"}`} />
         ))}
       </ol>
@@ -134,6 +138,7 @@ function JourneyMap({ active }: { active: number }) {
 }
 
 export default function Experience() {
+  const stops = useMemo(liveStops, []);
   const [active, setActive] = useState(0);
   const refs = useRef<(HTMLLIElement | null)[]>([]);
 
@@ -159,11 +164,11 @@ export default function Experience() {
         <div className="mt-14 grid lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-10 lg:gap-16">
           {/* Map: sticky on every screen size so it always follows the timeline */}
           <div className="lg:order-2 sticky top-[66px] lg:top-28 z-10 h-52 sm:h-64 lg:h-[calc(100vh-10rem)] -mx-5 sm:mx-0 bg-paper pb-3 lg:pb-0">
-            <JourneyMap active={active} />
+            <JourneyMap active={active} stops={stops} />
           </div>
 
           <ol className="relative lg:order-1 border-l border-hairline ml-2" style={{ perspective: 1200 }}>
-            {journey.map((s, i) => {
+            {stops.map((s, i) => {
               const x = xp(s);
               const on = i === active;
               return (
