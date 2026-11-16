@@ -1,4 +1,5 @@
 import { achievements, certifications, communityAndHackathons } from "@/data/portfolioData";
+import CloudBadges from "./CloudBadges";
 import Illustration from "./Illustration";
 import { BadgeCheck, CalendarDays, Trophy, Users } from "lucide-react";
 import { ChapterHead, IconLink, Mark, Reveal } from "./primitives";
@@ -12,7 +13,7 @@ export default function Credentials() {
             no="IV"
             label="Credentials"
             title={<>Steady <Mark>study</Mark> alongside the shipping.</>}
-            lede="Coursework, certifications and community work, with documents you can open to verify."
+            lede="Courses, certificates, cloud labs and community work. Everything here links to something you can check."
           />
           <Reveal>
             <Illustration name="credentials-study.jpg" alt="Saathvik studying algorithms with two classmates in a university reading room" caption="Study sessions at IIITDM Kurnool." ratio="16 / 10" />
@@ -52,6 +53,8 @@ export default function Credentials() {
             </ul>
           </div>
         </div>
+
+        <CloudBadges />
 
         <Reveal className="mt-20">
           <p className="eyebrow mb-6">Community &amp; hackathons</p>
