@@ -611,12 +611,6 @@ export const communityAndHackathons = [
   },
 ];
 
-export const achievements = [
-  { year: "2026", title: "Two more NPTEL courses completed", body: "Introduction to Large Language Models (73%) and Natural Language Processing (66%), 4 credits each, Jul–Oct 2026." },
-  { year: "2026", title: "NPTEL Elite — Cloud Computing", body: "81% consolidated score, 25/25 on assignments (Jan–Apr 2026)." },
-  { year: "2026", title: "Google Cloud skill badges", body: "Kubernetes, DevOps, AlloyDB, Prometheus monitoring, and the Vision, Speech and Natural Language APIs. All verifiable on Credly." },
-  { year: "Ongoing", title: "350+ LeetCode problems", body: "35 Hard, 150+ Medium." },
-];
 
 export const chapters = [
   { id: "prologue", no: "00", label: "Intro", narration: "Start here: who I am and the questions I like." },

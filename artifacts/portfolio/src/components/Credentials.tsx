@@ -1,7 +1,7 @@
-import { achievements, certifications, communityAndHackathons } from "@/data/portfolioData";
+import { certifications, communityAndHackathons } from "@/data/portfolioData";
 import CloudBadges from "./CloudBadges";
 import Illustration from "./Illustration";
-import { BadgeCheck, CalendarDays, Trophy, Users } from "lucide-react";
+import { BadgeCheck, CalendarDays, Users } from "lucide-react";
 import { ChapterHead, IconLink, Mark, Reveal } from "./primitives";
 
 export default function Credentials() {
@@ -20,25 +20,12 @@ export default function Credentials() {
           </Reveal>
         </div>
 
-        <div className="mt-20 grid lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] gap-14 lg:gap-20">
-          <div>
-            <p className="eyebrow mb-6">Recent</p>
-            <ol className="border-l border-hairline">
-              {achievements.map((a) => (
-                <li key={a.title} className="relative pl-7 pb-8 last:pb-0">
-                  <span aria-hidden className="absolute -left-[12px] top-0 grid h-6 w-6 place-items-center rounded-full border border-hairline bg-surface text-accent"><Trophy size={12} /></span>
-                  <p className="font-mono text-[.74rem] text-faint">{a.year}</p>
-                  <p className="font-medium text-ink">{a.title}</p>
-                  <p className="text-sm text-muted leading-relaxed">{a.body}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
+        <div className="mt-20">
           <div>
             <p className="eyebrow mb-6">Certifications</p>
-            <ul>
+            <ul className="grid md:grid-cols-2 gap-x-12">
               {certifications.map((c) => (
-                <li key={c.title} className="grid sm:grid-cols-[1fr_auto] gap-x-8 gap-y-1 border-t border-hairline py-5 last:border-b">
+                <li key={c.title} className="grid grid-cols-[1fr_auto] gap-x-6 gap-y-1 border-t border-hairline py-5">
                   <div>
                     <p className="font-medium text-ink">{c.title}</p>
                     <p className="text-sm text-muted">{c.issuer}</p>
