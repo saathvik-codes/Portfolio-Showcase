@@ -1,0 +1,131 @@
+ILLUSTRATIONS — Saathvik Kalepu portfolio (handcrafted direction)
+=================================================================
+
+Put files in:  artifacts/portfolio/public/illustrations/   (exact filenames below)
+Missing files show a plain paper placeholder, so add them one at a time.
+
+
+WHY THE LAST BATCH LOOKED AI-MADE (avoid all of these)
+------------------------------------------------------
+- Glossy, evenly-lit "perfect" rendering, airbrushed gradients, soft glow.
+- Too much detail everywhere; every surface equally sharp.
+- Cinematic lighting, bokeh, film-still realism.
+- Detailed faces and hands (the classic giveaway).
+- Symmetric composition, centred hero pose, stock-photo smiles.
+
+
+THE MEDIUM (paste this block before every prompt)
+-------------------------------------------------
+Hand-drawn sketchbook illustration: loose black fineliner pen lines with
+uneven, wobbly line weight, light visible pencil construction lines left in,
+and a flat transparent watercolour wash that bleeds past the lines in places.
+Drawn on off-white cold-press paper with visible paper tooth and a slightly
+yellowed edge. Only three colours of wash: indigo blue, burnt-orange clay,
+and warm grey; everything else is bare paper. Lots of empty paper around the
+figures; background suggested with a few quick lines, not rendered.
+Faces simplified: dot eyes, a single line for the mouth, no detailed features.
+Hands simplified or tucked away. Slightly off-kilter, imperfect perspective,
+like an architect's travel sketch or a New Yorker spot drawing.
+NOT digital painting, NOT 3D, NOT anime, NOT vector, no gradients, no glow,
+no bokeh, no text, no letters, no logos, no UI, no speech bubbles.
+
+Negative prompt (if your tool supports one):
+photorealistic, 3d render, cgi, glossy, smooth shading, airbrush, gradient,
+bokeh, cinematic lighting, detailed face, detailed hands, symmetry, text,
+watermark, signature, neon, glow, vector art, anime, plastic
+
+
+THE CHARACTER (identical in every image)
+----------------------------------------
+Saathvik: young South Asian man, short messy dark hair drawn in a few strokes,
+thin round glasses, charcoal overshirt with rolled sleeves (indigo wash),
+cream tee (bare paper). Always mid-conversation with someone, seen at a slight
+angle, never posing for the viewer (except in the contact image).
+
+
+AFTER GENERATING (this is what sells "handmade")
+------------------------------------------------
+1. Pick the loosest, most imperfect result, not the prettiest.
+2. Desaturate about 15% and warm the whites slightly toward cream.
+3. Overlay a real paper-texture scan at 20–30% Multiply.
+4. Optional but best: print it, trace the key lines yourself with a pen,
+   scan back in. Even five minutes of real tracing removes the AI feel.
+5. Export JPG, 1600 px long edge, under 400 KB.
+Crop guide: site shows 4:5 on desktop and 16:10 on mobile, so keep the
+action inside the middle 70% of the frame.
+
+
+FILES
+-----
+
+1. hero-convo.jpg  (4:5)
+   Saathvik and a founder (woman, short hair, olive coat in grey wash) at a
+   small cafe table. He sketches boxes and arrows in an open notebook; she
+   leans in. Two cups, one plant leaf at the edge, a window drawn as three
+   lines. Clay wash only on the cups and her scarf.
+
+2. about-convo.jpg  (4:5)
+   Saathvik at a whiteboard covered in rough rectangles and arrows (no words),
+   marker in hand, turning to a product designer holding a notebook. A cat
+   asleep on a stool in the corner, drawn in six lines.
+
+3. experience-darwix.jpg  (4:5)
+   Saathvik, headphones pushed back on one ear, sitting beside an operations
+   lead with a clipboard. One monitor shows a hand-drawn wavy sound line and
+   three circles joined by arrows. Coffee mug with a clay wash.
+
+4. experience-caterworld.jpg  (4:5)
+   Saathvik and a teammate beside a small conveyor of cardboard boxes rolling
+   toward a delivery van drawn in outline. A laptop on a trolley shows a
+   half-filled bar. Boxes in clay wash.
+
+5. experience-aimaster.jpg  (4:5)
+   Saathvik and a product lead at a shared desk, connecting a laptop and a
+   phone with a long looping cable. A wall of sticky notes drawn as small
+   coloured squares, no writing.
+
+6. proj-quorumdb.jpg  (4:5)
+   A row of five server cabinets drawn as tall boxes. An older engineer in a
+   vest pulls one cable out (cable in clay wash); Saathvik watches a laptop
+   with a few small dots. The other four cabinets lean slightly together,
+   like they are holding up the gap.
+
+7. proj-aetherflow.jpg  (4:5)
+   Workbench seen from above at an angle: an open drive case, a row of eight
+   small squares laid out like train carriages, a little oscilloscope with a
+   square-wave line. Saathvik explains, a colleague perches on a stool.
+
+8. proj-onroad.jpg  (4:5)
+   Car showroom drawn in a few perspective lines. A young woman holds a tablet
+   with three bars of different lengths; Saathvik gestures at a car drawn in
+   one confident outline with an indigo wash body.
+
+9. proj-switchboard.jpg  (4:5)
+   A bank support lead with glasses and Saathvik across a table where small
+   round tokens are arranged into a branching tree. An old telephone
+   switchboard with plug cables in the background, loosely sketched.
+
+10. proj-querymind.jpg  (4:5)
+    Shop back-room with a clothing rail and stacked boxes. A merchandiser in a
+    clay-washed blazer points at Saathvik's tablet showing a few bars. A fox
+    asleep on a box, drawn very simply.
+
+11. proj-pulse.jpg  (4:5)
+    From a balcony rail, a founder with a small notebook and Saathvik look down
+    at rows of tiny round figures; a few at the edge are walking toward a
+    door. Quick hatching for the floor below.
+
+12. proj-hybrid-llm-rbac.jpg  (4:5)
+    Corridor outside a frosted-glass door. A security architect in a dark
+    turtleneck holds up a keycard; Saathvik holds a binder. Behind the glass,
+    shelves with padlocks of different sizes, grey wash only.
+
+13. credentials-study.jpg  (16:10 landscape)
+    Library table at night under two desk lamps (clay wash glow drawn as flat
+    shapes, not light effects). Saathvik and two classmates share a sketchpad
+    of tree and graph doodles. Bookshelves as vertical strokes, an owl on top.
+
+14. contact-convo.jpg  (4:5)
+    Cafe booth by a rainy window (rain as short pen dashes). Saathvik sits
+    opposite the viewer, relaxed, small smile, hands around a cup. A second,
+    empty cup on our side of the table.

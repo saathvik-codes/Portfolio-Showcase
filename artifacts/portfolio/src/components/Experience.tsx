@@ -1,132 +1,47 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowUpRight, Building2, CalendarDays, MapPin } from "lucide-react";
 import { experiences } from "@/data/portfolioData";
+import { ChapterHead, IconLink, Reveal } from "./primitives";
+import ScrollStage, { type StageItem } from "./ScrollStage";
+import { TechList } from "./TechIcon";
 
-gsap.registerPlugin(ScrollTrigger);
+const items: StageItem[] = [
+  { id: "xp-darwix", image: "experience-darwix.jpg", alt: "Saathvik with a hiring operations lead reviewing voice screening flows", caption: "Darwix AI: voice and video hiring systems." },
+  { id: "xp-caterworld", image: "experience-caterworld.jpg", alt: "Saathvik pairing with a teammate on a release pipeline", caption: "Caterworld.ai: release automation and an offline-first PWA." },
+  { id: "xp-aimaster", image: "experience-aimaster.jpg", alt: "Saathvik reviewing API endpoints with a product lead", caption: "AIMaster.live: backend APIs and SQL tuning." },
+];
 
 export default function Experience() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".exp-reveal",
-        { y: 16, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.55,
-          stagger: 0.08,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        },
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      id="experience"
-      className="relative py-20 md:py-28 px-5 sm:px-8 border-b border-[#e4e2dd]"
-      data-testid="experience-section"
-    >
-      <div className="max-w-6xl mx-auto space-y-12">
-        <div className="exp-reveal flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div>
-            <div className="section-kicker mb-2">02 · Production Experience</div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#141413]">
-              Shipped under{" "}
-              <span className="font-serif-editorial italic font-normal text-[#57534e]">
-                real traffic.
-              </span>
-            </h2>
-          </div>
-          <p className="font-mono text-xs text-[#78716c]">
-            Darwix AI · Caterworld.ai · AIMaster.live
-          </p>
-        </div>
-
-        <div className="divide-y divide-[#e4e2dd] border-t border-[#e4e2dd]">
-          {experiences.map((exp, i) => (
-            <article
-              key={exp.id}
-              className="exp-reveal py-8 sm:py-10 grid lg:grid-cols-12 gap-6 lg:gap-10 items-start"
-              data-testid={`exp-card-${i}`}
-            >
-              {/* Role & Meta */}
-              <div className="lg:col-span-4 space-y-1.5">
-                <div className="flex items-center gap-2 text-xs font-medium text-[#57534e]">
-                  <span
-                    className="h-2 w-2 rounded-full shrink-0"
-                    style={{ background: exp.accent }}
-                  />
-                  <span>{exp.type}</span>
-                </div>
-                <h3 className="text-xl font-bold text-[#141413] tracking-tight pt-0.5">
-                  {exp.role}
-                </h3>
-                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm">
-                  {exp.companyUrl ? (
-                    <a
-                      href={exp.companyUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-semibold underline underline-offset-4 decoration-[#d6d3cb] hover:decoration-current transition-colors"
-                      style={{ color: exp.accent }}
-                    >
-                      {exp.company} ↗
-                    </a>
-                  ) : (
-                    <span className="font-semibold" style={{ color: exp.accent }}>
-                      {exp.company}
-                    </span>
-                  )}
-                  <span className="text-xs text-[#78716c]">{exp.location}</span>
-                </div>
-                <div className="font-mono text-xs text-[#78716c] pt-0.5">{exp.period}</div>
-              </div>
-
-              {/* Impact & Bullets */}
-              <div className="lg:col-span-8 space-y-4">
-                <p className="text-sm sm:text-base text-[#141413] font-medium leading-relaxed">
-                  {exp.summary}
-                </p>
-                <ul className="space-y-2.5">
-                  {exp.highlights.map((bullet, idx) => (
-                    <li
-                      key={idx}
-                      className="flex items-start gap-3 text-sm text-[#57534e] leading-relaxed"
-                    >
-                      <span
-                        className="mt-2 h-1.5 w-1.5 rounded-full shrink-0"
-                        style={{ background: exp.accent }}
-                      />
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {exp.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[11px] px-2.5 py-1 rounded-full bg-[#f3f1ec] text-[#57534e] border border-[#e4e2dd]"
-                      data-testid={`exp-tag-${tag}`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </article>
-          ))}
+    <section id="experience" className="py-24 sm:py-32 border-t border-hairline bg-surface">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <ChapterHead no="II" label="Experience" title={<>Three internships, each with something real in production.</>} />
+        <div className="mt-16 lg:mt-24">
+          <ScrollStage
+            items={items}
+            render={(i) => {
+              const x = experiences[i];
+              return (
+                <Reveal>
+                  <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-faint">
+                    <span className="inline-flex items-center gap-1.5"><CalendarDays size={14} aria-hidden />{x.period}</span>
+                    <span className="inline-flex items-center gap-1.5"><MapPin size={14} aria-hidden />{x.location}</span>
+                  </p>
+                  <h3 className="mt-3 font-serif text-3xl sm:text-4xl leading-tight text-ink">{x.role}</h3>
+                  <p className="mt-1 inline-flex items-center gap-1.5 text-lg text-accent">
+                    <Building2 size={17} aria-hidden />
+                    {x.companyUrl ? <IconLink href={x.companyUrl} icon={ArrowUpRight} className="!text-accent">{x.company}</IconLink> : x.company}
+                  </p>
+                  <p className="mt-6 text-muted leading-relaxed">{x.summary}</p>
+                  <ul className="mt-6 space-y-3 text-[.95rem] text-ink/85 leading-relaxed">
+                    {x.highlights.map((h) => (
+                      <li key={h} className="flex gap-3"><span aria-hidden className="mt-[.7em] h-px w-4 shrink-0 bg-clay" />{h}</li>
+                    ))}
+                  </ul>
+                  <div className="mt-6"><TechList items={x.tags} /></div>
+                </Reveal>
+              );
+            }}
+          />
         </div>
       </div>
     </section>

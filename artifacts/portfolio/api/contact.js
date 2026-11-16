@@ -1,109 +1,126 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
+
+const OWNER_NAME = "Saathvik Kalepu";
+const SITE = "https://saathvik-kalepu.vercel.app";
+const LINKS = {
+  github: "https://github.com/saathvik-codes",
+  linkedin: "https://linkedin.com/in/saathvik-kalepu-17041228b",
+  resume: `${SITE}/Saathvik_Kalepu_Resume.pdf`,
+};
+
+// Best-effort per-instance rate limit (serverless instances are short-lived).
+const hits = new Map();
+function limited(ip) {
+  const now = Date.now();
+  const recent = (hits.get(ip) || []).filter((t) => now - t < 10 * 60 * 1000);
+  recent.push(now);
+  hits.set(ip, recent);
+  return recent.length > 5;
+}
+
+const esc = (s) =>
+  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const clean = (s, max) => String(s ?? "").replace(/[\r\n]+/g, " ").trim().slice(0, max);
+
+const shell = (body) => `
+<div style="background:#f7f5f0;padding:32px 12px;font-family:Georgia,'Times New Roman',serif;color:#16181d">
+  <div style="max-width:560px;margin:0 auto;background:#fffefb;border:1px solid #e1ddd3">
+    <div style="padding:28px 32px;border-bottom:1px solid #e1ddd3">
+      <div style="font-size:22px;letter-spacing:-0.01em">${OWNER_NAME}</div>
+      <div style="font:12px/1.4 Arial,Helvetica,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#80858f;margin-top:4px">Software Engineer</div>
+    </div>
+    <div style="padding:32px;font:15px/1.7 Arial,Helvetica,sans-serif">${body}</div>
+  </div>
+</div>`;
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { name, email, subject, message } = req.body;
+  const body = typeof req.body === "string" ? safeParse(req.body) : req.body || {};
+  if (body.website) return res.status(200).json({ success: true }); // honeypot
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ message: 'Missing required fields' });
+  const name = clean(body.name, 100);
+  const email = clean(body.email, 200);
+  const subject = clean(body.subject, 150);
+  const message = String(body.message ?? "").trim().slice(0, 4000);
+
+  if (!name || !email || message.length < 10) {
+    return res.status(400).json({ message: "Please fill in your name, email and a message of at least 10 characters." });
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return res.status(400).json({ message: "That email address does not look valid." });
   }
 
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.error('SMTP_USER/SMTP_PASS env vars are not configured');
-    return res.status(500).json({ message: 'Email is not configured on the server.' });
+  const ip = String(req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "unknown").split(",")[0].trim();
+  if (limited(ip)) return res.status(429).json({ message: "Too many messages. Please try again later." });
+
+  const user = process.env.SMTP_USER || process.env.SMTP_EMAIL;
+  const pass = process.env.SMTP_PASS || process.env.SMTP_APP_PASSWORD;
+  if (!user || !pass) {
+    console.error("SMTP credentials are not configured");
+    return res.status(500).json({ message: "Email is not configured on the server." });
   }
+  const owner = process.env.CONTACT_TO || user;
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: "smtp.gmail.com",
     port: 465,
     secure: true,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
+    auth: { user, pass: pass.replace(/\s+/g, "") },
   });
 
-  const fromEmail = '"Saathvik Kalepu" <no-reply@saathvik.in>';
-  const logoUrl = 'https://saathvik-kalepu.vercel.app/og-thumbnail.svg';
+  const label = subject || "Portfolio inquiry";
 
-  // Email to you (Notification)
-  const notificationHtml = `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0a0a0a; color: #fff; border-radius: 12px; overflow: hidden; border: 1px solid rgba(167, 139, 250, 0.2);">
-      <div style="background-color: #050505; padding: 30px; text-align: center; border-bottom: 1px solid rgba(167, 139, 250, 0.1);">
-        <h1 style="margin: 0; color: #a78bfa; font-size: 24px; letter-spacing: 2px; text-transform: uppercase;">New Contact Message</h1>
-      </div>
-      <div style="padding: 40px 30px; background-color: #0a0a0a;">
-        <p style="margin: 0 0 10px; font-size: 14px; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px;">From:</p>
-        <p style="margin: 0 0 25px; font-size: 16px;"><strong>${name}</strong> (${email})</p>
-        
-        <p style="margin: 0 0 10px; font-size: 14px; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px;">Subject:</p>
-        <p style="margin: 0 0 25px; font-size: 16px;">${subject || 'No Subject'}</p>
-        
-        <p style="margin: 0 0 10px; font-size: 14px; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px;">Message:</p>
-        <div style="background-color: rgba(255, 255, 255, 0.03); padding: 20px; border-radius: 8px; font-size: 15px; line-height: 1.6; border: 1px solid rgba(255, 255, 255, 0.05); white-space: pre-wrap;">${message}</div>
-      </div>
-      <div style="background-color: #050505; padding: 20px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, 0.4); border-top: 1px solid rgba(167, 139, 250, 0.1);">
-        This message was sent from your portfolio website contact form.
-      </div>
-    </div>
-  `;
+  const ownerHtml = shell(`
+    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">From</p>
+    <p style="margin:0 0 20px"><strong>${esc(name)}</strong> &lt;<a href="mailto:${esc(email)}" style="color:#23408e">${esc(email)}</a>&gt;</p>
+    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Subject</p>
+    <p style="margin:0 0 20px">${esc(label)}</p>
+    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Message</p>
+    <div style="white-space:pre-wrap;border-left:2px solid #a8541f;padding-left:14px">${esc(message)}</div>
+    <p style="margin:24px 0 0;color:#80858f;font-size:12px">Reply to this email to respond directly to ${esc(name)}.</p>`);
 
-  // Email to user (Auto-reply)
-  const autoReplyHtml = `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0a0a0a; color: #fff; border-radius: 12px; overflow: hidden; border: 1px solid rgba(167, 139, 250, 0.2);">
-      <div style="background-color: #050505; padding: 40px 30px; text-align: center; border-bottom: 1px solid rgba(167, 139, 250, 0.1);">
-        <img src="${logoUrl}" alt="Saathvik Kalepu" style="max-width: 150px; margin-bottom: 20px;" />
-        <h1 style="margin: 0; color: #a78bfa; font-size: 24px; letter-spacing: 1px;">Message Received!</h1>
-      </div>
-      <div style="padding: 40px 30px; background-color: #0a0a0a; line-height: 1.6;">
-        <p style="font-size: 16px; margin-bottom: 20px;">Hi ${name},</p>
-        <p style="font-size: 16px; margin-bottom: 20px; color: rgba(255, 255, 255, 0.8);">
-          Thank you for reaching out! I've received your message and will get back to you as soon as possible.
-        </p>
-        <div style="background-color: rgba(167, 139, 250, 0.05); padding: 20px; border-radius: 8px; margin: 30px 0; border-left: 4px solid #a78bfa;">
-          <p style="margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.6);">Your Message Subject:</p>
-          <p style="margin: 5px 0 0; font-weight: 600;">${subject || 'Portfolio Inquiry'}</p>
-        </div>
-        <p style="font-size: 16px; margin-bottom: 30px; color: rgba(255, 255, 255, 0.8);">
-          In the meantime, feel free to check out my <a href="https://github.com/saathvik-codes" style="color: #a78bfa; text-decoration: none;">GitHub</a> or <a href="https://linkedin.com/in/saathvik-kalepu-17041228b" style="color: #a78bfa; text-decoration: none;">LinkedIn</a>.
-        </p>
-        <p style="font-size: 16px; margin: 0;">
-          Best regards,<br/>
-          <strong style="color: #a78bfa;">Saathvik Kalepu</strong><br/>
-          <span style="font-size: 12px; color: rgba(255, 255, 255, 0.4);">Full Stack Developer & AI Specialist</span>
-        </p>
-      </div>
-      <div style="background-color: #050505; padding: 20px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, 0.4); border-top: 1px solid rgba(167, 139, 250, 0.1);">
-        © ${new Date().getFullYear()} Saathvik Kalepu. All rights reserved.<br/>
-        Please do not reply to this automated email.
-      </div>
-    </div>
-  `;
+  const replyHtml = shell(`
+    <p style="margin:0 0 16px">Hi ${esc(name.split(" ")[0])},</p>
+    <p style="margin:0 0 16px">Thanks for getting in touch. I have received your message and will reply personally, usually within one to two days.</p>
+    <p style="margin:0 0 4px;color:#80858f;font-size:12px;letter-spacing:.1em;text-transform:uppercase">Your message</p>
+    <div style="white-space:pre-wrap;border-left:2px solid #e1ddd3;padding-left:14px;color:#555b66;margin-bottom:20px">${esc(message)}</div>
+    <p style="margin:0 0 16px">In the meantime: <a href="${LINKS.resume}" style="color:#23408e">resume</a> · <a href="${LINKS.github}" style="color:#23408e">GitHub</a> · <a href="${LINKS.linkedin}" style="color:#23408e">LinkedIn</a></p>
+    <p style="margin:0">Regards,<br/>${OWNER_NAME}</p>
+    <p style="margin:24px 0 0;color:#80858f;font-size:12px">This is an automatic confirmation. You can reply to it and it will reach me.</p>`);
 
   try {
-    // 1. Send notification to you
     await transporter.sendMail({
-      from: fromEmail,
-      to: 'saathvikk202@gmail.com', // Your email
-      subject: `New Portfolio Message from ${name} - ${subject || 'No Subject'}`,
-      html: notificationHtml,
-      replyTo: email,
+      from: `"${OWNER_NAME} (Portfolio)" <${user}>`,
+      to: owner,
+      replyTo: `"${name.replace(/"/g, "")}" <${email}>`,
+      subject: `Portfolio: ${label} — ${name}`,
+      text: `From: ${name} <${email}>\nSubject: ${label}\n\n${message}`,
+      html: ownerHtml,
     });
-
-    // 2. Send auto-reply to the user
-    await transporter.sendMail({
-      from: fromEmail,
-      to: email, // User's email
-      subject: `Thanks for reaching out, ${name}!`,
-      html: autoReplyHtml,
-    });
-
-    return res.status(200).json({ success: true, message: 'Message sent successfully!' });
-  } catch (error) {
-    console.error('SMTP Error:', error);
-    return res.status(500).json({ success: false, message: 'Failed to send message. Please try again later.' });
+    // Auto-reply failure should not hide that the owner already received the message.
+    try {
+      await transporter.sendMail({
+        from: `"${OWNER_NAME}" <${user}>`,
+        to: email,
+        replyTo: owner,
+        subject: `Thanks for reaching out, ${name.split(" ")[0]}`,
+        text: `Hi ${name.split(" ")[0]},\n\nThanks for getting in touch. I have received your message and will reply personally, usually within one to two days.\n\nRegards,\n${OWNER_NAME}`,
+        html: replyHtml,
+      });
+    } catch (err) {
+      console.error("Auto-reply failed:", err);
+    }
+    return res.status(200).json({ success: true, message: "Message sent." });
+  } catch (err) {
+    console.error("SMTP error:", err);
+    return res.status(500).json({ message: "Could not send your message. Please email me directly." });
   }
+}
+
+function safeParse(s) {
+  try { return JSON.parse(s); } catch { return {}; }
 }

@@ -1,265 +1,98 @@
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { profile, socialLinks } from "@/data/portfolioData";
+import { useState, type FormEvent } from "react";
+import { profile } from "@/data/portfolioData";
+import Illustration from "./Illustration";
+import { CircleAlert, CircleCheck, LoaderCircle, Mail, Phone, Send } from "lucide-react";
+import { ChapterHead, IconLink, Reveal, SocialRow } from "./primitives";
 
-gsap.registerPlugin(ScrollTrigger);
+type Status = "idle" | "sending" | "sent" | "error";
+
+const field =
+  "w-full rounded-sm border border-hairline bg-surface px-4 py-3 text-[.95rem] text-ink placeholder:text-faint focus:border-accent focus:outline-none";
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [copied, setCopied] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".contact-reveal",
-        { y: 14, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.45,
-          stagger: 0.06,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-        },
-      );
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(profile.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setError("");
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
-      setError("Please fill in your name, email, and message.");
-      return;
-    }
-    setSending(true);
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries());
+    setStatus("sending");
     setError("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(data),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Something went wrong.");
-      setSent(true);
-      setForm({ name: "", email: "", subject: "", message: "" });
-    } catch (sendError) {
-      const msg = sendError instanceof Error ? sendError.message : "Unknown error";
-      setError(`Could not send (${msg}). Reach me directly at ${profile.email}.`);
-    } finally {
-      setSending(false);
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.message || "Something went wrong.");
+      setStatus("sent");
+      form.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setStatus("error");
     }
-  };
+  }
 
   return (
-    <section
-      ref={sectionRef}
-      id="contact"
-      className="relative py-20 md:py-28 px-5 sm:px-8"
-      data-testid="contact-section"
-    >
-      <div className="max-w-6xl mx-auto space-y-12">
-        <div className="contact-reveal flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <section id="contact" className="py-24 sm:py-32 border-t border-hairline">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="grid lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] gap-14 lg:gap-20">
           <div>
-            <div className="section-kicker mb-2">06 · Contact</div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-[-0.025em] text-[#141413]">
-              Have a problem worth solving?{" "}
-              <span className="font-serif-editorial italic font-normal text-[#57534e]">
-                Let&rsquo;s talk.
-              </span>
-            </h2>
-          </div>
-          <p className="text-sm text-[#57534e] max-w-md leading-relaxed">
-            Open to backend, full-stack, and applied AI roles, internships, and focused engineering builds. Usually respond within 24 hours.
-          </p>
-        </div>
-
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          {/* Left: Direct Channels & Links */}
-          <div className="lg:col-span-5 space-y-5 contact-reveal">
-            <div className="clean-card rounded-2xl p-6 space-y-5">
-              <div className="font-mono text-xs font-medium text-[#2563eb]">
-                Direct Channels
-              </div>
-
-              <div className="space-y-4">
-                <a href={`mailto:${profile.email}`} className="block group">
-                  <div className="text-xs text-[#78716c]">Email</div>
-                  <div className="text-sm sm:text-base font-medium text-[#141413] group-hover:text-[#2563eb] transition-colors mt-0.5 break-all">
-                    {profile.email}
-                  </div>
-                </a>
-
-                <a href={profile.phoneHref} className="block group">
-                  <div className="text-xs text-[#78716c]">Phone</div>
-                  <div className="text-sm sm:text-base font-medium text-[#141413] group-hover:text-[#2563eb] transition-colors mt-0.5">
-                    {profile.phone}
-                  </div>
-                </a>
-
-                <div>
-                  <div className="text-xs text-[#78716c]">Location</div>
-                  <div className="text-sm text-[#57534e] mt-0.5">{profile.location}</div>
+            <ChapterHead
+              no="V"
+              label="Contact"
+              title={<>Have a hard problem? Let&rsquo;s talk it through.</>}
+              lede="Roles, projects or just a technical question: write a few lines and I will reply personally. You will get an automatic confirmation straight away."
+            />
+            <Reveal delay={0.1}>
+              <form onSubmit={onSubmit} className="mt-12 space-y-4" noValidate={false}>
+                <div className="hidden" aria-hidden>
+                  <label>Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
                 </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={copyEmail}
-                className="w-full py-2.5 rounded-xl bg-[#f3f1ec] border border-[#dcd9d0] font-mono text-xs font-medium text-[#141413] hover:bg-[#141413] hover:text-[#faf9f6] hover:border-[#141413] transition-colors cursor-pointer"
-              >
-                {copied ? "Copied to clipboard ✓" : "Copy Email Address"}
-              </button>
-            </div>
-
-            <div className="clean-card rounded-2xl p-6 space-y-3">
-              <div className="font-mono text-xs font-medium text-[#57534e]">
-                Profiles &amp; Code
-              </div>
-              <div className="divide-y divide-[#eceae4]">
-                {socialLinks.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="py-2.5 flex items-center justify-between gap-3 text-xs sm:text-sm text-[#141413] hover:text-[#2563eb] transition-colors"
-                  >
-                    <span className="font-medium">{s.label}</span>
-                    <span className="font-mono text-[11px] text-[#78716c] truncate max-w-[190px]">
-                      {s.handle} ↗
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right: Clean Inquiry Form */}
-          <div className="lg:col-span-7 contact-reveal">
-            {sent ? (
-              <div className="clean-card rounded-2xl p-10 text-center space-y-4">
-                <div className="w-11 h-11 mx-auto rounded-full bg-[#eff6ff] border border-[#bfdbfe] flex items-center justify-center text-[#2563eb] font-bold">
-                  ✓
-                </div>
-                <h3 className="text-xl font-bold text-[#141413]">Note Received</h3>
-                <p className="text-sm text-[#57534e] max-w-md mx-auto">
-                  Thanks for reaching out. I will reply directly from {profile.email} within 24 hours.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setSent(false)}
-                  className="text-xs font-medium text-[#2563eb] hover:underline underline-offset-4 cursor-pointer pt-1"
-                >
-                  Send another note →
-                </button>
-              </div>
-            ) : (
-              <form
-                onSubmit={handleSubmit}
-                className="clean-card rounded-2xl p-6 sm:p-8 space-y-5 shadow-[0_1px_2px_rgba(20,20,19,0.03)]"
-                data-testid="contact-form"
-              >
-                <div className="font-mono text-xs font-medium text-[#2563eb]">
-                  Send a Note
-                </div>
-
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-medium text-[#57534e] mb-1.5">
-                      Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      placeholder="Your name"
-                      className="form-input-clean"
-                      data-testid="contact-input-name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-[#57534e] mb-1.5">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      placeholder="you@company.com"
-                      className="form-input-clean"
-                      data-testid="contact-input-email"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-[#57534e] mb-1.5">
-                    Topic / Role
+                  <label className="block text-sm text-muted">Name
+                    <input name="name" required maxLength={100} autoComplete="name" className={`${field} mt-1.5`} />
                   </label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={form.subject}
-                    onChange={handleChange}
-                    placeholder="Backend role, AI systems collaboration, or project question"
-                    className="form-input-clean"
-                    data-testid="contact-input-subject"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-[#57534e] mb-1.5">
-                    Message *
+                  <label className="block text-sm text-muted">Email
+                    <input name="email" type="email" required maxLength={200} autoComplete="email" className={`${field} mt-1.5`} />
                   </label>
-                  <textarea
-                    name="message"
-                    value={form.message}
-                    onChange={handleChange}
-                    rows={5}
-                    placeholder="What problem are you working on?"
-                    className="form-input-clean resize-none"
-                    data-testid="contact-input-message"
-                  />
                 </div>
-
-                {error && <p className="text-xs font-medium text-[#dc2626]">{error}</p>}
-
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="w-full py-3 rounded-xl bg-[#141413] text-[#faf9f6] text-xs sm:text-sm font-medium hover:bg-[#2563eb] transition-colors disabled:opacity-45 cursor-pointer"
-                  data-testid="contact-submit"
-                >
-                  {sending ? "Sending..." : "Send Note →"}
-                </button>
+                <label className="block text-sm text-muted">Subject
+                  <input name="subject" maxLength={150} className={`${field} mt-1.5`} />
+                </label>
+                <label className="block text-sm text-muted">Message
+                  <textarea name="message" required rows={6} minLength={10} maxLength={4000} className={`${field} mt-1.5 resize-y`} />
+                </label>
+                <div className="flex flex-wrap items-center gap-5 pt-2">
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="inline-flex items-center gap-2 rounded-sm bg-ink px-7 py-3 text-sm font-medium text-paper hover:bg-accent disabled:opacity-60"
+                  >
+                    {status === "sending" ? <LoaderCircle size={16} className="animate-spin" aria-hidden /> : <Send size={16} aria-hidden />}
+                    {status === "sending" ? "Sending…" : "Send message"}
+                  </button>
+                  <p role="status" aria-live="polite" className={`inline-flex items-center gap-1.5 text-sm ${status === "error" ? "text-red-700" : "text-accent"}`}>
+                    {status === "sent" && <><CircleCheck size={16} aria-hidden />Sent. Check your inbox for a confirmation.</>}
+                    {status === "error" && <><CircleAlert size={16} aria-hidden />{error}</>}
+                  </p>
+                </div>
               </form>
-            )}
+            </Reveal>
+            <Reveal delay={0.15} className="mt-14 border-t border-hairline pt-8 text-sm">
+              <p className="text-muted mb-4">Prefer direct?</p>
+              <p className="flex flex-wrap gap-x-6 gap-y-2">
+                <IconLink href={`mailto:${profile.email}`} icon={Mail}>{profile.email}</IconLink>
+                <IconLink href={profile.phoneHref} icon={Phone}>{profile.phone}</IconLink>
+              </p>
+              <SocialRow withEmail={false} className="mt-5" />
+            </Reveal>
           </div>
+          <Reveal delay={0.1} className="lg:pt-24">
+            <Illustration name="contact-convo.jpg" alt="Saathvik smiling across a café table, notebook and coffee between us" caption="The next conversation could be yours." ratio="4 / 5" />
+          </Reveal>
         </div>
       </div>
     </section>

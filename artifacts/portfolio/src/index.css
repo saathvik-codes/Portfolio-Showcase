@@ -2,121 +2,49 @@
 @import "tw-animate-css";
 
 @theme inline {
-  --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
-  --font-serif: "Instrument Serif", Georgia, serif;
-  --font-display: "Manrope", system-ui, sans-serif;
-  --font-mono: "DM Mono", ui-monospace, monospace;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --color-paper: #f7f5f0;
+  --color-surface: #fffefb;
+  --color-sand: #efece4;
+  --color-ink: #16181d;
+  --color-muted: #555b66;
+  --color-faint: #80858f;
+  --color-hairline: #e1ddd3;
+  --color-accent: #23408e;
+  --color-accent-soft: #e6ebf7;
+  --color-clay: #a8541f;
 }
 
-:root {
-  color-scheme: light;
-  --paper: #faf9f6;
-  --surface: #ffffff;
-  --stone: #f3f1ec;
-  --ink: #141413;
-  --ink-muted: #57534e;
-  --ink-subtle: #78716c;
-  --hairline: #e4e2dd;
-  --accent: #2563eb;
-  --accent-deep: #1e40af;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: "Manrope", system-ui, sans-serif;
-  scroll-behavior: smooth;
-}
-
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html { background: var(--color-paper); scroll-padding-top: 5rem; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
 body {
   margin: 0;
-  min-width: 320px;
-  overflow-x: hidden;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
+::selection { background: var(--color-accent); color: #fff; }
+a, button { transition: color .2s, background-color .2s, border-color .2s, opacity .2s; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 2px; }
 
-::selection {
-  background: rgba(37, 99, 235, 0.14);
-  color: #0f172a;
-}
+.eyebrow { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--color-faint); }
+.display { font-family: var(--font-serif); font-weight: 400; letter-spacing: -.02em; line-height: 1.04; }
+.rule { border-top: 1px solid var(--color-hairline); }
 
-/* Clean gallery surface */
-.clean-card {
-  background: var(--surface);
-  border: 1px solid var(--hairline);
-}
-
-.clean-subtle-surface {
-  background: var(--stone);
-  border: 1px solid var(--hairline);
-}
-
-.section-kicker {
-  font-family: "DM Mono", monospace;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--ink-subtle);
-}
-
-.font-serif-editorial {
-  font-family: "Instrument Serif", Georgia, serif;
-}
-
-/* Light intro overlay */
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  background: #faf9f6;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Inputs */
-.form-input-clean {
-  background: #ffffff;
-  border: 1px solid #dcd9d0;
-  border-radius: 0.75rem;
-  padding: 0.8rem 1rem;
-  color: var(--ink);
-  font-size: 0.92rem;
-  width: 100%;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.form-input-clean:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.form-input-clean::placeholder {
-  color: #a8a29e;
-}
-
-/* Reveal helper */
-.clip-line-wrap {
-  overflow: hidden;
-  display: block;
-}
+@keyframes drift { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+.drift { animation: drift 7s ease-in-out infinite; }
+@keyframes caret { 50% { opacity: 0 } }
+.caret::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 3px; background: var(--color-accent); vertical-align: -.12em; animation: caret 1s steps(1) infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }

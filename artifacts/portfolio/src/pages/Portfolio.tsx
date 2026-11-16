@@ -1,109 +1,76 @@
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";
-import Lenis from "lenis";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useCallback, useEffect, useRef, useState } from "react";
 import SKIntro from "@/components/SKIntro";
-import Navigation from "@/components/Navigation";
+import Lenis from "lenis";
+import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
-import Skills from "@/components/Skills";
-import Certifications from "@/components/Certifications";
+import Credentials from "@/components/Credentials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import { ChapterProvider, ChapterRail, WalkthroughDock } from "@/components/walkthrough";
 
-const CinematicStage3D = lazy(() => import("@/components/CinematicStage3D"));
-
-gsap.registerPlugin(ScrollTrigger);
+const seenIntro = () => {
+  try { return sessionStorage.getItem("sk-intro") === "1"; } catch { return false; }
+};
 
 export default function Portfolio() {
-  const [introDone, setIntroDone] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const scrollProgressRef = useRef(0);
-  const lastUiRatioRef = useRef(0);
   const lenisRef = useRef<Lenis | null>(null);
+  const [intro, setIntro] = useState(() => !seenIntro());
+  const endIntro = useCallback(() => {
+    try { sessionStorage.setItem("sk-intro", "1"); } catch { /* storage blocked */ }
+    setIntro(false);
+  }, []);
 
   useEffect(() => {
-    if (!introDone) return;
-
-    const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smoothWheel: true,
-    });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
     lenisRef.current = lenis;
-
-    const updateProgress = () => {
-      const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      const ratio = Math.min(Math.max(window.scrollY / max, 0), 1);
-      scrollProgressRef.current = ratio;
-      if (Math.abs(ratio - lastUiRatioRef.current) >= 0.005 || ratio === 0 || ratio === 1) {
-        lastUiRatioRef.current = ratio;
-        setScrollProgress(ratio);
-      }
+    let raf = 0;
+    const loop = (t: number) => {
+      lenis.raf(t);
+      raf = requestAnimationFrame(loop);
     };
-
-    lenis.on("scroll", () => {
-      ScrollTrigger.update();
-      updateProgress();
-    });
-
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-    updateProgress();
-
+    raf = requestAnimationFrame(loop);
+    // Honour deep links like /#projects on first load.
+    const hash = window.location.hash.slice(1);
+    if (hash) setTimeout(() => { const el = document.getElementById(hash); if (el) lenis.scrollTo(el, { offset: -64, immediate: true }); }, 50);
     return () => {
-      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(raf);
       lenis.destroy();
       lenisRef.current = null;
     };
-  }, [introDone]);
+  }, []);
 
-  const scrollToTarget = useCallback((selector: string) => {
-    const target = document.querySelector(selector);
-    if (!target) return;
-    if (lenisRef.current && target instanceof HTMLElement) {
-      lenisRef.current.scrollTo(target, { offset: -20 });
-    } else {
-      target.scrollIntoView({ behavior: "smooth" });
-    }
+  const go = useCallback((id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    history.replaceState(null, "", id === "prologue" ? window.location.pathname : `#${id}`);
+    if (lenisRef.current) lenisRef.current.scrollTo(el, { offset: -64 });
+    else el.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#faf9f6] text-[#141413] overflow-x-clip">
-      {!introDone && <SKIntro onComplete={() => setIntroDone(true)} />}
-
-      {/* Whisper-quiet Theatre.js + Three.js light architectural background */}
-      <Suspense fallback={null}>
-        <CinematicStage3D scrollProgressRef={scrollProgressRef} />
-      </Suspense>
-
-      {introDone && (
-        <>
-          <Navigation
-            visible={introDone}
-            scrollProgress={scrollProgress}
-            onNavigate={scrollToTarget}
-          />
-
-          <main className="relative z-10">
-            <Hero onNavigate={scrollToTarget} />
-            <About />
-            <Experience />
-            <Projects />
-            <Skills />
-            <Certifications />
-            <Contact />
-          </main>
-
-          <Footer onNavigate={scrollToTarget} />
-        </>
-      )}
-    </div>
+    <ChapterProvider go={go}>
+      {intro && <SKIntro onComplete={endIntro} />}
+      <div className="min-h-screen bg-paper text-ink overflow-x-clip">
+        <a href="#about" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
+          Skip to content
+        </a>
+        <Header />
+        <ChapterRail />
+        <main>
+          <Hero onNavigate={go} />
+          <About />
+          <Experience />
+          <Projects />
+          <Credentials />
+          <Contact />
+        </main>
+        <Footer />
+        <WalkthroughDock />
+      </div>
+    </ChapterProvider>
   );
 }

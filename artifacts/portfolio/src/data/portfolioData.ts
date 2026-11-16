@@ -81,7 +81,7 @@ export const profile = {
   phone: "+91 99081 79816",
   phoneHref: "tel:+919908179816",
   resumePath: "/Saathvik_Kalepu_Resume.pdf",
-  availability: "Open to SWE & Applied AI Roles",
+  availability: "Open to SWE & Applied AI roles",
 };
 
 export const socialLinks = [
@@ -171,13 +171,14 @@ export const experiences: ExperienceItem[] = [
     type: "Current Internship",
     accent: "#1d4ed8",
     summary:
-      "Architected a config-driven AI hiring & voice/video verification suite connecting WhatsApp outreach, Vapi phone screens, webhook assessments, and deterministic insurance pre-issuance video interviews.",
+      "Hiring automation and voice/video verification systems used across recruiting campaigns.",
     highlights: [
-      "Built an end-to-end AI hiring automation platform (Python, Flask, MySQL, OpenAI) orchestrating a 9-stage recruiting funnel from outreach to final offers.",
-      "Developed LLM voice screening agents (Vapi, GPT-4o-mini) across 12 configurable role profiles, processing 1,500+ candidates across 80+ campaigns with sub-2-minute webhook triggers.",
-      "Engineered a real-time AI video verification agent (FastAPI, Deepgram STT, ElevenLabs TTS) using a deterministic dialogue state machine covered by 226 automated tests.",
+      "Built an end-to-end hiring automation platform (Python, Flask, MySQL, OpenAI) that runs a 9-stage recruiting funnel: WhatsApp outreach, voice screening, assessments, shortlisting, interviews and offers.",
+      "Developed LLM voice screening agents (Vapi, GPT-4o-mini) that call candidates, score fit from transcripts and route qualified candidates to intern or full-time tracks.",
+      "Made it config-driven with 12 role-specific screening profiles; processed 1,500+ candidates across 80+ campaigns, with assessments sent within 2 minutes via webhooks.",
+      "Built a real-time video verification agent for insurance pre-issuance checks (FastAPI, Deepgram STT, ElevenLabs TTS) with a deterministic dialogue state machine and 226 automated tests.",
     ],
-    tags: ["Python", "FastAPI", "Flask", "MySQL", "Vapi", "Deepgram", "ElevenLabs", "226 Tests"],
+    tags: ["Python", "Flask", "FastAPI", "MySQL", "OpenAI", "WhatsApp", "Deepgram", "ElevenLabs"],
   },
   {
     id: "caterworld",
@@ -185,30 +186,30 @@ export const experiences: ExperienceItem[] = [
     company: "Caterworld.ai",
     companyUrl: "https://www.caterworld.ai/",
     period: "Apr 2026 – Jul 2026",
-    location: "Chennai, India · Hybrid",
+    location: "Chennai, India",
     type: "Internship",
     accent: "#0f766e",
     summary:
-      "Automated release engineering across 10 web modules and re-architected the client shell into an offline-capable React Progressive Web App.",
+      "Release automation and Progressive Web App work on the Caterworld platform.",
     highlights: [
-      "Built and maintained CI/CD pipelines automating build, test, and deployment across 10 application modules.",
-      "Engineered React Progressive Web App modules using service workers and offline asset caching, cutting frontend load time by 15%.",
+      "Built and maintained CI/CD pipelines automating build, test and deployment across 10 application modules, replacing manual releases.",
+      "Developed PWA modules for the main website in React (service workers, offline caching, installable app shell), improving frontend load performance by 15%.",
     ],
-    tags: ["React.js", "PWA", "Service Workers", "CI/CD", "Release Automation"],
+    tags: ["React", "PWA", "Service Workers", "CI/CD"],
   },
   {
     id: "aimaster",
     role: "Software Engineering Intern",
     company: "AIMaster.live",
     period: "Jul 2024 – Jan 2025",
-    location: "Hyderabad, India · Remote",
+    location: "Hyderabad, India",
     type: "Internship",
     accent: "#4338ca",
     summary:
-      "Built core backend REST APIs, tuned SQL reporting queries, and shipped responsive TypeScript/React product views.",
+      "Backend APIs and product features for an early-stage team.",
     highlights: [
-      "Engineered 20+ RESTful backend API endpoints in Python/Flask and Node.js covering authentication, session state, and routing.",
-      "Optimized SQL queries and pandas aggregation pipelines, reducing data retrieval latency by 15%.",
+      "Engineered 20+ RESTful backend API endpoints in Python/Flask and Node.js covering authentication, session management and request workflows.",
+      "Optimized SQL queries to cut retrieval latency by 15%; shipped user-facing features in TypeScript/React.",
     ],
     tags: ["Python", "Flask", "Node.js", "TypeScript", "React", "SQL"],
   },
@@ -254,16 +255,15 @@ export const flagshipProjects: FlagshipProject[] = [
     category: "Full-Stack · Pricing Engine",
     year: "2026",
     accent: "#0369a1",
-    question: "Why do ex-showroom sticker prices jump 14–22% unpredictably at dealerships?",
+    question: "Why does the on-road price of a car differ so much from its ex-showroom sticker?",
     answer:
       "Each Indian state computes RTO road tax slabs, cess, insurance, and green tax differently. OnRoad computes every line item deterministically upfront.",
     architecture:
       "Full-stack Indian automotive pricing platform combining Next.js 16, Three.js interactive vehicle inspection, MapLibre dealer locator, and FastAPI + SQLite WAL.",
-    proofMetric: "36 States & UTs · 50+ brands · 2,500+ variants · 2,200+ dealers",
+    proofMetric: "36 States & UTs · 2,500+ variants · 2,200+ dealers",
     tags: ["Next.js 16", "FastAPI", "Three.js", "MapLibre", "SQLite WAL"],
     repo: "https://github.com/saathvik-codes/OnRoad",
     live: "https://onroad-frontend.onrender.com/",
-    docsUrl: "https://onroad-uu9c.onrender.com/api/docs",
   },
   {
     index: "04",
@@ -293,7 +293,7 @@ export const flagshipProjects: FlagshipProject[] = [
       "Every LLM-generated query runs through a strict read-only SQL AST guard (blocking all mutations) with automatic schema self-repair over DuckDB.",
     architecture:
       "Natural-language analytics engine over 1M+ UK retail transactions in DuckDB with iterative SQL repair and hard read-only execution boundaries exposed via FastAPI + React.",
-    proofMetric: "1M+ real retail rows · 12/12 query classes validated · Live",
+    proofMetric: "1,041,670 real retail rows · read-only SQL guard · Live",
     tags: ["Python", "LangChain", "DuckDB", "FastAPI", "React", "SQL Guard"],
     repo: "https://github.com/saathvik-codes/querymind",
     live: "https://querymind-app.vercel.app",
@@ -324,10 +324,10 @@ export const flagshipProjects: FlagshipProject[] = [
     accent: "#047857",
     question: "How do you cut cloud LLM spend while enforcing strict role-based data boundaries?",
     answer:
-      "Serve repeated queries in <10ms from a cosine semantic cache, route cold prompts across Ollama + Gemini, and bind vector retrieval chunks to SQLite role ACLs + PII redaction.",
+      "Answer repeated queries from a cosine-similarity semantic cache, route new prompts across local Ollama and Gemini, and bind retrieval to SQLite role ACLs with PII redaction.",
     architecture:
-      "Two companion production repositories: a FastAPI Hybrid LLM Router with semantic vector caching and a Multi-Agent RBAC Workflow Engine with output PII guardrails.",
-    proofMetric: "<10ms semantic cache hit · Role-scoped vector RAG & PII guard",
+      "Two companion repositories: a FastAPI Hybrid LLM Router with semantic vector caching and a Multi-Agent RBAC Workflow Engine with output PII guardrails.",
+    proofMetric: "Semantic cache · local-first routing · role-scoped RAG with PII guard",
     tags: ["FastAPI", "Ollama", "Gemini", "SQLite RBAC", "Cosine Cache", "PII Guard"],
     repo: "https://github.com/saathvik-codes/hybrid-llm-gateway",
     companionRepo: {
@@ -344,7 +344,6 @@ export const archiveProjects: ArchiveProject[] = [
     summary:
       "Gradient-boosting denial-risk scoring (15 features) + GPT-4o-mini ICD-10/CPT extraction with regex fallback, Redis TTL cache, JWT RBAC, Prometheus metrics & 20 pytest tests.",
     stack: ["FastAPI", "PostgreSQL", "Redis", "scikit-learn", "Prometheus"],
-    note: "Master Resume",
   },
   {
     title: "CareerFlow — Multi-Agent Application Compiler",
@@ -396,13 +395,12 @@ export const archiveProjects: ArchiveProject[] = [
     repo: "https://github.com/saathvik-codes/RAG-Document-Assistant",
   },
   {
-    title: "Spring Boot 3 / Java 21 Microservices Suite",
+    title: "Spring Boot Service Collection",
     category: "Systems & Backend",
     summary:
-      "Seven production services: HiveCRM, GateKeeper (sliding-window rate limiter), FraudShield, TaskWave (STOMP WebSockets), StockSeer, and LaunchDeck.",
-    stack: ["Java 21", "Spring Boot 3", "PostgreSQL", "MongoDB", "Docker"],
+      "Ten focused Spring Boot services, including HiveCRM, GateKeeper (sliding-window rate limiter), FraudShield, TaskWave (STOMP WebSockets), StockSeer, LaunchDeck, CarePulse and FleetPulse.",
+    stack: ["Java", "Spring Boot", "PostgreSQL", "MongoDB", "Docker"],
     repo: "https://github.com/saathvik-codes",
-    note: "7 Repos",
   },
   {
     title: "HabitLoop — Offline-First Android App",
@@ -428,7 +426,7 @@ export const visualBuilds: VisualBuild[] = [
     title: "Saathvik Visuals",
     subtitle: "Interactive UI/UX Casebook",
     focus: "Four adaptive experience modes, localized typography & visual storytelling studio.",
-    live: "https://saathvik-visuals-portfolio.vercel.app",
+    live: "",
     repo: "https://github.com/saathvikvisuals/saathvik-visuals",
     accent: "#1d4ed8",
   },
@@ -468,7 +466,7 @@ export const visualBuilds: VisualBuild[] = [
     title: "BazaarX & Pawly",
     subtitle: "Multi-Vendor & Pet Care Commerce",
     focus: "Vendor/admin analytics storefronts & warm mobile-first checkout flows.",
-    live: "https://bazaarx.vercel.app",
+    live: "https://bazaarx-tau.vercel.app",
     repo: "https://github.com/saathvikvisuals/BazaarX",
     accent: "#b45309",
   },
@@ -485,7 +483,7 @@ export const skillMatrix = [
   },
   {
     label: "Frontend & 3D",
-    items: "React · Next.js 16 · Three.js · Theatre.js · GSAP · Lenis · Tailwind CSS · Jetpack Compose",
+    items: "React · Next.js 16 · Three.js · Tailwind CSS · Jetpack Compose",
   },
   {
     label: "AI, Voice & Data",
@@ -502,6 +500,28 @@ export const skillMatrix = [
 ];
 
 export const certifications: CertificationItem[] = [
+  {
+    title: "Introduction to Large Language Models (LLMs)",
+    issuer: "NPTEL · Ministry of Education",
+    date: "Jul–Oct 2026",
+    detail: "73% consolidated score (25/25 assignments, 47.25/75 exam · 4 credits)",
+    credentialId: "NPTEL26CS171S755400054",
+    verifyUrl: "/certificates/nptel-llm-2026.pdf",
+    accent: "#23408e",
+    tier: "verified-core",
+    brand: "nptel",
+  },
+  {
+    title: "Natural Language Processing",
+    issuer: "NPTEL · Ministry of Education",
+    date: "Jul–Oct 2026",
+    detail: "66% consolidated score (19.53/25 assignments, 45.75/75 exam · 4 credits)",
+    credentialId: "NPTEL26CS180S455400615",
+    verifyUrl: "/certificates/nptel-nlp-2026.pdf",
+    accent: "#23408e",
+    tier: "verified-core",
+    brand: "nptel",
+  },
   {
     title: "NPTEL Elite — Cloud Computing (12 Weeks)",
     issuer: "IIT Kharagpur · Ministry of Education",
@@ -573,37 +593,52 @@ export const certifications: CertificationItem[] = [
     issuer: "Infosys Springboard",
     date: "Nov 2025",
     detail: "Statistical modeling, Python workflows & supervised learning pipelines",
-    verifyUrl: "https://verify.onwingspan.com/",
+    verifyUrl: "/certificates/infosys-data-science.pdf",
     accent: "#c2410c",
     tier: "specialization",
     brand: "infosys",
-  },
-  {
-    title: "Python (Basic) Assessment Certificate",
-    issuer: "HackerRank",
-    date: "Jun 2024",
-    detail: "Verified algorithmic problem solving & core Python constructs",
-    accent: "#047857",
-    tier: "specialization",
-    brand: "hackerrank",
   },
 ];
 
 export const communityAndHackathons = [
   {
-    label: "Google Developer Groups on Campus (GDG) — Member & Organizer",
-    sub: "Peer workshops on backend APIs, cloud workflows & applied systems at IIITDM Kurnool",
+    label: "Google Developer Groups on Campus (GDG), IIITDM Kurnool — Member",
+    sub: "Campus developer community: workshops and peer study on backend and cloud.",
   },
   {
     label: "Google Cloud × AIM Code Kitchen S01 (Track 3)",
     sub: "Shipped CareerFlow multi-agent RBAC document compiler",
   },
-  {
-    label: "Smart India Hackathon · Adobe India Hackathon · Analytics Vidhya DataHack",
-    sub: "Rapid prototyping across civic tech, computer vision & competitive data science",
-  },
-  {
-    label: "NSS Volunteer & NSO Participant",
-    sub: "Community outreach initiatives & inter-collegiate athletics discipline",
-  },
+];
+
+export const achievements = [
+  { year: "2026", title: "Two more NPTEL courses completed", body: "Introduction to Large Language Models (73%) and Natural Language Processing (66%), 4 credits each, Jul–Oct 2026." },
+  { year: "2026", title: "NPTEL Elite — Cloud Computing", body: "81% consolidated score, 25/25 on assignments (Jan–Apr 2026)." },
+  { year: "Ongoing", title: "350+ LeetCode problems", body: "35 Hard, 150+ Medium." },
+];
+
+export const chapters = [
+  { id: "prologue", no: "00", label: "Intro", narration: "Start here: who I am and the questions I like." },
+  { id: "about", no: "I", label: "About", narration: "How I approach a problem before writing code." },
+  { id: "experience", no: "II", label: "Experience", narration: "Three internships with real systems in production." },
+  { id: "projects", no: "III", label: "Projects", narration: "Seven builds, each answering one hard question." },
+  { id: "credentials", no: "IV", label: "Credentials", narration: "Coursework, certificates and community work." },
+  { id: "contact", no: "V", label: "Contact", narration: "Last stop. Say hello, I reply personally." },
+];
+
+export const heroStats = [
+  { value: 3, suffix: "", label: "software internships" },
+  { value: 7, suffix: "", label: "flagship projects, all on GitHub" },
+  { value: 350, suffix: "+", label: "LeetCode problems solved" },
+  { value: 7, suffix: "", label: "certifications, verifiable below" },
+];
+
+export const journey = [
+  { id: "j-school", when: "2021 – 2023", title: "Class X & XII", org: "Valley Oak Junior College", place: "Hyderabad", coords: [17.385, 78.4867] as [number, number],
+    body: "98.8% in Class XII and a 10.0 GPA in Class X. Mathematics and physics first, code soon after." },
+  { id: "j-iiitdm", when: "Aug 2023 – May 2027", title: "B.Tech, Computer Science & Engineering", org: "IIITDM Kurnool", place: "Kurnool", coords: [15.8281, 78.0373] as [number, number],
+    body: "CGPA 8.2 / 10. Data structures, operating systems, networks, DBMS and distributed systems." },
+  { id: "j-aimaster", experience: "aimaster", place: "Hyderabad", coords: [17.44, 78.38] as [number, number] },
+  { id: "j-caterworld", experience: "caterworld", place: "Chennai", coords: [13.0827, 80.2707] as [number, number] },
+  { id: "j-darwix", experience: "darwix", place: "Gurugram", coords: [28.4595, 77.0266] as [number, number] },
 ];
