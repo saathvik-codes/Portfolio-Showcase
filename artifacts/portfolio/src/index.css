@@ -48,3 +48,14 @@ a, button { transition: color .2s, background-color .2s, border-color .2s, opaci
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Journey map pins */
+.journey-map { font-family: var(--font-sans); background: #efe7d6; }
+.jpin { position: relative; }
+.jpin-dot { position: absolute; inset: 3px; border-radius: 9999px; background: var(--color-surface); border: 2px solid var(--color-accent); transition: background-color .3s, transform .3s; }
+.jpin.is-visited .jpin-dot { background: var(--color-accent); transform: scale(.8); }
+.jpin.is-current .jpin-dot { background: var(--color-accent); }
+.jpin.is-current::before { content: ""; position: absolute; inset: -4px; border-radius: 9999px; border: 2px solid var(--color-accent); animation: jpin-pulse 1.8s ease-out infinite; }
+@keyframes jpin-pulse { from { transform: scale(.6); opacity: .8 } to { transform: scale(1.9); opacity: 0 } }
+.jpin-label { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); white-space: nowrap; font: 500 12px/1 var(--font-sans); color: var(--color-ink); background: rgba(255,254,251,.92); border: 1px solid var(--color-hairline); padding: 4px 7px; border-radius: 2px; opacity: .7; transition: opacity .3s; }
+.jpin.is-current .jpin-label { opacity: 1; font-weight: 600; box-shadow: 0 2px 8px -4px rgba(22,24,29,.35); }

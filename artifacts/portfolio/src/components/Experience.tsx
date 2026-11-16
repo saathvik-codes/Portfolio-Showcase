@@ -8,60 +8,127 @@ import { ChapterHead, IconLink, Mark } from "./primitives";
 import { TechList } from "./TechIcon";
 
 type Stop = (typeof journey)[number];
+type LL = [number, number];
 const xp = (s: Stop) => ("experience" in s ? experiences.find((e) => e.id === s.experience) : undefined);
 
-const pin = (on: boolean, label: string) =>
+// One pin per city, even when several stops share it.
+const places = Array.from(new Map(journey.map((s) => [s.place, s.coords as LL])).entries());
+const placeIndex = (name: string) => places.findIndex(([p]) => p === name);
+
+const pinIcon = (name: string, state: "upcoming" | "visited" | "current") =>
   L.divIcon({
-    className: "",
-    iconSize: [0, 0],
-    html: `<div style="transform:translate(-50%,-50%);display:flex;align-items:center;gap:6px;white-space:nowrap">
-      <span style="display:block;width:${on ? 14 : 10}px;height:${on ? 14 : 10}px;border-radius:50%;background:${on ? "#23408e" : "#fffefb"};border:2px solid #23408e;box-shadow:0 0 0 ${on ? 6 : 0}px rgba(35,64,142,.18);transition:all .3s"></span>
-      <span style="font:500 12px Inter,sans-serif;color:#16181d;background:rgba(255,254,251,.9);padding:1px 6px;border-radius:2px;opacity:${on ? 1 : 0.75}">${label}</span>
-    </div>`,
+    className: `jpin is-${state}`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    html: `<span class="jpin-dot"></span><span class="jpin-label">${name}</span>`,
   });
 
-/** Watercolour map that flies to each stop as the journey timeline scrolls. */
+/** Gentle arc between two points (quadratic Bézier, bulging to one side). */
+function arc(a: LL, b: LL, steps = 40): LL[] {
+  const [y1, x1] = a, [y2, x2] = b;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  const dx = x2 - x1, dy = y2 - y1;
+  const k = 0.22; // bulge
+  const cx = mx - dy * k, cy = my + dx * k;
+  const pts: LL[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps, u = 1 - t;
+    pts.push([u * u * y1 + 2 * u * t * cy + t * t * y2, u * u * x1 + 2 * u * t * cx + t * t * x2]);
+  }
+  return pts;
+}
+
+// Route as a list of points, plus the index where each stop is reached.
+const legs: LL[] = [journey[0].coords as LL];
+const reachedAt: number[] = [0];
+for (let i = 1; i < journey.length; i++) {
+  const a = journey[i - 1].coords as LL, b = journey[i].coords as LL;
+  if (journey[i - 1].place !== journey[i].place) legs.push(...arc(a, b).slice(1));
+  reachedAt.push(legs.length - 1);
+}
+
+/** Watercolour map: flies between stops and draws the route travelled so far. */
 function JourneyMap({ active }: { active: number }) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
-  const markers = useRef<L.Marker[]>([]);
-  const trail = useRef<L.Polyline | null>(null);
+  const pins = useRef<L.Marker[]>([]);
+  const travelled = useRef<L.Polyline | null>(null);
+  const drawn = useRef(0);
   const reduce = useReducedMotion();
 
   useEffect(() => {
     if (!el.current || map.current) return;
-    const m = L.map(el.current, { zoomControl: false, scrollWheelZoom: false, dragging: !L.Browser.mobile, attributionControl: true })
-      .setView(journey[0].coords, 6);
+    const m = L.map(el.current, {
+      zoomControl: false,
+      scrollWheelZoom: false,
+      dragging: !L.Browser.mobile,
+      zoomSnap: 0.25,
+      attributionControl: false,
+    }).setView(journey[0].coords as LL, 6.5);
     L.tileLayer("https://watercolormaps.collection.cooperhewitt.org/tile/watercolor/{z}/{x}/{y}.jpg", {
       maxZoom: 12,
-      attribution: "Watercolor tiles © Stamen Design / Cooper Hewitt · © OpenStreetMap",
     }).addTo(m);
-    L.control.zoom({ position: "bottomright" }).addTo(m);
-    markers.current = journey.map((s) => L.marker(s.coords, { icon: pin(false, s.place), keyboard: false }).addTo(m));
-    trail.current = L.polyline([], { color: "#a8541f", weight: 2, dashArray: "6 6" }).addTo(m);
+    L.control.attribution({ prefix: false, position: "bottomright" }).addAttribution("© Stamen / Cooper Hewitt · © OSM").addTo(m);
+    if (!L.Browser.mobile) L.control.zoom({ position: "bottomright" }).addTo(m);
+    L.polyline(legs, { color: "#a8541f", weight: 2, opacity: 0.45, dashArray: "1 7", lineCap: "round", interactive: false }).addTo(m);
+    travelled.current = L.polyline([], { color: "#a8541f", weight: 3, opacity: 0.95, lineCap: "round", lineJoin: "round", interactive: false }).addTo(m);
+    pins.current = places.map(([name, ll]) => L.marker(ll, { icon: pinIcon(name, "upcoming"), keyboard: false, interactive: false }).addTo(m));
     map.current = m;
-    return () => { m.remove(); map.current = null; };
+    const ro = new ResizeObserver(() => m.invalidateSize());
+    ro.observe(el.current);
+    return () => { ro.disconnect(); m.remove(); map.current = null; };
   }, []);
 
   useEffect(() => {
     const m = map.current;
     if (!m) return;
-    const s = journey[active];
-    markers.current.forEach((mk, i) => mk.setIcon(pin(i === active, journey[i].place)));
-    trail.current?.setLatLngs(journey.slice(0, active + 1).map((j) => j.coords));
-    const prev = journey[Math.max(active - 1, 0)];
-    const far = Math.abs(prev.coords[0] - s.coords[0]) > 5;
-    m.flyTo(s.coords, far ? 5 : 7, { duration: reduce ? 0 : 1.4 });
+
+    // Pins: current city pulses, cities already passed are filled.
+    const cur = placeIndex(journey[active].place);
+    const seen = new Set(journey.slice(0, active + 1).map((s) => placeIndex(s.place)));
+    pins.current.forEach((mk, i) => mk.setIcon(pinIcon(places[i][0], i === cur ? "current" : seen.has(i) ? "visited" : "upcoming")));
+    pins.current[cur]?.setZIndexOffset(1000);
+
+    // Route: animate the solid line from where it was to this stop.
+    const from = drawn.current, to = reachedAt[active];
+    let raf = 0;
+    if (reduce || from === to) {
+      travelled.current?.setLatLngs(legs.slice(0, to + 1));
+      drawn.current = to;
+    } else {
+      const t0 = performance.now(), dur = 1100;
+      const step = (t: number) => {
+        const k = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - k, 3);
+        const n = Math.round(from + (to - from) * e);
+        travelled.current?.setLatLngs(legs.slice(0, n + 1));
+        drawn.current = n;
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    }
+
+    // Camera: frame the previous and current stop together.
+    const here = journey[active].coords as LL;
+    const prev = journey[Math.max(active - 1, 0)].coords as LL;
+    const opts = { duration: reduce ? 0 : 1.2, padding: [70, 70] as [number, number], maxZoom: 7 };
+    if (prev[0] === here[0] && prev[1] === here[1]) m.flyTo(here, 6.5, { duration: opts.duration });
+    else m.flyToBounds(L.latLngBounds([prev, here]), opts);
+    return () => cancelAnimationFrame(raf);
   }, [active, reduce]);
 
-  const reset = () => map.current?.flyToBounds(L.latLngBounds(journey.map((j) => j.coords)).pad(0.3), { duration: 1 });
+  const whole = () => map.current?.flyToBounds(L.latLngBounds(places.map(([, ll]) => ll)), { padding: [60, 60], duration: 1 });
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-sm border border-hairline bg-sand">
-      <div ref={el} className="h-full w-full" aria-label="Map of places in my journey" role="img" />
-      <button onClick={reset} className="absolute left-3 top-3 z-[500] inline-flex items-center gap-1.5 rounded-sm border border-hairline bg-surface/95 px-2.5 py-1.5 text-xs text-ink hover:border-ink">
+      <div ref={el} className="journey-map h-full w-full" aria-label="Map of the places in my journey" role="img" />
+      <button onClick={whole} className="absolute left-3 top-3 z-[500] inline-flex items-center gap-1.5 rounded-sm border border-hairline bg-surface/95 px-2.5 py-1.5 text-xs text-ink hover:border-ink">
         <RotateCcw size={13} aria-hidden /> Whole route
       </button>
+      <ol className="absolute right-3 top-3 z-[500] flex gap-1" aria-hidden>
+        {journey.map((s, i) => (
+          <li key={s.id} className={`h-1.5 w-5 rounded-full transition-colors ${i <= active ? "bg-clay" : "bg-surface/90 border border-hairline"}`} />
+        ))}
+      </ol>
     </div>
   );
 }

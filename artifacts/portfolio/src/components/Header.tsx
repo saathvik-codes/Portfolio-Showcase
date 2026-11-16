@@ -15,7 +15,7 @@ export default function Header() {
     let last = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
-      setHidden(y > last && y > 160);
+      setHidden(window.innerWidth >= 1024 && y > last && y > 160);
       last = y;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
