@@ -2,19 +2,20 @@
 @import "tw-animate-css";
 
 @theme inline {
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
-  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-  --color-paper: #f7f5f0;
-  --color-surface: #fffefb;
-  --color-sand: #efece4;
-  --color-ink: #16181d;
-  --color-muted: #555b66;
-  --color-faint: #80858f;
-  --color-hairline: #e1ddd3;
-  --color-accent: #23408e;
-  --color-accent-soft: #e6ebf7;
-  --color-clay: #a8541f;
+  --font-sans: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-hand: "Caveat", "Segoe Print", cursive;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --color-paper: #f4eee2;
+  --color-surface: #fbf8f1;
+  --color-sand: #ebe2d0;
+  --color-ink: #221d17;
+  --color-muted: #5e5548;
+  --color-faint: #8d8272;
+  --color-hairline: #ddd2bd;
+  --color-accent: #b4532a;
+  --color-accent-soft: #f5e1d3;
+  --color-clay: #2f6b66;
 }
 
 :root { color-scheme: light; }
@@ -59,3 +60,10 @@ a, button { transition: color .2s, background-color .2s, border-color .2s, opaci
 @keyframes jpin-pulse { from { transform: scale(.6); opacity: .8 } to { transform: scale(1.9); opacity: 0 } }
 .jpin-label { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); white-space: nowrap; font: 500 12px/1 var(--font-sans); color: var(--color-ink); background: rgba(255,254,251,.92); border: 1px solid var(--color-hairline); padding: 4px 7px; border-radius: 2px; opacity: .7; transition: opacity .3s; }
 .jpin.is-current .jpin-label { opacity: 1; font-weight: 600; box-shadow: 0 2px 8px -4px rgba(22,24,29,.35); }
+
+/* Scrapbook identity */
+.hand { font-family: var(--font-hand); font-weight: 500; letter-spacing: 0; }
+.display { font-variation-settings: "SOFT" 60, "WONK" 1; }
+body { background-image: radial-gradient(rgba(34,29,23,.035) 1px, transparent 1px); background-size: 4px 4px; }
+.tape { position: absolute; height: 1.6rem; width: 6.5rem; background: rgba(233,214,168,.85); box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  clip-path: polygon(3% 0, 97% 4%, 100% 50%, 97% 96%, 2% 100%, 0 50%); }

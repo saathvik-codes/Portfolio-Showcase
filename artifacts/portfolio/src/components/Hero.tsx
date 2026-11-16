@@ -50,7 +50,7 @@ export default function Hero({ onNavigate }: { onNavigate: (id: string) => void 
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <button onClick={() => onNavigate("about")} className="inline-flex items-center gap-2 rounded-sm bg-ink px-5 py-3 text-sm font-medium text-paper hover:bg-accent">
-                Start the walkthrough <ArrowDown size={16} aria-hidden />
+                Open the scrapbook <ArrowDown size={16} aria-hidden />
               </button>
               <a href={profile.resumePath} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-sm border border-hairline bg-surface px-5 py-3 text-sm font-medium text-ink hover:border-ink">
                 <FileText size={16} strokeWidth={1.8} aria-hidden /> Resume
@@ -68,7 +68,7 @@ export default function Hero({ onNavigate }: { onNavigate: (id: string) => void 
             >
               <span aria-hidden className="absolute -top-3 left-1/2 h-6 w-24 -translate-x-1/2 rotate-2 bg-[#efe3c4]/85" />
               <Illustration name="hero-convo.jpg" alt="Saathvik sketching a system diagram with a founder over coffee" ratio="1 / 1" parallax={false} priority />
-              <p className="absolute bottom-4 inset-x-0 text-center font-serif italic text-muted">Most projects start with a conversation.</p>
+              <p className="hand absolute bottom-3 inset-x-0 text-center text-2xl text-muted">most projects start like this</p>
             </motion.div>
           </Reveal>
         </div>

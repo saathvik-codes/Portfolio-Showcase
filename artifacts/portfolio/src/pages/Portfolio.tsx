@@ -10,7 +10,7 @@ import Credentials from "@/components/Credentials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { PaperTear } from "@/components/primitives";
-import { ChapterProvider, ChapterRail, WalkthroughDock } from "@/components/walkthrough";
+import { ChapterProvider } from "@/components/walkthrough";
 
 const seenIntro = () => {
   try { return sessionStorage.getItem("sk-intro") === "1"; } catch { return false; }
@@ -60,7 +60,6 @@ export default function Portfolio() {
           Skip to content
         </a>
         <Header />
-        <ChapterRail />
         <main>
           <Hero onNavigate={go} />
           <PaperTear />
@@ -72,7 +71,6 @@ export default function Portfolio() {
           <Contact />
         </main>
         <Footer />
-        <WalkthroughDock />
       </div>
     </ChapterProvider>
   );

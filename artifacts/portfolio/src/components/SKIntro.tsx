@@ -75,11 +75,11 @@ export default function SKIntro({ onComplete }: { onComplete: () => void }) {
         <svg viewBox="0 0 172 172" width="190" height="190" fill="none" aria-label="SK">
           <circle ref={ring1} cx="86" cy="86" r="80" stroke="#d9d4c8" strokeWidth="1" strokeDasharray="4 8" />
           <circle ref={ring2} cx="86" cy="86" r="66" stroke="#e5e0d5" strokeWidth="1" strokeDasharray="2 6" />
-          <path ref={sRef} d="M 26 46 C 26 46 70 30 70 54 C 70 73 26 73 26 92 C 26 111 70 106 70 106" stroke="#16181d" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-          <path ref={kLine} d="M 96 30 L 96 116" stroke="#16181d" strokeWidth="5" strokeLinecap="round" />
-          <path ref={kTop} d="M 96 72 L 148 30" stroke="#16181d" strokeWidth="5" strokeLinecap="round" />
-          <path ref={kBot} d="M 96 72 L 148 116" stroke="#16181d" strokeWidth="5" strokeLinecap="round" />
-          <circle ref={dotRef} cx="156" cy="116" r="6" fill="#23408e" />
+          <path ref={sRef} d="M 26 46 C 26 46 70 30 70 54 C 70 73 26 73 26 92 C 26 111 70 106 70 106" stroke="#221d17" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+          <path ref={kLine} d="M 96 30 L 96 116" stroke="#221d17" strokeWidth="5" strokeLinecap="round" />
+          <path ref={kTop} d="M 96 72 L 148 30" stroke="#221d17" strokeWidth="5" strokeLinecap="round" />
+          <path ref={kBot} d="M 96 72 L 148 116" stroke="#221d17" strokeWidth="5" strokeLinecap="round" />
+          <circle ref={dotRef} cx="156" cy="116" r="6" fill="#b4532a" />
         </svg>
         <div className="flex flex-col items-center gap-2 text-center">
           <p ref={nameRef} className="font-mono text-sm uppercase tracking-[0.45em] text-ink">Saathvik Kalepu</p>

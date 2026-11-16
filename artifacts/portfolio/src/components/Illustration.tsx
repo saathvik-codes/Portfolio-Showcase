@@ -44,7 +44,7 @@ export default function Illustration({
           />
         ) : (
           <motion.img
-            src={`/illustrations/${name}`}
+            src={`/illustrations/journey/${name}`}
             alt={alt}
             loading={priority ? "eager" : "lazy"}
             decoding="async"

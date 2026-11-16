@@ -70,8 +70,8 @@ function JourneyMap({ active }: { active: number }) {
     }).addTo(m);
     L.control.attribution({ prefix: false, position: "bottomright" }).addAttribution("© Stamen / Cooper Hewitt · © OSM").addTo(m);
     if (!L.Browser.mobile) L.control.zoom({ position: "bottomright" }).addTo(m);
-    L.polyline(legs, { color: "#a8541f", weight: 2, opacity: 0.45, dashArray: "1 7", lineCap: "round", interactive: false }).addTo(m);
-    travelled.current = L.polyline([], { color: "#a8541f", weight: 3, opacity: 0.95, lineCap: "round", lineJoin: "round", interactive: false }).addTo(m);
+    L.polyline(legs, { color: "#2f6b66", weight: 2, opacity: 0.5, dashArray: "1 7", lineCap: "round", interactive: false }).addTo(m);
+    travelled.current = L.polyline([], { color: "#2f6b66", weight: 3, opacity: 0.95, lineCap: "round", lineJoin: "round", interactive: false }).addTo(m);
     pins.current = places.map(([name, ll]) => L.marker(ll, { icon: pinIcon(name, "upcoming"), keyboard: false, interactive: false }).addTo(m));
     map.current = m;
     const ro = new ResizeObserver(() => m.invalidateSize());
