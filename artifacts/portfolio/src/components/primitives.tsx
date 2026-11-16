@@ -1,5 +1,7 @@
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { CodeXml, Github, Instagram, Linkedin, Mail, Palette, type LucideIcon } from "lucide-react";
+import { SiLeetcode } from "react-icons/si";
+import type { ComponentType, SVGProps } from "react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { profile, socialLinks } from "@/data/portfolioData";
 
@@ -83,7 +85,8 @@ export function IconLink({ href, icon: Icon, children, className = "" }: { href:
   );
 }
 
-const socialIcon: Record<string, LucideIcon> = { GitHub: Github, LinkedIn: Linkedin, LeetCode: CodeXml, Visuals: Palette, Instagram };
+type AnyIcon = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>;
+const socialIcon: Record<string, AnyIcon> = { GitHub: Github, LinkedIn: Linkedin, LeetCode: SiLeetcode as AnyIcon, Visuals: Palette, Instagram };
 
 /** Round icon buttons for social profiles (+ email). */
 export function SocialRow({ withEmail = true, className = "" }: { withEmail?: boolean; className?: string }) {
@@ -102,7 +105,7 @@ export function SocialRow({ withEmail = true, className = "" }: { withEmail?: bo
             title={label}
             className="grid h-10 w-10 place-items-center rounded-full border border-hairline bg-surface text-muted hover:-translate-y-0.5 hover:border-ink hover:text-ink transition-transform"
           >
-            <Icon size={17} strokeWidth={1.8} aria-hidden />
+            <Icon size={17} aria-hidden />
           </a>
         </li>
       ))}
