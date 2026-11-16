@@ -1,11 +1,3 @@
-export interface WalkthroughTopic {
-  id: string;
-  label: string;
-  question: string;
-  answer: string;
-  metric: string;
-}
-
 export interface ExperienceItem {
   id: string;
   role: string;
@@ -117,32 +109,6 @@ export const socialLinks = [
   },
 ];
 
-export const heroWalkthroughTopics: WalkthroughTopic[] = [
-  {
-    id: "systems",
-    label: "Storage & Consensus",
-    question: "How do you prove a distributed key-value store handles crashes safely?",
-    answer:
-      "In QuorumDB I kill random nodes while 17,658 writes are in flight. Raft elects a new leader, quorum reads and writes carry on, and the WAL replays on restart. Nothing was lost.",
-    metric: "~2s failover · 0 data loss",
-  },
-  {
-    id: "voice-ai",
-    label: "Production Voice AI",
-    question: "How do you stop an LLM voice agent from skipping mandatory checks?",
-    answer:
-      "Don't let the model decide the order. At Darwix AI the video agent follows a fixed state machine, and 226 tests walk every path through it. The phone screening side has called 1,500+ candidates.",
-    metric: "1,500+ candidates · 226 tests",
-  },
-  {
-    id: "product",
-    label: "Full-Stack Data",
-    question: "Where do data tools usually fail first-time users?",
-    answer:
-      "When the rules are hidden. OnRoad shows every tax line for each state, and QueryMind refuses any SQL that would change data. In both, you can see why you got the answer you did.",
-    metric: "36 States & UTs · 1M+ rows",
-  },
-];
 
 export const education = [
   {
