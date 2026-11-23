@@ -59,6 +59,10 @@ function Hackathons() {
   const hackCount = items.filter((c) => c.kind === "hackathon").length;
   return (
     <div className="mt-24">
+      <img
+        src="/illustrations/pf-hackathon-stage.webp" alt="" width={560} height={320}
+        className="mx-auto mb-6 h-auto w-full max-w-[420px] mix-blend-multiply [mask-image:radial-gradient(ellipse_72%_72%_at_50%_50%,#000_55%,transparent_100%)]"
+      />
       <Reveal>
         <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <p className="eyebrow">Hackathons &amp; community</p>
