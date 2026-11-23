@@ -34,8 +34,12 @@ export default function Header() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 border-b border-hairline bg-paper/90 backdrop-blur transition-transform duration-300 ${hidden && !open ? "-translate-y-full" : ""}`}>
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <button onClick={() => nav("prologue")} className="font-serif text-xl tracking-tight text-ink">
-          {profile.name}
+        <button onClick={() => nav("prologue")} aria-label={`${profile.name}, back to the top`} title={profile.name} className="text-ink">
+          <svg viewBox="18 18 150 112" width="50" height="37" fill="none" aria-hidden>
+            <path d="M 26 46 C 26 46 70 30 70 54 C 70 73 26 73 26 92 C 26 111 70 106 70 106" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M 96 30 L 96 116 M 96 72 L 148 30 M 96 72 L 148 116" stroke="currentColor" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+            <circle cx="160" cy="117" r="8.5" fill="#b4532a" />
+          </svg>
         </button>
         <nav className="hidden md:flex items-center gap-7" aria-label="Sections">
           {chapters.slice(1).map((c) => {
