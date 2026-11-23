@@ -280,7 +280,7 @@ export const flagshipProjects: FlagshipProject[] = [
     proofMetric: "£17.7M revenue · 36,969 orders segmented · Live on Vercel",
     tags: ["Python", "pandas", "DuckDB", "Next.js", "Recharts"],
     repo: "https://github.com/saathvik-codes/pulse-customer-intelligence",
-    live: "https://eccomerce-analytics-ztf9.vercel.app",
+    live: "https://pulse-customer-intelligence.vercel.app",
   },
   {
     index: "07",
