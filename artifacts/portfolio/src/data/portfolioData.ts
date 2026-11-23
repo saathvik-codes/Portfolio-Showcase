@@ -263,7 +263,7 @@ export const flagshipProjects: FlagshipProject[] = [
     proofMetric: "1,041,670 real retail rows · read-only SQL guard · Live",
     tags: ["Python", "LangChain", "DuckDB", "FastAPI", "React", "SQL Guard"],
     repo: "https://github.com/saathvik-codes/querymind",
-    live: "https://querymind-app.vercel.app",
+    live: "https://querymind-eta-six.vercel.app",
   },
   {
     index: "06",
