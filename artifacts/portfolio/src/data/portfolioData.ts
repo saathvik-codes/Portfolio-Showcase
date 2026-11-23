@@ -567,14 +567,32 @@ export const certifications: CertificationItem[] = [
   },
 ];
 
-export const communityAndHackathons = [
+export const communityAndHackathons: {
+  label: string; sub: string; kind?: "hackathon" | "community"; result?: string; event?: string; org?: string;
+  tagline?: string; date?: string; verifyUrl?: string; highlight?: boolean;
+}[] = [
   {
-    label: "Google Developer Groups on Campus (GDG), IIITDM Kurnool — Member",
-    sub: "Campus developer community: workshops and peer study on backend and cloud.",
+    label: "Flipkart GRiD 8.0: National Semi-Finalist",
+    event: "Flipkart GRiD 8.0",
+    tagline: "Prompt the Future",
+    org: "Flipkart Early Careers",
+    result: "National Semi-Finalist",
+    kind: "hackathon",
+    date: "Sep 2026",
+    sub: "Flipkart's national engineering challenge for students. Cleared the online rounds to reach the national semi-finals, representing IIITDM Kurnool.",
+    verifyUrl: "/certificates/flipkart-grid-8-semifinalist.pdf",
+    highlight: true,
   },
   {
     label: "Google Cloud × AIM Code Kitchen S01 (Track 3)",
-    sub: "Shipped CareerFlow multi-agent RBAC document compiler",
+    kind: "hackathon",
+    sub: "Shipped CareerFlow, a multi-agent RBAC document compiler.",
+  },
+  {
+    label: "Google Developer Groups on Campus (GDG), IIITDM Kurnool",
+    kind: "community",
+    result: "Member",
+    sub: "Campus developer community: workshops and peer study on backend and cloud.",
   },
 ];
 

@@ -1,7 +1,7 @@
 import { certifications, communityAndHackathons } from "@/data/portfolioData";
 import CloudBadges from "./CloudBadges";
 import Illustration from "./Illustration";
-import { BadgeCheck, CalendarDays, Users } from "lucide-react";
+import { BadgeCheck, CalendarDays, Trophy, Users } from "lucide-react";
 import { ChapterHead, IconLink, Reveal } from "./primitives";
 
 export default function Credentials() {
@@ -47,9 +47,20 @@ export default function Credentials() {
           <p className="eyebrow mb-6">Community &amp; hackathons</p>
           <ul className="grid md:grid-cols-2 gap-x-14">
             {communityAndHackathons.map((c) => (
-              <li key={c.label} className="border-t border-hairline py-5">
-                <p className="inline-flex items-start gap-2 font-medium text-ink"><Users size={16} aria-hidden className="mt-1 shrink-0 text-accent" />{c.label}</p>
-                <p className="mt-1 text-sm text-muted">{c.sub}</p>
+              <li key={c.label} className="grid grid-cols-[1fr_auto] gap-x-6 border-t border-hairline py-5">
+                <div>
+                  <p className="inline-flex items-start gap-2 font-medium text-ink">
+                    {c.kind === "hackathon"
+                      ? <Trophy size={16} aria-hidden className="mt-1 shrink-0 text-accent" />
+                      : <Users size={16} aria-hidden className="mt-1 shrink-0 text-accent" />}
+                    {c.label}
+                  </p>
+                  <p className="mt-1 text-sm text-muted">{c.sub}</p>
+                </div>
+                <div className="text-right text-sm">
+                  {c.date && <p className="inline-flex items-center gap-1.5 font-mono text-[.76rem] text-faint"><CalendarDays size={13} aria-hidden />{c.date}</p>}
+                  {c.verifyUrl && <p className="mt-1"><IconLink href={c.verifyUrl} icon={BadgeCheck}>Verify</IconLink></p>}
+                </div>
               </li>
             ))}
           </ul>
